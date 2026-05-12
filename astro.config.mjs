@@ -136,7 +136,6 @@ export default defineConfig({
 	vite: {
 		build: {
 			cssMinify: true,
-			minify: "esbuild",
 			chunkSizeWarningLimit: 2500,
 			rollupOptions: {
 				onwarn(warning, warn) {
