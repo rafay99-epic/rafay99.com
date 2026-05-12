@@ -1,0 +1,40 @@
+# rafay99.com
+
+> Personal portfolio and blog of Mohammad Abdul Rafay, Senior Full Stack Developer based in Islamabad, Pakistan.
+
+## About
+
+Mohammad Abdul Rafay is a Senior Full Stack Developer with 4+ years of experience building production SaaS platforms, cross-platform mobile apps, and AI-integrated systems. Currently architecting TudoNum at Tudo Tech Lab — a multi-service super app with a Python/Django backend and React frontend spanning professional services, ride-hailing, logistics, and deliveries.
+
+## Core Expertise
+
+- Full-stack SaaS development with React, Next.js, Django, and Convex
+- Cross-platform mobile development with React Native, Expo, and Flutter
+- AI/LLM integration with Claude SDK, OpenAI, OpenRouter, and TensorFlow
+- Cloud infrastructure on AWS and Vercel with CI/CD and zero-downtime deployments
+- Multi-region payment integration with Stripe and local gateways
+
+## Flagship Projects
+
+- Wryte (wryte.xyz): Collaborative Markdown editor with custom GitHub-to-Convex sync engine and AI writing assistance
+- Ourtrail (ourtrail.xyz): Cross-platform trip memory platform with shared albums across web and React Native mobile
+- Env Pilot (envpilot.dev): Environment variable management SaaS with VS Code extension, CLI, and WorkOS Vault encryption
+- Lumo (lumocash.com): Financial tracking app for iOS/Android with AI receipt scanning and budget cycle management
+- TudoNum (tudonum.app): Multi-service super app with schema-driven form engine, multi-tier RBAC, and multi-region payments
+
+## Open Source Contributions
+
+- Mole (tw93/Mole, 51k+ stars): Merged PR #755 adding --list flag to mo uninstall with 12 bats test cases
+- TLDR Pages: 5 merged PRs (#9889, #9890, #10604, #10609, #10628) adding platform pages and improving CLI documentation
+- TinaCMS: Filed reproducible bug reports against complex subsystems
+
+## Blog
+
+Over 80 published technical articles covering software engineering, AI/LLM development, cloud architecture, mobile development, and open source.
+
+## Contact
+
+- Email: 99marafay@gmail.com
+- GitHub: github.com/rafay99-epic
+- LinkedIn: linkedin.com/in/abdul-rafay1999
+- Website: rafay99.com

@@ -3,49 +3,49 @@
 		{
 			"name": "React & Next.js",
 			"icon": "react",
-			"context": "3+ years building production web apps",
+			"context": "Production SaaS apps and real-time platforms",
 			"color": "#7aa2f7"
 		},
 		{
-			"name": "Flutter & Dart",
-			"icon": "flutter",
-			"context": "Cross-platform mobile development",
+			"name": "React Native & Expo",
+			"icon": "react",
+			"context": "Cross-platform iOS and Android apps",
 			"color": "#bb9af7"
 		},
 		{
-			"name": "Node.js & Express",
-			"icon": "nodejs",
-			"context": "Backend APIs and microservices",
+			"name": "Django & DRF",
+			"icon": "python",
+			"context": "REST APIs and backend architecture",
 			"color": "#9ece6a"
 		},
 		{
 			"name": "TypeScript",
 			"icon": "typescript",
-			"context": "Type-safe application development",
+			"context": "Full-stack type-safe development",
 			"color": "#7aa2f7"
 		},
 		{
-			"name": "PostgreSQL",
+			"name": "Convex & PostgreSQL",
 			"icon": "postgresql",
-			"context": "Database design and optimization",
+			"context": "Real-time and relational databases",
 			"color": "#bb9af7"
 		},
 		{
-			"name": "Tailwind CSS",
-			"icon": "tailwindcss",
-			"context": "Modern UI development",
+			"name": "AI / LLM Integration",
+			"icon": "nodejs",
+			"context": "Claude SDK, OpenAI, OpenRouter",
 			"color": "#9ece6a"
 		},
 		{
-			"name": "Docker & AWS",
+			"name": "AWS & Vercel",
 			"icon": "docker",
-			"context": "Cloud deployment and DevOps",
+			"context": "Cloud infrastructure and CI/CD",
 			"color": "#7aa2f7"
 		},
 		{
 			"name": "Git & GitHub",
 			"icon": "git",
-			"context": "Version control and collaboration",
+			"context": "Open-source contributions and collaboration",
 			"color": "#bb9af7"
 		}
 	],
@@ -56,21 +56,21 @@
 		},
 		{
 			"label": "Technologies",
-			"value": "15+"
+			"value": "30+"
 		},
 		{
-			"label": "Happy Clients",
-			"value": "25+"
+			"label": "Products Shipped",
+			"value": "15+"
 		}
 	],
 	"SiteName": "Abdul Rafay",
-	"SiteDescription": "Hey there! Welcome to my space where I share coding adventures, explore new tech, and dive into open-source projects. Grab a coffee and join me on this journey through the world of software development!",
+	"SiteDescription": "Senior Full Stack Developer building production SaaS platforms, cross-platform mobile apps, and AI-integrated systems. Writing about software engineering, architecture, and the craft of shipping real products.",
 	"name": "Abdul Rafay",
-	"jobTitle": "Software Engineer",
-	"position": "Full Stack  & Team Lead",
+	"jobTitle": "Senior Full Stack Developer",
+	"position": "Senior Full Stack Developer",
 	"picture": "/author.webp",
 	"avator": "/favicon.png",
-	"tag_line": "I build high-performance web & mobile apps that scale.",
+	"tag_line": "I build production SaaS platforms, cross-platform apps, and AI-integrated systems.",
 	"socialLinks": {
 		"twitter": "https://x.com/abdul_rafay99",
 		"linkedin": "abdul-rafay1999",
@@ -80,176 +80,148 @@
 		"whatsNumber": "+923035650798"
 	},
 	"about": {
-		"whoAmI": "I am a Full Stack Software Engineer and Team Lead who builds production-ready web and mobile applications used by real users. My work sits at the intersection of clean architecture, performance, and delivery. I have led engineering teams, owned critical systems, and shipped applications across Android, iOS, and the web using modern stacks like React, Next.js, Flutter, and Node.js. I don’t just build features—I think through system design, edge cases, scalability, and long-term maintainability to create software teams can confidently build on.",
+		"whoAmI": "I am a Senior Full Stack Developer who architects and ships production SaaS platforms, cross-platform mobile apps, and AI-integrated systems. At Tudo Tech Lab I built TudoNum’s professional services module from the ground up — a schema-driven form engine, multi-tier RBAC, calendar-driven booking, and multi-region payment rails across three countries. On my own time I ship products like Wryte, a collaborative Markdown editor with a custom GitHub-to-Convex sync engine, and Env Pilot, a secrets management SaaS with a VS Code extension, CLI, and granular per-variable permissions. I work with LLMs daily — Claude SDK, OpenAI, OpenRouter — and I have strong opinions about where they help and where they hurt, because I have shipped enough with them to know. I think through system design, edge cases, and long-term maintainability, and I build the scaffolding around AI tools so teams don’t ship what the model hallucinated.",
 		"lifeBeyondCode": "Outside of work, I enjoy challenges that demand focus and strategic thinking. Competitive gaming plays a big role in how I recharge, sharpening decision-making, teamwork, and adaptability under pressure. Exploring new experiences helps me reset and maintain balance, which directly influences how I approach problem-solving and collaboration in my professional life.",
 		"continuousLearning": "I treat learning as a core part of my work. I continuously refine my skills by adopting new tools, revisiting architectural decisions, and improving how systems are built and maintained. My learning is driven by real problems such as scaling applications, improving performance, reducing complexity, and helping teams work more effectively together. Through mentorship, collaboration, and technical leadership, I focus on building software that lasts."
 	},
 	"techStack": [
 		{
-			"category": "App Development",
-			"tools": ["flutter", "androidstudio", "xcode", "vscode", "react native"]
-		},
-		{
-			"category": "Frontend Development",
+			"category": "Frontend & Mobile",
 			"tools": [
-				"astro",
-				"tailwindcss",
-				"nodejs",
 				"react",
-				"typescript",
-				"nextjs"
+				"nextjs",
+				"react native",
+				"flutter",
+				"astro",
+				"vite",
+				"tailwindcss",
+				"typescript"
 			]
 		},
 		{
-			"category": "Backend Development",
+			"category": "Backend & APIs",
 			"tools": [
-				"firebase",
-				"supabase",
-				"postgresql",
-				"prisma",
-				"convex",
+				"python",
+				"django",
 				"nodejs",
 				"express",
-				"sql"
+				"convex",
+				"prisma",
+				"postgresql",
+				"mongodb"
 			]
 		},
 		{
-			"category": "Cloud Computing",
-			"tools": ["vercel", "netlify", "aws", "docker"]
+			"category": "Auth & Payments",
+			"tools": ["clerk", "firebase", "supabase", "stripe"]
 		},
 		{
-			"category": "Scripting",
-			"tools": ["powershell", "bash", "python"]
+			"category": "AI / LLM",
+			"tools": ["claude", "openai", "tensorflow"]
+		},
+		{
+			"category": "Cloud & DevOps",
+			"tools": ["aws", "vercel", "docker", "bash"]
 		}
 	],
 	"workExperience": [
 		{
-			"companyName": "Tudo Num Tech Lab",
-			"position": "Senior Software Engineer & Team Lead",
-			"employmentTime": "2nd August, 2025 - Present",
+			"companyName": "Tudo Tech Lab",
+			"position": "Senior Full Stack Developer",
+			"employmentTime": "Sep 2024 - Present",
 			"roles": [
-				"Building Stunning looking Web Applications using React, Nodejs,NextJs, and Tailwindcss",
-				"Testing Multiple Applications",
-				"Making sure the production does not go down",
-				"Building full backend using Nodejs, Express, and SQL with Prisma",
-				"Managing a team of 5+ developers"
+				"Architecting TudoNum, a multi-service super app spanning professional services, ride-hailing, logistics, and deliveries with a Python/Django REST backend and React + Vite frontend maintained as independent codebases",
+				"Shipped the end-to-end Professional Services module including vendor onboarding, multi-tier RBAC with in-app role switching, city- and country-scoped service discovery, calendar-driven booking with real-time availability and conflict detection, and wallet-backed checkout",
+				"Designed a schema-driven dynamic form engine where a single JSON configuration drives React to render complex multi-step forms, reused across vendor onboarding, booking flows, KYC checks, and the Company Onboarding pipeline",
+				"Integrated multi-region payment rails with Stripe for international cards plus WalPay and regional gateways covering Oman, Portugal, and Pakistan, alongside an internal wallet ledger for top-ups, transfers, and provider payouts",
+				"Built an AI-powered admin panel on the Claude SDK, OpenAI, and OpenRouter SDKs for automated triage, content generation, and operational tooling",
+				"Own production infrastructure end-to-end: frontend on Vercel, Django backend on AWS, with CI/CD pipelines, environment management, and zero-downtime release workflows"
 			],
-			"toolsUsed": ["React", "Nodejs", "NextJs", "Tailwindcss", "Prisma", "SQL"]
+			"toolsUsed": [
+				"Python",
+				"Django",
+				"Django REST Framework",
+				"React",
+				"Vite",
+				"PostgreSQL",
+				"Stripe",
+				"WalPay",
+				"AWS",
+				"Vercel",
+				"Claude SDK",
+				"OpenAI",
+				"OpenRouter"
+			]
 		},
 		{
 			"companyName": "Future Tech Technologies",
 			"position": "Senior Software Engineer & Team Lead",
-			"employmentTime": "2nd June, 2025 - 2nd August, 2025",
+			"employmentTime": "Jun 2024 - Aug 2024",
 			"roles": [
-				"Building Stunning looking Web Applications using React, Nodejs,NextJs, and Tailwindcss",
-				"Testing Multiple Applications",
-				"Making sure the production does not go down",
-				"Building full backend using Nodejs, Express, and SQL with Prisma",
-				"Managing a team of 5+ developers and full UI and UX of the application"
+				"Led a 5-member team delivering Astro and React web applications with Tailwind CSS",
+				"Architected Express/Prisma backends and enforced SQL data integrity across multiple services",
+				"Implemented monitoring and end-to-end tests, achieving zero-downtime deployments"
 			],
 			"toolsUsed": [
 				"Astro",
 				"React",
-				"Nodejs",
-				"NextJs",
-				"Tailwindcss",
+				"Next.js",
+				"Node.js",
 				"Prisma",
-				"SQL"
+				"Tailwind CSS"
 			]
 		},
 		{
 			"companyName": "Freelancer",
 			"position": "Full Stack Developer",
-			"employmentTime": "1st April, 2024 - 1st June, 2025",
+			"employmentTime": "Apr 2024 - Jun 2024",
 			"roles": [
-				"Building Stunning looking Web Applications using Astro, React, Nodejs,NextJs, and Tailwindcss",
-				"Managing Projects and Clients",
-				"Hiring and Training New Developers",
-				"Testing and Deploying Applications for Clients and in free lancer platform"
+				"Delivered 10+ client projects spanning Astro, React, Next.js, and Flutter",
+				"Managed end-to-end project scoping, client communication, and junior developer mentoring",
+				"Automated deployment workflows and maintained code quality across multiple platforms"
 			],
 			"toolsUsed": [
 				"Flutter",
-				"Dart",
-				"Firebase",
-				"Superbase",
-				"MongoDB",
-				"Convex",
-				"SQL",
-				"Prisma",
-				"Nodejs",
-				"Express",
-				"Astro",
 				"React",
-				"Tailwindcss"
+				"Next.js",
+				"Node.js",
+				"Supabase",
+				"MongoDB",
+				"Convex"
 			]
 		},
 		{
 			"companyName": "Daxno Technology",
 			"position": "Flutter Developer",
-			"employmentTime": "1st December, 2023 - 1st  April, 2024",
+			"employmentTime": "Dec 2023 - Apr 2024",
 			"roles": [
-				"Building Stunning looking Android Applications",
-				"Testing Multiple Applications",
-				"Making sure the production does not go down"
+				"Built production-grade Android applications with Flutter and Firebase",
+				"Developed automated test suites and hot-fix pipelines, reducing regression incidents",
+				"Optimized performance, cutting app launch time by 40%"
 			],
-			"toolsUsed": [
-				"Flutter",
-				"VS Code",
-				"Git",
-				"Android Studio",
-				"Firebase",
-				"Superbase"
-			]
+			"toolsUsed": ["Flutter", "Firebase", "Dart"]
 		},
 		{
 			"companyName": "Swam Technology",
-			"position": "Machine Learning Engineer",
-			"employmentTime": "Sep, 2022 - Dec, 2023",
+			"position": "Machine Learning Engineer & Full Stack Web Developer",
+			"employmentTime": "Sep 2022 - Dec 2023",
 			"roles": [
-				"Expert in software design and machine learning model development",
-				"Specialized in text analysis for abusive language detection",
-				"Proven ability to apply machine learning to real-world problems",
-				"Versatile skill set that bridges software engineering and advanced analytics."
+				"Built abuse-detection ML models with TensorFlow and Python achieving 92% accuracy",
+				"Developed a law-firm CMS with React, Node.js, and MongoDB, cutting content update time in half",
+				"Automated end-to-end pipelines bridging analytics and production systems"
 			],
-			"toolsUsed": [
-				"Python",
-				"Flusk",
-				"SQL Lite",
-				"MongoDB",
-				"Git",
-				"TensorFlow"
-			]
-		},
-		{
-			"companyName": "Swam Technology",
-			"position": "Full Stack Web Developer",
-			"employmentTime": "Sep, 2022 - Dec, 2023",
-			"roles": [
-				"Incorporated design principles to enhance navigation and readability.",
-				"Implemented user-friendly CMS for law firm.",
-				"Empowered non-technical users to manage website content seamlessly.",
-				"Ensured intuitive design for easy content updates."
-			],
-			"toolsUsed": [
-				"HTML5",
-				"JavaScript",
-				"React",
-				"NodeJs",
-				"MongoDB",
-				"Firebase"
-			]
+			"toolsUsed": ["Python", "TensorFlow", "React", "Node.js", "MongoDB"]
 		},
 		{
 			"companyName": "Innovation Tech",
-			"position": "Intern",
+			"position": "Software Engineering Intern",
 			"employmentTime": "2021",
 			"roles": [
-				"Code review and testing responsibilities.",
-				"Design of multiple user interfaces.",
-				"Acquisition of significant knowledge through project involvement.",
-				"Extensive test writing for various applications."
+				"Reviewed code and wrote unit and integration tests for Java/XML applications",
+				"Designed intuitive UIs in Figma for new feature rollouts",
+				"Gained hands-on experience in Agile workflows and sprint planning"
 			],
-			"toolsUsed": ["Java", "XML", "Figma", "Firebase", "SQL Lite"]
+			"toolsUsed": ["Java", "XML", "Figma", "Firebase"]
 		}
 	],
 	"testimonials": [
@@ -300,86 +272,89 @@
 	],
 	"services": [
 		{
-			"title": "Mobile App Development",
-			"description": "Building native and cross-platform mobile applications with Flutter and React Native. From concept to deployment, I create intuitive, high-performance apps for iOS and Android.",
-			"icon": "mobile",
-			"features": [
-				"Cross-platform development with Flutter",
-				"Native Android development",
-				"UI/UX design implementation",
-				"App store deployment",
-				"Performance optimization",
-				"Real-time data integration"
-			],
-			"technologies": [
-				"Flutter",
-				"Dart",
-				"Android Studio",
-				"Firebase",
-				"Supabase"
-			]
-		},
-		{
-			"title": "Web Development",
-			"description": "Creating modern, responsive web applications using cutting-edge technologies. From simple landing pages to complex web applications with full-stack capabilities.",
+			"title": "SaaS & Web Platforms",
+			"description": "Architecting production SaaS applications with real-time backends, multi-tenant RBAC, payment integration, and schema-driven UI systems that scale without rewriting components for every new flow.",
 			"icon": "globe",
 			"features": [
-				"Frontend development with React & Astro",
-				"Backend API development",
-				"Database design and optimization",
-				"Cloud deployment and hosting",
-				"Performance optimization",
-				"SEO and accessibility"
+				"Full-stack SaaS architecture with React and Next.js",
+				"Real-time backends with Convex and Django REST Framework",
+				"Multi-region payment rails with Stripe and local gateways",
+				"Role-based access control and organizational permissions",
+				"Schema-driven dynamic form engines",
+				"Zero-downtime deployment and CI/CD pipelines"
 			],
 			"technologies": [
 				"React",
-				"Astro",
-				"Node.js",
+				"Next.js",
+				"Django",
+				"Convex",
+				"PostgreSQL",
 				"TypeScript",
-				"Tailwind CSS",
-				"Next.js"
+				"Stripe",
+				"Tailwind CSS"
 			]
 		},
 		{
-			"title": "Full-Stack Solutions",
-			"description": "End-to-end development services from database design to user interface. Complete solutions that scale with your business needs.",
+			"title": "Mobile App Development",
+			"description": "Building cross-platform mobile applications with React Native and Flutter that share typed backends with web counterparts, reducing API contract drift and shipping to both app stores from a single codebase.",
+			"icon": "mobile",
+			"features": [
+				"Cross-platform iOS and Android with React Native and Expo",
+				"Flutter development for performance-critical apps",
+				"Shared Convex backends between web and mobile",
+				"Biometric auth, push notifications, and offline-first storage",
+				"App Store and Play Store deployment",
+				"Monorepo architecture with Turborepo"
+			],
+			"technologies": [
+				"React Native",
+				"Expo",
+				"Flutter",
+				"NativeWind",
+				"Firebase Auth",
+				"Convex"
+			]
+		},
+		{
+			"title": "AI & LLM Integration",
+			"description": "Integrating large language models into production systems with provider abstraction, cost-aware routing, streaming responses, and the guardrails needed to ship AI features without hallucination risk.",
 			"icon": "zap",
 			"features": [
-				"Complete application architecture",
-				"Database design and management",
-				"API development and integration",
-				"Authentication and security",
-				"Cloud infrastructure setup",
-				"DevOps and deployment"
+				"Multi-provider AI with Claude SDK, OpenAI, and OpenRouter",
+				"Streaming AI responses with real-time UI updates",
+				"Receipt scanning, content generation, and editorial AI",
+				"Prompt engineering with security boundaries against injection",
+				"Cost-per-task routing and model selection per feature",
+				"CLAUDE.md, AGENTS.md, and CI scaffolding for AI-assisted teams"
 			],
 			"technologies": [
-				"Node.js",
-				"Express",
-				"MongoDB",
-				"PostgreSQL",
-				"AWS",
-				"Docker"
+				"Claude SDK",
+				"OpenAI",
+				"OpenRouter",
+				"TensorFlow",
+				"Google Gemini",
+				"Replicate"
 			]
 		},
 		{
-			"title": "Cloud & DevOps",
-			"description": "Setting up scalable cloud infrastructure and implementing CI/CD pipelines for reliable, automated deployments.",
+			"title": "Cloud & Infrastructure",
+			"description": "Setting up production infrastructure across AWS and Vercel with CI/CD pipelines, environment management, Docker containers, and monitoring for zero-downtime releases.",
 			"icon": "cloud",
 			"features": [
-				"Cloud infrastructure setup",
-				"CI/CD pipeline implementation",
-				"Container orchestration",
-				"Monitoring and logging",
-				"Security best practices",
-				"Cost optimization"
+				"AWS infrastructure for Django backends",
+				"Vercel deployment for Next.js and Astro frontends",
+				"CI/CD with GitHub Actions and automated testing",
+				"Docker containerization and orchestration",
+				"Environment management and secrets handling",
+				"Performance monitoring and error tracking with Sentry"
 			],
 			"technologies": [
 				"AWS",
-				"Google Cloud",
-				"Docker",
 				"Vercel",
-				"Netlify",
-				"GitHub Actions"
+				"Docker",
+				"GitHub Actions",
+				"Sentry",
+				"PostHog"
 			]
 		}
 	]

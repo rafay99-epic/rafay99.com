@@ -1,0 +1,73 @@
+---
+Projecttitle: "Lumo - Financial Tracker"
+ProjectDescription: "Cross-platform financial tracking app with AI receipt scanning, budget cycle management, loan tracking, and a companion admin panel, built on Expo and Convex with multi-provider AI fallback."
+ProjectImage: /ProjectImages/Lumo/logo.png
+draft: false
+ProjectTech:
+  [
+    "React Native",
+    "Expo 54",
+    "Next.js 16",
+    "TypeScript",
+    "Convex",
+    "Firebase Auth",
+    "Google Gemini",
+    "OpenRouter",
+    "PostHog",
+    "Turborepo",
+    "NativeWind",
+    "Tailwind CSS",
+    "TanStack Router",
+    "Radix UI",
+  ]
+ProjectCategory: ["SaaS", "Mobile Apps"]
+ProjectGithubLink: ""
+ProjectDeployedLink: "https://lumocash.com"
+ProjectRanking: "4"
+---
+
+## Project Overview
+
+Lumo is a financial tracking application that runs on iOS and Android with a companion website and admin panel, all backed by a shared Convex real-time backend. The app helps users track daily spending, manage budget cycles with automatic carryover, scan receipts using AI, track loans, and monitor income streams. The project ships from a Turborepo monorepo containing four packages: an Expo 54 React Native mobile app, a Next.js 16 marketing and blog site, a Vite-based admin panel, and a shared Convex backend.
+
+What makes Lumo more than a simple expense tracker is the budget cycle engine. Rather than treating a budget as a static monthly number, Lumo models budgets as cycles that can start on any date, carry surplus or deficit forward into the next cycle, deduct outstanding loans from available funds, and aggregate income from multiple streams with different frequencies. The cycle state is computed in real time from the underlying transaction and income data, which means the "available budget" number a user sees always reflects the current truth rather than a cached snapshot.
+
+## Receipt Scanning
+
+The receipt scanning feature demonstrates a pattern I use across several projects: a multi-provider AI fallback chain configured through environment variables rather than hardcoded model references. When a user captures a receipt through the camera or selects one from their gallery, the mobile app compresses the image to a maximum width of 1024 pixels at 50% JPEG quality using Expo's ImageManipulator, then base64-encodes it and sends it to a Convex action.
+
+The backend action forwards the image to an AI vision model with a carefully crafted system prompt that instructs the model to extract merchant name, location, date, currency, subtotal, tax, tip, total, individual line items, and a category guess. The prompt also includes an explicit security boundary that tells the model to ignore any instructions embedded in the receipt image itself, which prevents prompt injection attacks through crafted receipts. The response is validated against a Zod schema that enforces maximum lengths and sanitizes HTML to prevent XSS, then returned to the client for review before the user confirms and saves the transaction.
+
+The primary model routes through OpenRouter, which allows the backend to specify a chain of models with automatic fallback. If the first model fails or times out, OpenRouter routes to the next one without the client needing to retry. Model selection is controlled entirely through environment variables, so switching from one provider to another requires no code changes and no deployment.
+
+PostHog tracks every receipt extraction with distinct event IDs that feed into an LLM-specific analytics pipeline, making it possible to compare extraction accuracy, latency, and cost across different models over time.
+
+## Budget Cycle Engine
+
+The budget calculation engine is the most complex piece of backend logic in Lumo. A central getCycleState function computes the complete state of the current budget cycle including total budget, total spending, available budget, outstanding loans, and net available budget after loan deductions. Cycle boundaries are calculated automatically based on income stream start dates, and the system supports multiple income streams with different frequencies including monthly, weekly, bi-weekly, annually, and one-time.
+
+When a cycle ends, a finalization process locks the cycle, calculates the final carryover amount, and generates a savings snapshot that records total budget, total spending, savings, budget savings, automatic savings, over-budget amount, and carryover to the next cycle. Whether negative balances carry forward is a per-user preference stored in a budgetPreferences table. This means one user can choose to start each month fresh regardless of overspending while another user carries the deficit forward as a form of accountability.
+
+Loan tracking is a first-class feature rather than an afterthought. Users create loan records with borrower names and track individual lent and repaid transactions against each loan. Outstanding loan balances are deducted from the available budget in real time, which gives users an honest picture of their actual spending power rather than a number that ignores money they have lent out.
+
+## Device Security
+
+Lumo implements a multi-device security model that goes beyond simple token-based sessions. Each device is identified by a unique device ID, and new devices must be approved before they can access the user's financial data. The approval flow uses hashed session tokens stored alongside device metadata like last-seen timestamps and platform information. Recovery codes provide a fallback path for users who lose access to their approved device. A deviceSecurityEvents table maintains a full audit trail of device bootstraps, approvals, revocations, and admin overrides.
+
+The mobile app uses Expo's Local Authentication API for biometric verification and Expo Secure Store for encrypted local storage of sensitive session data. On app launch, a preloading screen checks authentication state and loads the user's data with a visible progress indicator before routing to either the onboarding flow or the main dashboard, with the preload state cached in AsyncStorage to prevent flicker on subsequent opens.
+
+## The Admin Panel
+
+The admin panel is a separate Vite application using TanStack Router for type-safe file-based routing and Radix UI components for the interface. It provides user management with the ability to view, deactivate, or ban accounts. Subscription administration lets the admin manage tiers, trial periods, and promotional access. A device access section shows pending device approvals and lets the admin override security gates when users lock themselves out.
+
+An error tracking dashboard aggregates client and server errors with severity levels, source filtering, and resolution notes. A builds section manages iOS and Android release records including release notes, SHA256 hashes, and per-platform notification delivery to both email waitlist subscribers and push notification recipients. A predictions section lets the admin trigger batch recalculations of AI-generated spending predictions across the user base, with progress tracking and error reporting for each run.
+
+The admin panel also manages a waitlist with full email threading through Resend, a blog comment moderation system with nested threading and abuse prevention via rate limiting and hCaptcha trust scores, and a feature request tracker with community voting.
+
+## The Website
+
+The companion website at lumocash.com runs on Next.js 16 and serves as both the marketing site and a content platform with a blog. The blog uses MDX with rehype-pretty-code and Shiki for syntax highlighting, remark-gfm for GitHub Flavored Markdown, and an RSS feed generated through the feed library. Comments are backed by the same Convex database as the mobile app and support nested threading, emoji reactions, and progressive trust scoring where new commenters must pass hCaptcha verification while established users with high trust scores can comment freely.
+
+## Technical Stack
+
+The monorepo runs on Turborepo with Bun and TypeScript 5.9 in strict mode. The mobile app uses Expo 54 with React Native 0.81, Expo Router for file-based navigation, NativeWind for Tailwind styling, React Native Reanimated for animations, and React Native Chart Kit for financial visualizations. The backend runs entirely on Convex with Firebase JWT verification for authentication. Analytics run through PostHog with session replay on mobile and AI-specific event tracking for receipt scanning. Code quality is enforced by Biomejs across all packages, and the Convex backend has test coverage through Vitest with the Convex test harness.

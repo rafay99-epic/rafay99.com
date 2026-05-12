@@ -2,7 +2,7 @@
 Projecttitle: "Future Insight Android App"
 ProjectDescription: "Explore insightful content effortlessly with the 'Clean UI Future Insight' Android App. Designed in Flutter for a seamless and immersive experience."
 ProjectImage: https://7huqjqx8yo.ufs.sh/f/TViMykBJnLIJ2Ee1R7zNlCFs7RaDUjr1gkAhYuLmT9ZtyS0w
-draft: false
+draft: true
 ProjectTech:
   [
     "Flutter",

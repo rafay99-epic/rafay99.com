@@ -1,0 +1,80 @@
+---
+Projecttitle: "Env Pilot - Environment Variable Management"
+ProjectDescription: "Multi-surface SaaS for secure environment-variable management with a web dashboard, VS Code extension, CLI tool, and mobile app, backed by WorkOS Vault encryption and granular per-variable RBAC."
+ProjectImage: /ProjectImages/EnvPilot/preview.png
+draft: false
+ProjectTech:
+  [
+    "Next.js 16",
+    "React 19",
+    "TypeScript",
+    "Convex",
+    "WorkOS AuthKit",
+    "WorkOS Vault",
+    "Polar.sh",
+    "VS Code Extension API",
+    "Commander.js",
+    "Ink",
+    "Expo 55",
+    "Turborepo",
+    "Tailwind CSS",
+    "Three.js",
+    "Sentry",
+  ]
+ProjectCategory: ["SaaS", "Web Apps"]
+ProjectGithubLink: ""
+ProjectDeployedLink: "https://envpilot.dev"
+ProjectRanking: "3"
+---
+
+## Project Overview
+
+Env Pilot exists because every team I have worked on eventually develops the same bad habit: copying `.env` files through Slack DMs, pasting secrets into shared Google Docs, or committing `.env.example` files that drift out of sync with production within a week. The platform provides a single place to store, version, and distribute environment variables across projects and environments, with access controls granular enough to let a team lead grant a contractor read access to three specific variables for two weeks and have that access automatically expire.
+
+The product ships across four surfaces from a single Turborepo monorepo: a Next.js 16 web dashboard for management, a VS Code extension that syncs variables directly into the editor, a CLI tool for CI/CD pipelines and local development, and an Expo 55 mobile app for on-the-go approvals. All four share one Convex backend, which means permission changes propagate in real time to every connected surface via WebSocket subscriptions.
+
+## Security Architecture
+
+The most important architectural decision in Env Pilot is the separation of metadata from secret values. Variable names, descriptions, tags, environments, and permission records live in Convex where they benefit from real-time subscriptions and fast indexed queries. The actual plaintext secret values never touch the Convex database. They are stored in WorkOS Vault, which encrypts them at rest with AES-256 using per-organization key isolation. When a client requests a variable's value, the backend first verifies the user's permission at the Convex layer, then makes a separate call to the Vault endpoint to decrypt and return the value. This means that even if the Convex database were compromised, an attacker would get metadata and permission records but no usable secrets.
+
+Authentication runs through WorkOS AuthKit, which handles OAuth, SAML, and email-based sign-in with secure HTTP-only session cookies on the web and device-code OAuth flows on the CLI and extension. Every API endpoint wraps its handler in a withAuth middleware that verifies the session before proceeding.
+
+## Permission Model
+
+Access control operates at three levels. At the organization level, users are assigned one of three roles: admin, team lead, or member. Admins have full control over the organization, its projects, and all variables including the ability to roll back changes. Team leads can manage projects and variables and grant per-variable access to other users. Members have read-only access and must request explicit grants for individual variables.
+
+At the project level, a separate role hierarchy of manager, developer, and viewer further restricts what users can do within a specific project. Managers can create and delete variables. Developers can create and update but not delete. Viewers can only read variables they have been explicitly granted access to.
+
+The third level is per-variable granular permissions. Individual variables can carry read, write, or admin grants for specific users, and these grants can include a TTL that causes them to expire automatically after a set period. When a permission is revoked, a real-time event fires through Convex's subscription system, and any connected VS Code extension or CLI session responds immediately by deleting the local `.env` file that contained the now-unauthorized variable.
+
+## The VS Code Extension
+
+The extension is the surface where most developers interact with Env Pilot daily. After authenticating through an OAuth flow that opens a browser and polls for completion, the extension syncs variables from a linked project into a local `.env` file. It supports multi-directory sync, where different directories in the same workspace can be linked to different projects or environments.
+
+The extension implements several layers of secret protection. A file protection system detects any attempt to edit a synced `.env` file and reverts the change automatically. A clipboard guard blocks copy and paste operations on variables where the user has read-only access. A dual-layer commit guard both prevents `.env` files from being staged in VS Code's git interface and optionally installs a pre-commit hook that blocks commits at the git level. CodeLens annotations appear inline above `.env` files showing the sync status and quick-action buttons for each variable.
+
+Conflict resolution is configurable through VS Code settings with strategies for prompt, overwrite, backup, merge, and skip, so teams can decide how to handle situations where a local `.env` file already contains values that differ from the remote.
+
+## The CLI
+
+The CLI is built with Commander.js for command routing and Ink for a React-rendered terminal UI that provides an interactive dashboard when invoked without arguments. Authentication uses a device-code flow that opens a browser, polls for completion, and stores the resulting tokens in a local config file via the conf library.
+
+The core workflow commands are init to link a directory to a project, pull to download variables into a local file, push to upload local values to the remote, and run to execute a command with environment variables injected from the remote without writing them to disk. The pull command supports seven export formats: dotenv, JSON, YAML, Vercel, Netlify, AWS Parameter Store, and Docker Compose, which makes it straightforward to integrate with any deployment target. A sync command combines init, auth, and pull into a single step for quick onboarding.
+
+Project configuration is stored in a `.envpilot` YAML file that tracks the linked project ID, environment, and target file for each directory, supporting both single-project and multi-project configurations.
+
+## Billing and Payments
+
+Subscription management is handled through Polar.sh rather than Stripe. When a user initiates checkout, the backend ensures a Polar customer record exists (creating one if needed, with a fallback email search for conflict resolution), generates a checkout session with the selected products, and redirects the user to Polar's hosted checkout page. Webhook events for subscription creation, updates, and cancellation are verified using the Standard Webhooks specification and update a userTiers table that the feature-gating logic checks on every protected operation.
+
+The tier system is fully admin-configurable. Tier definitions, feature registries, and the mapping between tiers and features are all stored in the database and managed through the admin interface. The admin can create custom tiers, adjust limits, enable payments globally or per-feature, and override individual user subscriptions without deploying code.
+
+## Audit and Compliance
+
+Every significant action in the system writes an entry to a comprehensive audit log that spans nearly a thousand lines of backend code. Access to sensitive variables, permission changes, login events, and administrative actions are all recorded with timestamps, user identifiers, and contextual metadata. The audit trail supports configurable retention per tier and provides compliance reporting queries for teams that need to demonstrate access control practices to auditors or regulators.
+
+An anomaly detection system monitors usage patterns and flags unusual behavior such as bulk variable access from a new IP or permission escalation attempts, providing an additional layer of security beyond the permission model itself.
+
+## Technical Stack
+
+The monorepo runs on Turborepo with Bun as the package manager and TypeScript in strict mode. The web dashboard uses Next.js 16 with React 19 and the React Compiler, Tailwind CSS v4, Three.js with React Three Fiber for the landing page, Recharts for analytics dashboards, and Zustand for client state. Error tracking runs through Sentry across all four surfaces. The backend runs entirely on Convex with Resend handling transactional email delivery. The VS Code extension is bundled with esbuild, the CLI with tsup, and end-to-end tests run through Playwright. The current version is 1.11.0 across the monorepo, with the extension at v1.4.0 on the VS Code Marketplace and Open VSX.

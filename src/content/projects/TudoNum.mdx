@@ -1,24 +1,31 @@
 ---
-Projecttitle: "TudoNum- Launching Platform"
-ProjectDescription: "An Ultimate Platform where people get the chance to become an affiliate and earn money by referring people to the platform."
+Projecttitle: "TudoNum - Multi-Service Super App"
+ProjectDescription: "Multi-service super app spanning professional services, ride-hailing, logistics, and deliveries with advanced affiliate system, real-time booking, and multi-region payments."
 ProjectImage: https://7huqjqx8yo.ufs.sh/f/TViMykBJnLIJlw6k4WOwnMSaAmJh8r0o2yIjlPqUTZEsuO7H
 draft: false
 ProjectTech:
   [
     "React",
     "NextJS",
+    "Vite",
+    "Python",
+    "Django",
+    "Django REST Framework",
+    "PostgreSQL",
     "Convex",
     "Clerk",
     "Vercel",
+    "AWS",
     "TailwindCSS",
-    "ShadcnUI",
-    "Lucide Icons",
-    "React Hook Form",
-    "React Query",
+    "Stripe",
+    "WalPay",
+    "Claude SDK",
+    "OpenAI",
+    "OpenRouter",
   ]
-ProjectCategory: ["Web Apps"]
+ProjectCategory: ["Flagship SaaS", "Web Apps"]
 ProjectGithubLink: "https://github.com/rafay99-epic/TudoNum-landing"
-ProjectRanking: "1"
+ProjectRanking: "5"
 ProjectDeployedLink: "https://www.tudonum.app/"
 ---
 
@@ -26,60 +33,111 @@ import ImageSlider from "../../components/ReactComponent/blog/enhancements/image
 
 ## Project Overview
 
-**TudoNum** is a revolutionary multi-service platform that unifies various service categories under one comprehensive ecosystem. It's designed as a "super app" that connects users with service providers across multiple industries while incorporating a sophisticated affiliate marketing system.
+**TudoNum** (live at tudonum.app) is a multi-service super app architected from the ground up to span professional services, ride-hailing, logistics, and deliveries. It's built with a Python/Django REST backend and React + Vite frontend maintained as independent codebases, enabling teams to work and scale independently while sharing a unified data model.
+
+**My role**: Senior Full Stack Developer, architecting and shipping the entire end-to-end professional services module including vendor onboarding, RBAC, booking engine, and payments infrastructure.
 
 ### Core Purpose
 
-TudoNum serves as a unified platform that eliminates the need for multiple apps by providing access to services across:
+TudoNum eliminates the need for multiple apps by providing access to services across a unified ecosystem:
 
-- **Transportation** (Taxi, Logistics)
-- **Food & Groceries** (Food delivery, Grocery shopping)
-- **Healthcare** (Doctor consultations, Health services)
-- **Real Estate** (Buying, selling, renting properties)
-- **Entertainment** (Gaming, Entertainment services)
-- **Beauty & Wellness** (Salons, spas, personal care)
-- **Professional Services** (Consulting, Legal, Freelancing)
-- **Education** (Tutoring, Courses)
-- **Marketplace** (Classified ads, E-commerce)
-- **Home Services** (Maintenance, Construction)
+- **Professional Services** - Consulting, legal services, freelancing, vendor onboarding
+- **Transportation** - Taxi, ride-hailing, logistics
+- **Food & Groceries** - Food delivery, grocery shopping
+- **Healthcare** - Doctor consultations, health services
+- **Real Estate** - Property buying, selling, renting
+- **Beauty & Wellness** - Salons, spas, personal care
+- **Education** - Tutoring, online courses
+- **Entertainment** - Gaming, entertainment services
+- **Marketplace** - Classified ads, e-commerce
+- **Home Services** - Maintenance, construction
+
+### Key Architectural Achievements
+
+#### **Schema-Driven Form Engine ("DNA")**
+
+The core innovation is a dynamic form engine where a single JSON configuration drives React to render complex, multi-step forms from a shared UI primitive library. This enables:
+
+- Hundreds of distinct vendor and service flows without new component code
+- Consistent UX across the platform
+- Rapid iteration on new service types
+- Reuse across Company Onboarding pipeline (document collection, KYC checks, admin approval state machines)
+
+#### **Professional Services Module (My Ownership)**
+
+End-to-end implementation including:
+- Vendor onboarding and profile management
+- Multi-tier RBAC with in-app role switching (customer / vendor / admin)
+- City- and country-scoped service discovery
+- Calendar-driven booking with survey scheduling
+- Real-time availability and conflict detection across provider calendars
+- Wallet-backed checkout with secure transactions
+
+#### **Multi-Region Payment Rails**
+
+Integrated payment infrastructure supporting:
+- Stripe for international cards
+- WalPay for regional coverage
+- Local gateways for Oman, Portugal, and Pakistan
+- Internal wallet ledger handling top-ups, transfers, and provider payouts
+
+#### **AI-Powered Admin Panel**
+
+Built on Claude Code, OpenAI, and OpenRouter SDKs:
+- Automated triage and support routing
+- Content generation and optimization
+- Operational tooling and insights
+- Transactional SMTP and webhook handlers for invitations, verification, and payment events
+
+#### **Production Infrastructure**
+
+End-to-end ownership:
+- Frontend deployed on Vercel with ISR caching
+- Django backend on AWS with auto-scaling
+- CI/CD pipelines with environment management
+- Zero-downtime release workflows
+- Comprehensive monitoring and error tracking
 
 ## Technology Stack
 
-### **Frontend Framework**
+### **Frontend**
 
-- **Next.js 15.2.4** - React-based full-stack framework
-- **React 19** - Latest React with concurrent features
-- **TypeScript 5.8.3** - Type-safe development
-- **Tailwind CSS 3.4.17** - Utility-first CSS framework
-
-### **Backend & Database**
-
-- **Convex** - Real-time backend platform with automatic scaling
+- **React + Vite** - Modern frontend with rapid development
+- **TypeScript** - Type-safe development across frontend
+- **Tailwind CSS** - Utility-first styling
 - **Clerk** - Authentication and user management
-- **Vercel** - Deployment and hosting platform
+- **Framer Motion** - Advanced animations
+- **React Hook Form** - Form state management
+- **Zustand/Redux** - State management
 
-### **UI/UX Components**
+### **Backend**
 
-- **Radix UI** - Accessible, unstyled UI primitives
-- **Framer Motion** - Advanced animations and transitions
-- **Lucide React** - Beautiful icon library
-- **Sonner** - Toast notifications
-- **React Hook Form** - Form management
-- **TipTap** - Rich text editor for blog content
+- **Python + Django** - Web framework
+- **Django REST Framework** - RESTful API development
+- **PostgreSQL** - Relational database
+- **Celery** - Async task queue
+- **Redis** - Caching and sessions
 
-### **Data Visualization & Charts**
+### **Payments & Integrations**
 
-- **Chart.js** - Interactive charts
-- **React Chart.js 2** - React wrapper for Chart.js
-- **Recharts** - Composable charting library
+- **Stripe API** - International card processing
+- **WalPay SDK** - Regional payment gateway
+- **Custom wallet ledger** - Internal transaction handling
+- **SMTP** - Email for transactional events
+- **Webhooks** - Event-driven architecture
 
-### **Additional Libraries**
+### **AI/LLM**
 
-- **QR Code generation** - For referral system
-- **PDF generation** - For reports and exports
-- **Excel export** - For data analysis
-- **Country selection** - International support
-- **Date handling** - Date-fns for time operations
+- **Claude SDK** - For admin panel intelligence
+- **OpenAI** - Alternative LLM provider
+- **OpenRouter** - Multi-provider abstraction for cost control and flexibility
+
+### **Infrastructure**
+
+- **Vercel** - Frontend deployment with ISR caching
+- **AWS** - Backend hosting and services
+- **GitHub Actions** - CI/CD pipelines
+- **Docker** - Containerization for consistent environments
 
 ## Design System
 

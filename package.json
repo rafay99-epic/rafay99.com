@@ -1,7 +1,7 @@
 {
 	"name": "rafay99.com",
 	"type": "module",
-	"version": "10.1.0",
+	"version": "10.2.0",
 	"scripts": {
 		"dev": "astro dev",
 		"build": "astro build",
@@ -16,14 +16,14 @@
 		"biome:check": "biome check --write ."
 	},
 	"dependencies": {
-		"@astrojs/mdx": "5.0.2",
-		"@astrojs/partytown": "2.1.5",
-		"@astrojs/react": "5.0.1",
-		"@astrojs/rss": "4.0.17",
-		"@astrojs/sitemap": "3.7.1",
+		"@astrojs/mdx": "5.0.4",
+		"@astrojs/partytown": "2.1.7",
+		"@astrojs/react": "5.0.4",
+		"@astrojs/rss": "4.0.18",
+		"@astrojs/sitemap": "3.7.2",
 		"@astrojs/tailwind": "^6.0.2",
 		"@astrojs/ts-plugin": "1.10.7",
-		"@astrojs/vercel": "10.0.2",
+		"@astrojs/vercel": "10.0.6",
 		"@fontsource/poppins": "^5.2.7",
 		"@playform/compress": "^0.2.0",
 		"@rollup/plugin-yaml": "^4.1.2",
@@ -32,7 +32,7 @@
 		"@types/react-dom": "19.1.6",
 		"@types/react-syntax-highlighter": "^15.5.13",
 		"@vercel/speed-insights": "^1.2.0",
-		"astro": "6.0.8",
+		"astro": "6.3.1",
 		"astro-icon": "^1.1.5",
 		"astro-opengraph-images": "^1.13.1",
 		"astro-robots-txt": "^1.0.0",

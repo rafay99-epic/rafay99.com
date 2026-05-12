@@ -2,7 +2,7 @@
 Projecttitle: Cinematic Experience
 ProjectDescription: "Blogging Website Developed with React, Astro and Tailwind"
 ProjectImage: https://7huqjqx8yo.ufs.sh/f/TViMykBJnLIJbCz5Qe4nRBrPQNqFmsSdU0jLhDYMVTkJ4Z76
-draft: false
+draft: true
 ProjectTech:
   - CSS
   - Typescript

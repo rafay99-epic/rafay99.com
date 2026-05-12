@@ -1,0 +1,199 @@
+---
+import {
+	ArrowRight,
+	Bug,
+	ExternalLink,
+	GitMerge,
+	GitPullRequest,
+	Star,
+} from "lucide-react";
+---
+
+<section class="relative min-h-screen overflow-hidden bg-[#1a1b26] py-20">
+  <div class="absolute inset-0 overflow-hidden">
+    <div class="absolute left-1/4 top-0 h-[500px] w-[500px] rounded-full bg-[#9ece6a]/3 blur-[150px]"></div>
+    <div class="absolute bottom-0 right-1/4 h-[400px] w-[400px] rounded-full bg-[#7aa2f7]/3 blur-[120px]"></div>
+  </div>
+
+  <div class="relative mx-auto max-w-5xl px-6">
+    <!-- Header -->
+    <div class="mb-16 text-center">
+      <div class="fade-up mb-4 inline-flex items-center gap-2 rounded-full border border-[#9ece6a]/20 bg-[#9ece6a]/5 px-4 py-1.5 text-xs font-medium tracking-wider text-[#9ece6a]">
+        <GitPullRequest className="h-3.5 w-3.5" />
+        OPEN SOURCE
+      </div>
+      <h1
+        class="fade-up delay-1 mb-4 font-bold leading-tight text-[#c0caf5]"
+        style="font-size: clamp(1.75rem, 3.5vw, 2.75rem);"
+      >
+        Open Source Contributions
+      </h1>
+      <p
+        class="fade-up delay-2 mx-auto max-w-2xl text-[#a9b1d6]"
+        style="font-size: clamp(0.875rem, 1.2vw, 1.05rem);"
+      >
+        I contribute to projects I use and care about. The feedback-and-ship loop with maintainers, at small scale, is the real work of building software with other people.
+      </p>
+    </div>
+
+    <!-- Mole -->
+    <div class="fade-up delay-2 mb-8 rounded-2xl border border-[#414868]/30 bg-[#24283b]/30 p-8 backdrop-blur-sm transition-all duration-300 hover:border-[#9ece6a]/30">
+      <div class="mb-6 flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <div class="mb-2 flex items-center gap-3">
+            <h2 class="text-xl font-bold text-[#c0caf5]">Mole</h2>
+            <span class="inline-flex items-center gap-1 rounded-full bg-[#9ece6a]/10 px-2.5 py-0.5 text-xs font-medium text-[#9ece6a]">
+              <GitMerge className="h-3 w-3" />
+              Merged
+            </span>
+          </div>
+          <p class="text-sm text-[#565f89]">macOS deep-clean utility by tw93</p>
+        </div>
+        <div class="flex items-center gap-1.5 text-sm text-[#565f89]">
+          <Star className="h-4 w-4 text-[#e0af68]" />
+          <span class="font-medium text-[#a9b1d6]">51k+</span> stars on GitHub
+        </div>
+      </div>
+
+      <div class="mb-6 space-y-4 text-[15px] leading-relaxed text-[#a9b1d6]">
+        <p>
+          I added a <code class="rounded bg-[#414868]/50 px-1.5 py-0.5 text-sm text-[#7aa2f7]">--list</code> flag to <code class="rounded bg-[#414868]/50 px-1.5 py-0.5 text-sm text-[#7aa2f7]">mo uninstall</code> that enumerates installed applications across system, user, Homebrew, and Setapp sources, surfacing both the display name and the exact Homebrew cask token required for uninstall. The implementation is in Bash with 12 bats test cases covering edge cases across all source types.
+        </p>
+        <p>
+          The maintainer came back and said my initial design added too much top-level surface to the CLI. He was right. I refactored the capability from a standalone <code class="rounded bg-[#414868]/50 px-1.5 py-0.5 text-sm text-[#7aa2f7]">mo list</code> command into a flag on the existing <code class="rounded bg-[#414868]/50 px-1.5 py-0.5 text-sm text-[#7aa2f7]">uninstall</code> command, keeping the API surface minimal. He merged it after the revision.
+        </p>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-3">
+        <span class="rounded-full bg-[#414868]/30 px-3 py-1 text-xs text-[#a9b1d6]">Bash</span>
+        <span class="rounded-full bg-[#414868]/30 px-3 py-1 text-xs text-[#a9b1d6]">bats testing</span>
+        <span class="rounded-full bg-[#414868]/30 px-3 py-1 text-xs text-[#a9b1d6]">CLI design</span>
+        <a
+          href="https://github.com/tw93/Mole/pull/755"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="ml-auto inline-flex items-center gap-1.5 text-sm text-[#7aa2f7] transition-colors hover:text-[#89b4fa]"
+        >
+          PR #755
+          <ExternalLink className="h-3.5 w-3.5" />
+        </a>
+      </div>
+    </div>
+
+    <!-- TLDR Pages -->
+    <div class="fade-up delay-3 mb-8 rounded-2xl border border-[#414868]/30 bg-[#24283b]/30 p-8 backdrop-blur-sm transition-all duration-300 hover:border-[#bb9af7]/30">
+      <div class="mb-6 flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <div class="mb-2 flex items-center gap-3">
+            <h2 class="text-xl font-bold text-[#c0caf5]">TLDR Pages</h2>
+            <span class="inline-flex items-center gap-1 rounded-full bg-[#9ece6a]/10 px-2.5 py-0.5 text-xs font-medium text-[#9ece6a]">
+              <GitMerge className="h-3 w-3" />
+              5 PRs Merged
+            </span>
+          </div>
+          <p class="text-sm text-[#565f89]">Community-maintained simplified man pages</p>
+        </div>
+      </div>
+
+      <div class="mb-6 space-y-4 text-[15px] leading-relaxed text-[#a9b1d6]">
+        <p>
+          Five merged pull requests adding new platform pages and improving existing CLI documentation. Contributions include a <code class="rounded bg-[#414868]/50 px-1.5 py-0.5 text-sm text-[#7aa2f7]">swaylock</code> page for the Linux/Wayland ecosystem and improvements to several existing command references. Each page follows the project's strict formatting guidelines with concise, example-driven documentation.
+        </p>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-3">
+        <span class="rounded-full bg-[#414868]/30 px-3 py-1 text-xs text-[#a9b1d6]">Documentation</span>
+        <span class="rounded-full bg-[#414868]/30 px-3 py-1 text-xs text-[#a9b1d6]">Linux/Wayland</span>
+        <span class="rounded-full bg-[#414868]/30 px-3 py-1 text-xs text-[#a9b1d6]">CLI references</span>
+        <div class="ml-auto flex flex-wrap gap-2">
+          {["9889", "9890", "10604", "10609", "10628"].map((pr) => (
+            <a
+              href={`https://github.com/tldr-pages/tldr/pull/${pr}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-1 text-sm text-[#bb9af7] transition-colors hover:text-[#cba6f7]"
+            >
+              #{pr}
+              <ExternalLink className="h-3 w-3" />
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- TinaCMS -->
+    <div class="fade-up delay-4 mb-16 rounded-2xl border border-[#414868]/30 bg-[#24283b]/30 p-8 backdrop-blur-sm transition-all duration-300 hover:border-[#7aa2f7]/30">
+      <div class="mb-6 flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <div class="mb-2 flex items-center gap-3">
+            <h2 class="text-xl font-bold text-[#c0caf5]">TinaCMS</h2>
+            <span class="inline-flex items-center gap-1 rounded-full bg-[#e0af68]/10 px-2.5 py-0.5 text-xs font-medium text-[#e0af68]">
+              <Bug className="h-3 w-3" />
+              Bug Reports
+            </span>
+          </div>
+          <p class="text-sm text-[#565f89]">Open-source headless CMS</p>
+        </div>
+      </div>
+
+      <div class="mb-6 text-[15px] leading-relaxed text-[#a9b1d6]">
+        <p>
+          Filed reproducible bug reports against subsystems where codebase complexity made direct fixes difficult to scope without deep familiarity with the project internals. The reports included minimal reproduction steps, environment details, and analysis of where the issue likely originated, giving maintainers a clear starting point for investigation.
+        </p>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-3">
+        <span class="rounded-full bg-[#414868]/30 px-3 py-1 text-xs text-[#a9b1d6]">Bug reporting</span>
+        <span class="rounded-full bg-[#414868]/30 px-3 py-1 text-xs text-[#a9b1d6]">CMS internals</span>
+        <span class="rounded-full bg-[#414868]/30 px-3 py-1 text-xs text-[#a9b1d6]">Reproduction cases</span>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="fade-up delay-4 text-center">
+      <p
+        class="mx-auto mb-6 max-w-lg text-[#a9b1d6]"
+        style="font-size: clamp(0.875rem, 1.2vw, 1rem);"
+      >
+        I contribute to tools I use in production. If you are building something interesting, I am happy to take a look.
+      </p>
+      <div class="flex flex-wrap items-center justify-center gap-4">
+        <a
+          href="https://github.com/rafay99-epic"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#7aa2f7] to-[#bb9af7] px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-[#7aa2f7]/20 transition-all duration-300 hover:shadow-xl hover:shadow-[#7aa2f7]/30"
+        >
+          View GitHub Profile
+          <ExternalLink className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+        </a>
+        <a
+          href="/project"
+          class="inline-flex items-center gap-2 rounded-full border border-[#414868]/40 px-7 py-3 text-sm font-semibold text-[#a9b1d6] transition-all duration-300 hover:border-[#7aa2f7]/40 hover:text-[#c0caf5]"
+        >
+          View Projects
+          <ArrowRight className="h-4 w-4" />
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .fade-up {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.6s ease-out forwards;
+  }
+  .delay-1 { animation-delay: 0.1s; }
+  .delay-2 { animation-delay: 0.2s; }
+  .delay-3 { animation-delay: 0.3s; }
+  .delay-4 { animation-delay: 0.4s; }
+
+  @keyframes fadeUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
