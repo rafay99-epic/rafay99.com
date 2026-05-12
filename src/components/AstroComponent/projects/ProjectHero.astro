@@ -30,7 +30,7 @@ const stackCount = ProjectTech?.length ?? 0;
 <section class="project-hero">
 	<div class={`project-hero__inner ${ProjectImage ? "has-media" : ""}`}>
 		<div class="project-hero__copy">
-			<div class="project-badges">
+			<div class="project-badges hero-fade-up" style="animation-delay: 0s;">
 				{primaryCategory && <span class="project-pill">{primaryCategory}</span>}
 				{
 					ProjectRanking && (
@@ -41,15 +41,15 @@ const stackCount = ProjectTech?.length ?? 0;
 				}
 			</div>
 
-			<h1 class="project-title" transition:name={`project-title-${Projecttitle}`}>
+			<h1 class="project-title hero-fade-up" style="animation-delay: 0.1s;" transition:name={`project-title-${Projecttitle}`}>
 				{Projecttitle}
 			</h1>
 
-			{ProjectDescription && <p class="project-description">{ProjectDescription}</p>}
+			{ProjectDescription && <p class="project-description hero-fade-up" style="animation-delay: 0.2s;">{ProjectDescription}</p>}
 
 			{
 				(ProjectDeployedLink || ProjectGithubLink) && (
-					<div class="project-actions">
+					<div class="project-actions hero-fade-up" style="animation-delay: 0.3s;">
 						{ProjectDeployedLink && (
 							<a
 								href={ProjectDeployedLink}
@@ -89,7 +89,7 @@ const stackCount = ProjectTech?.length ?? 0;
 				)
 			}
 
-			<div class="project-meta">
+			<div class="project-meta hero-fade-up" style="animation-delay: 0.4s;">
 				<div class="project-meta__item">
 					<span class="project-meta__label">Category</span>
 					<span class="project-meta__value">{primaryCategory ?? "General"}</span>
@@ -109,7 +109,7 @@ const stackCount = ProjectTech?.length ?? 0;
 
 		{
 			ProjectImage && (
-				<div class="project-hero__media">
+				<div class="project-hero__media hero-fade-up" style="animation-delay: 0.3s;">
 					<Image
 						src={ProjectImage}
 						alt={Projecttitle}

@@ -47,11 +47,11 @@ const stats = [
   <div class="project-inner">
     <header class="project-header">
       <div class="project-heading">
-        <span class="project-eyebrow">{eyebrow}</span>
-        <h2 class="project-title">{title}</h2>
-        <p class="project-subtitle">{subtitle}</p>
+        <span class="project-eyebrow fade-up">{eyebrow}</span>
+        <h2 class="project-title fade-up" style="--delay: 80ms">{title}</h2>
+        <p class="project-subtitle fade-up" style="--delay: 160ms">{subtitle}</p>
       </div>
-      <div class="project-stats">
+      <div class="project-stats fade-up" style="--delay: 240ms">
         {
           stats.map((stat) => (
             <div class="project-stat">
@@ -72,7 +72,7 @@ const stats = [
           const extraTech = techList.length - techPreview.length;
 
           return (
-            <article class="project-tile" style={`--delay: ${index * 80}ms`}>
+            <article class="project-tile fade-up" style={`--delay: ${index * 100}ms`}>
               <div class="project-card">
                 <div class="project-media">
                   {project.data.ProjectImage ? (
@@ -189,7 +189,7 @@ const stats = [
 
     {
       showViewAll && (
-        <div class="project-cta">
+        <div class="project-cta fade-up">
           <a href={viewAllHref} class="project-cta__link">
             {viewAllLabel}
             <svg
@@ -300,11 +300,21 @@ const stats = [
     gap: clamp(1.25rem, 2vw, 2rem);
   }
 
-  .project-tile {
-    animation: tileRise 0.7s ease forwards;
+  .fade-up {
     opacity: 0;
-    transform: translateY(24px);
-    animation-delay: var(--delay);
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    transition-delay: var(--delay, 0ms);
+  }
+
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .project-tile {
+    opacity: 0;
+    transform: translateY(20px);
   }
 
   .project-card {
@@ -597,10 +607,11 @@ const stats = [
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .fade-up,
     .project-tile {
-      animation: none;
       opacity: 1;
       transform: none;
+      transition: none;
     }
 
     .project-card,
@@ -608,25 +619,35 @@ const stats = [
       transform: none;
     }
   }
-
-  @keyframes tileRise {
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
 </style>
 
 <script is:inline>
   document.addEventListener("astro:page-load", () => {
-    const imgs = document.querySelectorAll(".project-media img");
-    imgs.forEach((img) => {
+    var imgs = document.querySelectorAll(".project-media img");
+    imgs.forEach(function (img) {
       if (img.complete && img.naturalWidth > 0) {
         img.classList.add("loaded");
       } else {
-        img.addEventListener("load", () => img.classList.add("loaded"), { once: true });
-        img.addEventListener("error", () => img.classList.add("loaded"), { once: true });
+        img.addEventListener("load", function () { img.classList.add("loaded"); }, { once: true });
+        img.addEventListener("error", function () { img.classList.add("loaded"); }, { once: true });
       }
     });
+
+    var fadeEls = document.querySelectorAll(".project-showcase .fade-up");
+    if (!fadeEls.length) return;
+
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    fadeEls.forEach(function (el) { observer.observe(el); });
   });
 </script>
