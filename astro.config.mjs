@@ -8,7 +8,6 @@ import robotsTxt from "astro-robots-txt";
 import dotenv from "dotenv";
 
 dotenv.config();
-const enableHeavyCompression = process.env.HEAVY_COMPRESS === "true";
 
 import partytown from "@astrojs/partytown";
 import playformCompress from "@playform/compress";
@@ -37,15 +36,9 @@ export default defineConfig({
 		prefetchAll: false,
 	},
 	experimental: {
-		svgo: true,
-		// When enabled, main/slot content can stream in after first paint; the Mermaid
-		// island may run before `<pre><code class="language-mermaid">` has text, and
-		// a childList-only MutationObserver never retries. Re-enable after diagram
-		// rendering is tied to `astro:after-swap` / characterData or similar.
 		queuedRendering: {
-			enabled: false,
+			enabled: true,
 			poolSize: 3000,
-			contentCache: true,
 		},
 	},
 	markdown: {
@@ -112,19 +105,17 @@ export default defineConfig({
 					removeComments: true,
 				},
 			},
-			Image: enableHeavyCompression
-				? {
-						quality: 80,
-						avif: {
-							quality: 80,
-							effort: 7,
-						},
-						webp: {
-							quality: 80,
-							effort: 5,
-						},
-					}
-				: false,
+			Image: {
+				quality: 80,
+				avif: {
+					quality: 80,
+					effort: 7,
+				},
+				webp: {
+					quality: 80,
+					effort: 5,
+				},
+			},
 			JavaScript: false,
 			SVG: false,
 			Logger: 2,
@@ -163,23 +154,25 @@ export default defineConfig({
 					experimentalMinChunkSize: 30000,
 					manualChunks(id) {
 						if (!id.includes("node_modules")) return;
-						// Mermaid + its heavy deps checked first to avoid
-						// colliding with the broader "react" match below.
+						if (id.includes("d3-")) return "vendor-d3";
+						if (id.includes("@chevrotain") || id.includes("langium"))
+							return "vendor-parser";
 						if (
-							id.includes("mermaid") ||
-							id.includes("d3-") ||
-							id.includes("@chevrotain") ||
-							id.includes("langium")
-						) {
-							return "vendor-mermaid";
-						}
+							id.includes("cytoscape") ||
+							id.includes("dagre-d3-es") ||
+							id.includes("dagre")
+						)
+							return "vendor-graph";
+						if (id.includes("mermaid")) return "vendor-mermaid";
+						if (id.includes("katex")) return "vendor-katex";
+						if (id.includes("framer-motion")) return "vendor-framer";
+						if (id.includes("lucide-react")) return "vendor-lucide";
 						if (
 							id.includes("/react/") ||
 							id.includes("/react-dom/") ||
 							id.includes("/scheduler/")
-						) {
+						)
 							return "react-vendor";
-						}
 					},
 				},
 			},
