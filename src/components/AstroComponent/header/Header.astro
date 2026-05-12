@@ -1,4 +1,5 @@
 ---
+import { Image } from "astro:assets";
 import NavLink from "@astro/header/NavLink.astro";
 import { featureFlags } from "@config/featureFlag/featureFlag.json";
 import authorConfig from "@config/siteConfig/info.json";
@@ -105,9 +106,11 @@ import {
         href="/"
         class="absolute left-4 hidden items-center gap-2 text-[13px] font-medium text-[#a9b1d6] sm:left-5 lg:flex"
       >
-        <img
+        <Image
           src={authorConfig.avator}
           alt={authorConfig.name}
+          width={24}
+          height={24}
           class="h-6 w-6 translate-y-[3px] rounded-full ring-1 ring-[#7aa2f7]/30 shadow-[0_0_6px_rgba(122,162,247,0.25)]"
         />
         {authorConfig.SiteName}
@@ -118,9 +121,11 @@ import {
         href="/"
         class="absolute left-4 flex items-center gap-2 text-[13px] font-medium text-[#a9b1d6] lg:hidden"
       >
-        <img
+        <Image
           src={authorConfig.avator}
           alt={authorConfig.name}
+          width={24}
+          height={24}
           class="h-6 w-6 translate-y-[3px] rounded-full ring-1 ring-[#7aa2f7]/30 shadow-[0_0_6px_rgba(122,162,247,0.25)]"
         />
         {authorConfig.SiteName}
@@ -256,9 +261,11 @@ import {
     class="flex items-center justify-between px-4 py-3.5 border-b border-[#565f89]/10"
   >
     <a href="/" class="flex items-center gap-2.5">
-      <img
+      <Image
         src={authorConfig.avator}
         alt={authorConfig.name}
+        width={28}
+        height={28}
         class="h-7 w-7 shrink-0 rounded-full ring-1 ring-[#7aa2f7]/30 shadow-[0_0_6px_rgba(122,162,247,0.25)]"
       />
       <span class="text-[13px] leading-none font-medium text-[#a9b1d6]">

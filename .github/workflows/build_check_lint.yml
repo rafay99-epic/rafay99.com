@@ -3,15 +3,80 @@ name: CI
 on:
   push:
     branches: ["main"]
+    paths:
+      - "src/**"
+      - "public/**"
+      - "package.json"
+      - "bun.lock"
+      - "tsconfig.json"
+      - "astro.config.mjs"
+      - "tailwind.config.mjs"
+      - "biome.json"
+      - ".github/workflows/**"
   pull_request:
     branches: ["main"]
+    paths:
+      - "src/**"
+      - "public/**"
+      - "package.json"
+      - "bun.lock"
+      - "tsconfig.json"
+      - "astro.config.mjs"
+      - "tailwind.config.mjs"
+      - "biome.json"
+      - ".github/workflows/**"
 
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  ci:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - name: Type Check
+            script: bun run typecheck
+          - name: Astro Check
+            script: bun run check
+          - name: Format Check
+            script: bun run format:check
+          - name: Lint Check
+            script: bun run lint:check
+
+    name: ${{ matrix.name }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Cache bun dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ hashFiles('bun.lock') }}
+          restore-keys: bun-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: ${{ matrix.name }}
+        run: ${{ matrix.script }}
+
+  build:
+    needs: checks
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
@@ -39,5 +104,5 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      - name: Lint, type-check, validate, and build
-        run: bun run ci
+      - name: Build
+        run: bun run build

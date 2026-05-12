@@ -442,6 +442,43 @@ try {
         transform: translateY(-3px);
       }
 
+      /* ── Shimmer skeleton for image containers ── */
+      .hero-image-side,
+      .quick-card-image,
+      .spotlight-image,
+      .story-card-visual {
+        background: rgba(36, 40, 59, 0.7);
+        background-image: linear-gradient(
+          90deg,
+          rgba(36, 40, 59, 0.7) 0%,
+          rgba(65, 72, 104, 0.3) 50%,
+          rgba(36, 40, 59, 0.7) 100%
+        );
+        background-size: 200% 100%;
+        animation: shimmer 1.8s ease-in-out infinite;
+      }
+
+      @keyframes shimmer {
+        0% { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
+      }
+
+      /* ── Fade-in for loaded images ── */
+      .hero-img,
+      .quick-img,
+      .spotlight-img,
+      .story-card-img {
+        opacity: 0;
+        transition: opacity 0.4s ease, transform 0.5s ease;
+      }
+
+      .hero-img.loaded,
+      .quick-img.loaded,
+      .spotlight-img.loaded,
+      .story-card-img.loaded {
+        opacity: 1;
+      }
+
       .hero-image-side {
         position: relative;
         overflow: hidden;
@@ -454,7 +491,6 @@ try {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        transition: transform 0.5s ease;
       }
 
       .hero-feature-inner:hover .hero-img {
@@ -570,7 +606,6 @@ try {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        transition: transform 0.4s ease;
       }
 
       .quick-card:hover .quick-img {
@@ -675,7 +710,6 @@ try {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        transition: transform 0.5s ease;
       }
 
       .spotlight:hover .spotlight-img {
@@ -809,7 +843,6 @@ try {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        transition: transform 0.45s ease;
       }
 
       .story-card:hover .story-card-img {
@@ -1175,5 +1208,21 @@ try {
         }
       }
     </style>
+
+    <script is:inline>
+      document.addEventListener("astro:page-load", () => {
+        const imgs = document.querySelectorAll(
+          ".hero-img, .quick-img, .spotlight-img, .story-card-img"
+        );
+        imgs.forEach((img) => {
+          if (img.complete && img.naturalWidth > 0) {
+            img.classList.add("loaded");
+          } else {
+            img.addEventListener("load", () => img.classList.add("loaded"), { once: true });
+            img.addEventListener("error", () => img.classList.add("loaded"), { once: true });
+          }
+        });
+      });
+    </script>
   </body>
 </html>

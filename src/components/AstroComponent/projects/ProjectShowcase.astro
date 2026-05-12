@@ -82,6 +82,7 @@ const stats = [
                       width={640}
                       height={400}
                       loading="lazy"
+                      class="project-img"
                     />
                   ) : (
                     <div class="project-placeholder">Project Preview</div>
@@ -335,13 +336,31 @@ const stats = [
     aspect-ratio: 16 / 10;
     overflow: hidden;
     background: var(--color-bg-tertiary);
+    background-image: linear-gradient(
+      90deg,
+      rgba(36, 40, 59, 0.7) 0%,
+      rgba(65, 72, 104, 0.3) 50%,
+      rgba(36, 40, 59, 0.7) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.8s ease-in-out infinite;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
   }
 
   .project-media img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.5s ease;
+    opacity: 0;
+    transition: opacity 0.4s ease, transform 0.5s ease;
+  }
+
+  .project-media img.loaded {
+    opacity: 1;
   }
 
   .project-placeholder {
@@ -597,3 +616,17 @@ const stats = [
     }
   }
 </style>
+
+<script is:inline>
+  document.addEventListener("astro:page-load", () => {
+    const imgs = document.querySelectorAll(".project-media img");
+    imgs.forEach((img) => {
+      if (img.complete && img.naturalWidth > 0) {
+        img.classList.add("loaded");
+      } else {
+        img.addEventListener("load", () => img.classList.add("loaded"), { once: true });
+        img.addEventListener("error", () => img.classList.add("loaded"), { once: true });
+      }
+    });
+  });
+</script>

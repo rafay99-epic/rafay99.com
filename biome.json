@@ -16,7 +16,6 @@
 			"tsconfig.json",
 			"!!.astro",
 			"!!.vercel",
-			"!!.sitepins",
 			"!!.vscode",
 			"!!public",
 			"!!dist",

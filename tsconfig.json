@@ -1,6 +1,6 @@
 {
 	"include": ["**/*"],
-	"exclude": ["dist", "astro/tsconfigs/base", "node_modules", "tina/"],
+	"exclude": ["dist", "astro/tsconfigs/base", "node_modules"],
 	"compilerOptions": {
 		"plugins": [
 			{

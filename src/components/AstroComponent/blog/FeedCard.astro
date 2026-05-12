@@ -1,0 +1,286 @@
+---
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+	post: CollectionEntry<"blog">;
+	index: number;
+	showSeries?: boolean;
+}
+
+const { post, index, showSeries = false } = Astro.props;
+
+const formattedDate = post.data.pubDate.toLocaleDateString("en-US", {
+	month: "short",
+	day: "numeric",
+	year: "numeric",
+});
+
+const hasSeries = showSeries && post.data.series && post.data.seriesPart;
+---
+
+<a
+	href={`/blog/${post.id}`}
+	class:list={["feed-card", `fade-up delay-${Math.min(index + 1, 4)}`]}
+>
+	<div class="feed-card-image">
+		{post.data.heroImage ? (
+			<Image
+				src={post.data.heroImage}
+				alt={post.data.title}
+				width={320}
+				height={180}
+				loading={index < 3 ? "eager" : "lazy"}
+				decoding="async"
+				class="feed-card-img"
+			/>
+		) : (
+			<div class="feed-card-fallback" aria-hidden="true">
+				<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+					<rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
+					<circle cx="9" cy="9" r="2" />
+					<path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
+				</svg>
+			</div>
+		)}
+		{hasSeries && (
+			<span class="feed-card-series" title={`Part of series: ${post.data.series}`}>
+				<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+					<path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20" />
+				</svg>
+				Part {post.data.seriesPart}{post.data.seriesTotal ? `/${post.data.seriesTotal}` : ""}
+			</span>
+		)}
+	</div>
+	<div class="feed-card-body">
+		<div class="feed-card-meta">
+			<span>{formattedDate}</span>
+			{post.data.readTime && (
+				<>
+					<span class="feed-card-sep">&middot;</span>
+					<span>{post.data.readTime}</span>
+				</>
+			)}
+			{post.data.tags?.[0] && (
+				<span class="feed-card-tag">#{post.data.tags[0]}</span>
+			)}
+		</div>
+		<h3 class="feed-card-title">{post.data.title}</h3>
+		<p class="feed-card-desc">{post.data.excerpt || post.data.description}</p>
+	</div>
+</a>
+
+<style>
+	.feed-card {
+		display: grid;
+		grid-template-columns: 200px 1fr;
+		gap: 1.25rem;
+		padding: 1rem;
+		border-radius: 14px;
+		border: 1px solid rgba(86, 95, 137, 0.15);
+		background: rgba(36, 40, 59, 0.35);
+		text-decoration: none;
+		transition:
+			border-color 0.25s ease,
+			transform 0.25s ease,
+			box-shadow 0.25s ease;
+	}
+
+	.feed-card:hover {
+		border-color: rgba(122, 162, 247, 0.3);
+		transform: translateY(-1px);
+		box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+	}
+
+	/* ─── Image ─── */
+	.feed-card-image {
+		grid-column: 1;
+		grid-row: 1;
+		position: relative;
+		aspect-ratio: 16 / 10;
+		border-radius: 10px;
+		overflow: hidden;
+		background: rgba(36, 40, 59, 0.6);
+		background-image: linear-gradient(
+			90deg,
+			rgba(36, 40, 59, 0.7) 0%,
+			rgba(65, 72, 104, 0.3) 50%,
+			rgba(36, 40, 59, 0.7) 100%
+		);
+		background-size: 200% 100%;
+		animation: shimmer 1.8s ease-in-out infinite;
+	}
+
+	@keyframes shimmer {
+		0% { background-position: 200% 0; }
+		100% { background-position: -200% 0; }
+	}
+
+	.feed-card-img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		opacity: 0;
+		transition: opacity 0.4s ease, transform 0.35s ease;
+	}
+
+	.feed-card-img.loaded { opacity: 1; }
+
+	.feed-card:hover .feed-card-img {
+		transform: scale(1.05);
+	}
+
+	.feed-card-fallback {
+		width: 100%;
+		height: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: linear-gradient(135deg, rgba(36, 40, 59, 0.9), rgba(122, 162, 247, 0.15));
+		color: #565f89;
+	}
+
+	/* ─── Series Overlay ─── */
+	.feed-card-series {
+		position: absolute;
+		top: 0.5rem;
+		right: 0.5rem;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.25rem;
+		padding: 0.2rem 0.55rem;
+		border-radius: 999px;
+		background: rgba(26, 27, 38, 0.85);
+		backdrop-filter: blur(4px);
+		border: 1px solid rgba(187, 154, 247, 0.25);
+		font-size: 0.65rem;
+		font-weight: 600;
+		line-height: 1.3;
+		color: #bb9af7;
+		white-space: nowrap;
+	}
+
+	.feed-card-series svg {
+		flex-shrink: 0;
+		opacity: 0.8;
+	}
+
+	/* ─── Body ─── */
+	.feed-card-body {
+		grid-column: 2;
+		grid-row: 1;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		gap: 0.35rem;
+		min-width: 0;
+	}
+
+	.feed-card-meta {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.4rem;
+		font-size: 0.75rem;
+		color: #565f89;
+	}
+
+	.feed-card-sep { color: rgba(86, 95, 137, 0.5); }
+
+	.feed-card-tag {
+		color: #7aa2f7;
+		font-weight: 500;
+	}
+
+	.feed-card-title {
+		font-size: 1.05rem;
+		font-weight: 600;
+		line-height: 1.35;
+		color: #c0caf5;
+		transition: color 0.2s ease;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	.feed-card:hover .feed-card-title { color: #f1f1ff; }
+
+	.feed-card-desc {
+		font-size: 0.84rem;
+		color: #a9b1d6;
+		line-height: 1.5;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	/* ─── Animations ─── */
+	@keyframes fadeUp {
+		from { opacity: 0; transform: translateY(12px); }
+		to { opacity: 1; transform: translateY(0); }
+	}
+
+	.fade-up { animation: fadeUp 0.6s ease both; }
+	.delay-1 { animation-delay: 0.08s; }
+	.delay-2 { animation-delay: 0.16s; }
+	.delay-3 { animation-delay: 0.24s; }
+	.delay-4 { animation-delay: 0.32s; }
+
+	/* ─── Mobile ─── */
+	@media (max-width: 640px) {
+		.feed-card {
+			grid-template-columns: 1fr;
+			gap: 0.85rem;
+			padding: 0;
+			overflow: hidden;
+		}
+
+		.feed-card-image {
+			grid-column: 1;
+			grid-row: 1;
+			aspect-ratio: 16 / 9;
+			border-radius: 0;
+		}
+
+		.feed-card-body {
+			grid-column: 1;
+			grid-row: 2;
+			padding: 0 1rem 1rem;
+		}
+
+		.feed-card-title { font-size: 0.98rem; }
+
+		.feed-card-desc {
+			-webkit-line-clamp: 2;
+			font-size: 0.82rem;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.fade-up,
+		.feed-card-image {
+			animation: none;
+		}
+
+		.feed-card,
+		.feed-card-img {
+			transition: none;
+		}
+	}
+</style>
+
+<script is:inline>
+	document.addEventListener("astro:page-load", () => {
+		const imgs = document.querySelectorAll(".feed-card-img");
+		imgs.forEach((img) => {
+			if (img.complete && img.naturalWidth > 0) {
+				img.classList.add("loaded");
+			} else {
+				img.addEventListener("load", () => img.classList.add("loaded"), { once: true });
+				img.addEventListener("error", () => img.classList.add("loaded"), { once: true });
+			}
+		});
+	});
+</script>

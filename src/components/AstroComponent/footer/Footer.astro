@@ -1,4 +1,5 @@
 ---
+import { Image } from "astro:assets";
 import SocialMedia from "@astro/SocialMedia/SocialMedia.astro";
 import { featureFlags } from "@config/featureFlag/featureFlag.json";
 import authorConfig from "@config/siteConfig/info.json";
@@ -14,9 +15,11 @@ import packageJson from "../../../../package.json";
       <!-- Brand -->
       <div class="sm:col-span-2 lg:col-span-1">
         <div class="mb-4 flex items-center gap-3">
-          <img
+          <Image
             src={authorConfig.avator}
             alt={authorConfig.name}
+            width={48}
+            height={48}
             class="h-12 w-12 rounded-full border-2 border-[#7aa2f7]/30"
             loading="lazy"
           />
