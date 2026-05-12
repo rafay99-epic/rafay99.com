@@ -1,4 +1,5 @@
 ---
+import { Image } from "astro:assets";
 import { type CollectionEntry, getCollection } from "astro:content";
 import BaseHead from "@astro/base/BaseHead.astro";
 import Footer from "@astro/footer/Footer.astro";
@@ -85,9 +86,11 @@ try {
               <article>
                 <a href={`/blog/archive/${post.id}`} class="block">
                   <div class="mb-6 h-64 overflow-hidden rounded-xl">
-                    <img
+                    <Image
                       src={post.data.heroImage || "/default-image.jpg"}
                       alt={post.data.title}
+                      width={400}
+                      height={256}
                       class="h-full w-full object-cover"
                     />
                   </div>

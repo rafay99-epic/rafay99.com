@@ -1,8 +1,7 @@
 ---
-import { Image } from "astro:assets";
 import { type CollectionEntry, getCollection } from "astro:content";
 import BaseHead from "@astro/base/BaseHead.astro";
-import SeriesBadge from "@astro/blog/series/SeriesBadge.astro";
+import FeedCard from "@astro/blog/FeedCard.astro";
 import Footer from "@astro/footer/Footer.astro";
 import Header from "@astro/header/Header.astro";
 import { featureFlags } from "@config/featureFlag/featureFlag.json";
@@ -13,7 +12,6 @@ export const prerender = true;
 const postsPerPage = 9;
 
 export async function getStaticPaths() {
-	// Must match `postsPerPage` below — Astro compiles this in isolation.
 	const perPage = 9;
 	const allPosts = (await getCollection("blog"))
 		.filter(
@@ -65,13 +63,6 @@ for (const post of allPosts) {
 	}
 }
 
-const formatDate = (date: Date) =>
-	new Date(date).toLocaleDateString("en-US", {
-		month: "short",
-		day: "numeric",
-		year: "numeric",
-	});
-
 const showTags = featureFlags.showTags;
 const showSearch = featureFlags.showSearch;
 
@@ -92,13 +83,8 @@ try {
     />
 
     <style>
-      html {
-        background-color: #1a1b26;
-      }
-
-      body {
-        background-color: #1a1b26;
-      }
+      html { background-color: #1a1b26; }
+      body { background-color: #1a1b26; }
     </style>
 
     <script
@@ -138,24 +124,23 @@ try {
   <body class="flex min-h-screen flex-col bg-[#1a1b26] text-[#a9b1d6]">
     <Header />
 
-    <main class="feed-shell mx-auto w-full max-w-3xl flex-1 px-5 pb-24 pt-14 sm:px-6">
+    <main class="page-shell mx-auto w-full max-w-6xl flex-1 px-5 pb-24 pt-14 sm:px-6">
 
-      <!-- ─── Compact Page Header ─── -->
-      <header class="feed-hero fade-up">
-        <h1 class="feed-title">Articles</h1>
-        <div class="feed-meta-bar">
-          <span class="meta-stat">Page {currentPage} of {totalPages}</span>
-          <span class="meta-dot">&middot;</span>
-          <span class="meta-stat">{totalPosts} total articles</span>
-          <span class="meta-dot">&middot;</span>
-          <span class="meta-stat">{tagCounts.size} topics</span>
-          <span class="meta-dot meta-dot--actions">&middot;</span>
-          <div class="meta-actions">
-            <a href="/blog" class="meta-link">Latest</a>
-            <a href="/blog/archive" class="meta-link">Archive</a>
-            {featureFlags.showSeries && <a href="/blog/series" class="meta-link">Series</a>}
-            {showSearch && <a href="/search" class="meta-link">Search</a>}
-            {showTags && <a href="/tag" class="meta-link">Tags</a>}
+      <header class="page-hero fade-up">
+        <h1 class="page-title">Articles</h1>
+        <div class="page-meta-bar">
+          <span class="page-stat">Page {currentPage} of {totalPages}</span>
+          <span class="page-dot">&middot;</span>
+          <span class="page-stat">{totalPosts} total articles</span>
+          <span class="page-dot">&middot;</span>
+          <span class="page-stat">{tagCounts.size} topics</span>
+          <span class="page-dot page-dot--actions">&middot;</span>
+          <div class="page-actions">
+            <a href="/blog" class="page-link">Latest</a>
+            <a href="/blog/archive" class="page-link">Archive</a>
+            {featureFlags.showSeries && <a href="/blog/series" class="page-link">Series</a>}
+            {showSearch && <a href="/search" class="page-link">Search</a>}
+            {showTags && <a href="/tag" class="page-link">Tags</a>}
           </div>
         </div>
       </header>
@@ -166,121 +151,56 @@ try {
         </div>
       )}
 
-      <!-- ─── Article Feed ─── -->
-      {
-        posts.length > 0 && (
-          <section class="feed-list">
-            {posts.map((post, index) => (
-              <a
-                href={`/blog/${post.id}`}
-                class:list={["feed-item group", `fade-up delay-${Math.min(index + 1, 4)}`]}
-              >
-                <div class="feed-item-thumb">
-                  {post.data.heroImage ? (
-                    <Image
-                      src={post.data.heroImage}
-                      alt={post.data.title}
-                      width={160}
-                      height={160}
-                      loading={index < 3 ? "eager" : "lazy"}
-                      decoding="async"
-                      class="feed-item-img"
-                    />
-                  ) : (
-                    <div class="feed-item-fallback" aria-hidden="true" />
-                  )}
-                </div>
-                <div class="feed-item-body">
-                  <div class="feed-item-meta">
-                    <span>{formatDate(post.data.pubDate)}</span>
-                    {post.data.readTime && (
-                      <>
-                        <span class="meta-dot">&middot;</span>
-                        <span>{post.data.readTime}</span>
-                      </>
-                    )}
-                    {post.data.tags?.[0] && (
-                      <>
-                        <span class="meta-dot">&middot;</span>
-                        <span class="feed-item-tag">#{post.data.tags[0]}</span>
-                      </>
-                    )}
-                  </div>
-                  <h3 class="feed-item-title line-clamp-2">{post.data.title}</h3>
-                  <p class="feed-item-excerpt line-clamp-2">
-                    {post.data.excerpt || post.data.description}
-                  </p>
-                  {featureFlags.showSeries && post.data.series && post.data.seriesPart && (
-                    <div class="mt-1.5">
-                      <SeriesBadge
-                        series={post.data.series}
-                        part={post.data.seriesPart}
-                        total={post.data.seriesTotal}
-                        compact
-                      />
-                    </div>
-                  )}
-                </div>
-              </a>
-            ))}
-          </section>
-        )
-      }
+      {posts.length > 0 && (
+        <section class="feed-list">
+          {posts.map((post, index) => (
+            <FeedCard post={post} index={index} showSeries={featureFlags.showSeries} />
+          ))}
+        </section>
+      )}
 
-      <!-- ─── Pagination ─── -->
-      {
-        totalPages > 1 && (
-          <nav class="pagination" aria-label="Pagination">
-            <a
-              href={currentPage > 1 ? `/blog/page/${currentPage - 1}` : "#"}
-              class:list={[
-                "pagination-link",
-                currentPage > 1 ? "pagination-active" : "pagination-disabled",
-              ]}
-            >
-              <span>&larr; Previous</span>
-            </a>
-            <div class="pagination-pill">
-              {currentPage} / {totalPages}
-            </div>
-            <a
-              href={
-                currentPage < totalPages ? `/blog/page/${currentPage + 1}` : "#"
-              }
-              class:list={[
-                "pagination-link",
-                currentPage < totalPages
-                  ? "pagination-active"
-                  : "pagination-disabled",
-              ]}
-            >
-              <span>Next &rarr;</span>
-            </a>
-          </nav>
-        )
-      }
+      {totalPages > 1 && (
+        <nav class="pagination" aria-label="Pagination">
+          <a
+            href={currentPage > 1 ? (currentPage === 2 ? "/blog" : `/blog/page/${currentPage - 1}`) : "#"}
+            class:list={[
+              "pagination-link",
+              currentPage > 1 ? "pagination-active" : "pagination-disabled",
+            ]}
+          >
+            <span>&larr; Previous</span>
+          </a>
+          <div class="pagination-pill">
+            {currentPage} / {totalPages}
+          </div>
+          <a
+            href={currentPage < totalPages ? `/blog/page/${currentPage + 1}` : "#"}
+            class:list={[
+              "pagination-link",
+              currentPage < totalPages ? "pagination-active" : "pagination-disabled",
+            ]}
+          >
+            <span>Next &rarr;</span>
+          </a>
+        </nav>
+      )}
     </main>
 
     <Footer />
 
     <style>
-      /* ═══════════════════════════════════════════
-         Clean Feed — Paginated pages
-         ═══════════════════════════════════════════ */
-
-      .feed-shell {
+      .page-shell {
         position: relative;
         isolation: isolate;
       }
 
-      /* ─── Hero ─── */
-      .feed-hero {
+      .page-hero {
         padding-bottom: 1.5rem;
         border-bottom: 1px solid rgba(86, 95, 137, 0.25);
-        margin-bottom: 0.5rem;
+        margin-bottom: 1.5rem;
       }
 
-      .feed-title {
+      .page-title {
         font-size: clamp(1.8rem, 2.5vw + 0.8rem, 2.6rem);
         font-weight: 700;
         line-height: 1.1;
@@ -288,7 +208,7 @@ try {
         letter-spacing: -0.02em;
       }
 
-      .feed-meta-bar {
+      .page-meta-bar {
         display: flex;
         flex-wrap: wrap;
         align-items: center;
@@ -297,120 +217,30 @@ try {
         font-size: 0.85rem;
       }
 
-      .meta-stat {
-        color: var(--color-text-muted, #565f89);
-      }
+      .page-stat { color: #565f89; }
+      .page-dot { color: rgba(86, 95, 137, 0.5); }
 
-      .meta-dot {
-        color: rgba(86, 95, 137, 0.5);
-      }
-
-      .meta-actions {
+      .page-actions {
         display: flex;
         gap: 0.75rem;
       }
 
-      .meta-link {
+      .page-link {
         color: #7aa2f7;
         font-weight: 500;
         transition: color 0.2s ease;
       }
 
-      .meta-link:hover {
-        color: #bb9af7;
-      }
+      .page-link:hover { color: #bb9af7; }
 
-      /* ─── Feed List ─── */
       .feed-list {
         display: flex;
         flex-direction: column;
+        gap: 1rem;
       }
 
-      .feed-item {
-        display: grid;
-        grid-template-columns: 88px 1fr;
-        gap: 1.1rem;
-        padding: 1.35rem 0;
-        border-bottom: 1px solid rgba(86, 95, 137, 0.18);
-        transition: background-color 0.25s ease;
-      }
-
-      .feed-item:first-child {
-        border-top: 1px solid rgba(86, 95, 137, 0.18);
-      }
-
-      .feed-item:hover {
-        background-color: rgba(36, 40, 59, 0.3);
-      }
-
-      .feed-item-thumb {
-        width: 88px;
-        height: 88px;
-        border-radius: 12px;
-        overflow: hidden;
-        flex-shrink: 0;
-        background: rgba(36, 40, 59, 0.6);
-      }
-
-      .feed-item-img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.3s ease;
-      }
-
-      .feed-item:hover .feed-item-img {
-        transform: scale(1.06);
-      }
-
-      .feed-item-fallback {
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(135deg, rgba(36, 40, 59, 0.9), rgba(122, 162, 247, 0.3));
-      }
-
-      .feed-item-body {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        gap: 0.3rem;
-        min-width: 0;
-      }
-
-      .feed-item-meta {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 0.4rem;
-        font-size: 0.75rem;
-        color: var(--color-text-muted, #565f89);
-      }
-
-      .feed-item-tag {
-        color: #7aa2f7;
-      }
-
-      .feed-item-title {
-        font-size: 1.08rem;
-        font-weight: 600;
-        line-height: 1.35;
-        color: var(--color-text-primary, #c0caf5);
-        transition: color 0.2s ease;
-      }
-
-      .feed-item:hover .feed-item-title {
-        color: #f1f1ff;
-      }
-
-      .feed-item-excerpt {
-        font-size: 0.88rem;
-        color: var(--color-text-secondary, #a9b1d6);
-        line-height: 1.5;
-      }
-
-      /* ─── Pagination ─── */
       .pagination {
-        margin-top: 3rem;
+        margin-top: 2.5rem;
         padding-top: 2rem;
         border-top: 1px solid rgba(86, 95, 137, 0.2);
         display: flex;
@@ -425,14 +255,10 @@ try {
         border: 1px solid rgba(86, 95, 137, 0.35);
         font-size: 0.85rem;
         font-weight: 500;
-        transition:
-          border-color 0.25s ease,
-          color 0.25s ease;
+        transition: border-color 0.25s ease, color 0.25s ease;
       }
 
-      .pagination-active {
-        color: #7aa2f7;
-      }
+      .pagination-active { color: #7aa2f7; }
 
       .pagination-active:hover {
         border-color: rgba(122, 162, 247, 0.6);
@@ -446,101 +272,40 @@ try {
 
       .pagination-pill {
         font-size: 0.8rem;
-        color: var(--color-text-muted, #565f89);
+        color: #565f89;
         font-variant-numeric: tabular-nums;
       }
 
-      /* ─── Empty State ─── */
       .empty-state {
         margin-top: 2.5rem;
         padding: 1.5rem;
         border-radius: 16px;
         border: 1px dashed rgba(86, 95, 137, 0.4);
         text-align: center;
-        color: var(--color-text-secondary, #a9b1d6);
+        color: #a9b1d6;
       }
 
-      /* ─── Utilities ─── */
-      .line-clamp-2 {
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-      }
-
-      /* ─── Animations ─── */
       @keyframes fadeUp {
-        from {
-          opacity: 0;
-          transform: translateY(12px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
+        from { opacity: 0; transform: translateY(12px); }
+        to { opacity: 1; transform: translateY(0); }
       }
 
-      .fade-up {
-        animation: fadeUp 0.6s ease both;
-      }
+      .fade-up { animation: fadeUp 0.6s ease both; }
 
-      .delay-1 {
-        animation-delay: 0.08s;
-      }
-
-      .delay-2 {
-        animation-delay: 0.16s;
-      }
-
-      .delay-3 {
-        animation-delay: 0.24s;
-      }
-
-      .delay-4 {
-        animation-delay: 0.32s;
-      }
-
-      /* ─── Responsive ─── */
       @media (max-width: 640px) {
-        .feed-item {
-          grid-template-columns: 68px 1fr;
-          gap: 0.85rem;
-          padding: 1.1rem 0;
-        }
+        .feed-list { gap: 0.75rem; }
 
-        .feed-item-thumb {
-          width: 68px;
-          height: 68px;
-          border-radius: 10px;
-        }
+        .page-dot--actions { display: none; }
 
-        .feed-item-title {
-          font-size: 0.98rem;
-        }
-
-        .feed-item-excerpt {
-          display: none;
-        }
-
-        .meta-dot--actions {
-          display: none;
-        }
-
-        .meta-actions {
+        .page-actions {
           width: 100%;
           margin-top: 0.25rem;
         }
       }
 
       @media (prefers-reduced-motion: reduce) {
-        .fade-up {
-          animation: none;
-        }
-
-        .feed-item,
-        .pagination-link {
-          transition: none;
-        }
+        .fade-up { animation: none; }
+        .pagination-link { transition: none; }
       }
     </style>
   </body>

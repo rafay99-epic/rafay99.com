@@ -1,4 +1,5 @@
 ---
+import { Image } from "astro:assets";
 import authorConfig from "@config/siteConfig/info.json";
 import {
 	ArrowRight,
@@ -172,9 +173,11 @@ const statColors = ["#7aa2f7", "#bb9af7", "#9ece6a"];
       <div class="fade-up flex justify-center lg:justify-start">
         <div class="profile-wrapper relative inline-block">
           <div class="profile-glow rounded-3xl p-1">
-            <img
+            <Image
               src={picture}
               alt={name}
+              width={320}
+              height={320}
               class="profile-image h-56 w-56 rounded-3xl object-cover sm:h-72 sm:w-72 lg:h-80 lg:w-80"
               loading="eager"
             />

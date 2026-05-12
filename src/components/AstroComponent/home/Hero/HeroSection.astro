@@ -1,5 +1,5 @@
 ---
-import authorConfig from "@config/siteConfig/info.json";
+import { Image } from "astro:assets";
 
 interface SocialLinks {
 	twitter: string;
@@ -19,7 +19,6 @@ interface Props {
 }
 
 const { name, jobTitle, picture, socialLinks } = Astro.props as Props;
-const stats = authorConfig.stats;
 ---
 
 <style>
@@ -94,31 +93,6 @@ const stats = authorConfig.stats;
     will-change: transform, opacity;
   }
 
-  .stat-divider {
-    position: relative;
-  }
-
-  .stat-divider::after {
-    content: '';
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    height: 32px;
-    width: 1px;
-    background: #414868;
-    opacity: 0.4;
-  }
-
-  .stat-divider:last-child::after {
-    display: none;
-  }
-
-  @media (max-width: 640px) {
-    .stat-divider::after {
-      display: none;
-    }
-  }
 </style>
 
 <section class="relative overflow-hidden bg-[#1a1b26]">
@@ -159,9 +133,11 @@ const stats = authorConfig.stats;
 
     <!-- Avatar + status badge -->
     <div class="hero-fade-up mb-5 flex items-center gap-2.5 sm:gap-3" style="animation-delay: 0s;">
-      <img
+      <Image
         src={picture}
-        alt="Profile"
+        alt={name}
+        width={56}
+        height={56}
         class="h-11 w-11 rounded-full object-cover ring-2 ring-[#7aa2f7]/20 sm:h-14 sm:w-14"
       />
       <div class="flex items-center gap-2 rounded-full border border-[#414868]/20 bg-[#24283b]/40 px-3 py-1.5 backdrop-blur-sm sm:px-3.5">
@@ -173,67 +149,46 @@ const stats = authorConfig.stats;
       </div>
     </div>
 
-    <!-- Main heading - the star of the show -->
-    <h1 class="hero-fade-up mb-4" style="animation-delay: 0.1s;">
-      <span
-        class="block text-[#c0caf5]"
-        style="font-size: clamp(2.25rem, 6vw, 5rem); line-height: 1.05; font-weight: 700;"
-      >Hey, I'm</span>
+    <!-- Name -->
+    <h1 class="hero-fade-up mb-2" style="animation-delay: 0.1s;">
       <span
         class="hero-name block bg-gradient-to-r from-[#7aa2f7] via-[#bb9af7] to-[#7aa2f7]"
-        style="font-size: clamp(3rem, 8vw, 7rem); line-height: 1; font-weight: 900; letter-spacing: -0.02em;"
+        style="font-size: clamp(3rem, 8vw, 6.5rem); line-height: 1.05; font-weight: 900; letter-spacing: -0.02em;"
       >{name}</span>
     </h1>
 
-    <!-- Subtitle -->
+    <!-- Role -->
     <p
-      class="hero-fade-up mx-auto mb-6 max-w-2xl text-[#a9b1d6]"
-      style="animation-delay: 0.2s; font-size: clamp(1rem, 1.8vw, 1.25rem); line-height: 1.6;"
+      class="hero-fade-up mb-6 text-sm font-medium uppercase tracking-[0.2em] text-[#7aa2f7]/60 sm:text-base"
+      style="animation-delay: 0.15s;"
     >
-      <span class="text-[#7aa2f7]">{jobTitle}</span> crafting software through
-      thoughtful design and engineering. I build
-      <span class="text-[#bb9af7]">scalable</span> web & mobile systems that grow with users.
+      {jobTitle}
     </p>
 
-    <!-- Stats -->
-    <div
-      class="hero-fade-up mb-8 flex flex-wrap items-center justify-center gap-4 sm:gap-8"
-      style="animation-delay: 0.3s;"
+    <!-- Bio -->
+    <p
+      class="hero-fade-up mx-auto mb-10 max-w-xl text-[#a9b1d6]/90"
+      style="animation-delay: 0.2s; font-size: clamp(1rem, 1.6vw, 1.15rem); line-height: 1.7;"
     >
-      {stats.map((stat) => (
-        <div class="stat-divider pr-4 sm:pr-8">
-          <div class="text-xl font-bold text-[#c0caf5] sm:text-2xl">{stat.value}</div>
-          <div class="mt-0.5 text-[10px] font-medium uppercase tracking-wider text-[#565f89] sm:text-[11px]">{stat.label}</div>
-        </div>
-      ))}
-    </div>
+      I build SaaS platforms, mobile apps, and AI-integrated systems&mdash;real
+      products that handle payments, serve users across countries, and don't fall
+      over at scale. Currently shipping at <span class="text-[#c0caf5]">Tudo Tech Lab</span>.
+    </p>
 
     <!-- CTA + Social -->
-    <div class="hero-fade-up flex flex-col items-center gap-4 sm:gap-5" style="animation-delay: 0.4s;">
+    <div class="hero-fade-up flex flex-col items-center gap-5" style="animation-delay: 0.3s;">
       <div class="flex flex-wrap items-center justify-center gap-3">
         <button
           id="connect-button"
-          class="group relative cursor-pointer overflow-hidden rounded-full bg-gradient-to-r from-[#7aa2f7] to-[#bb9af7] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#7aa2f7]/15 transition-all duration-300 hover:shadow-xl hover:shadow-[#7aa2f7]/25 sm:px-8 sm:py-3.5"
+          class="cursor-pointer rounded-full bg-[#7aa2f7] px-7 py-3 text-sm font-semibold text-[#1a1b26] transition-all duration-200 hover:bg-[#89b4fa] sm:px-8 sm:py-3.5"
         >
-          <span class="relative z-10 flex items-center gap-2">
-            Let's Work Together
-            <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-              <polyline points="12 5 19 12 12 19"></polyline>
-            </svg>
-          </span>
-          <span class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/15 to-transparent transition-transform duration-700 group-hover:translate-x-full"></span>
+          Get in touch
         </button>
         <a
           href="/downloads/Abdul_Rafay_CV.pdf"
           download
-          class="group inline-flex items-center gap-2 rounded-full border border-[#414868]/40 px-6 py-3 text-sm font-semibold text-[#a9b1d6] transition-all duration-300 hover:border-[#7aa2f7]/40 hover:text-[#c0caf5] sm:px-8 sm:py-3.5"
+          class="rounded-full border border-[#414868]/40 px-7 py-3 text-sm font-semibold text-[#a9b1d6] transition-all duration-200 hover:border-[#565f89] hover:text-[#c0caf5] sm:px-8 sm:py-3.5"
         >
-          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-            <polyline points="7 10 12 15 17 10"></polyline>
-            <line x1="12" y1="15" x2="12" y2="3"></line>
-          </svg>
           Download CV
         </a>
       </div>

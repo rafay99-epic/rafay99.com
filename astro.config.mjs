@@ -1,25 +1,23 @@
 import mdx from "@astrojs/mdx";
+import partytown from "@astrojs/partytown";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
 import vercel from "@astrojs/vercel";
-import { defineConfig } from "astro/config";
-import robotsTxt from "astro-robots-txt";
-import dotenv from "dotenv";
-
-dotenv.config();
-
-import partytown from "@astrojs/partytown";
 import playformCompress from "@playform/compress";
-import { fontProviders } from "astro/config";
+import { defineConfig, fontProviders } from "astro/config";
 import icon from "astro-icon";
+import robotsTxt from "astro-robots-txt";
 import { remarkReadingTime } from "./remark-reading-time.mjs";
 
 export default defineConfig({
 	site: "https://www.rafay99.com",
 	output: "server",
 	image: {
-		remotePatterns: [{ protocol: "https", hostname: "7huqjqx8yo.ufs.sh" }],
+		remotePatterns: [
+			{ protocol: "https", hostname: "7huqjqx8yo.ufs.sh" },
+			{ protocol: "https", hostname: "utfs.io" },
+		],
 	},
 	build: {
 		concurrency: 10,
@@ -180,7 +178,7 @@ export default defineConfig({
 			noExternal: ["@astrojs/*"],
 		},
 		optimizeDeps: {
-			exclude: ["@astrojs/image", "sharp"],
+			exclude: ["sharp"],
 		},
 		resolve: {
 			dedupe: ["react", "react-dom"],
