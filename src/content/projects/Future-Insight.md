@@ -2,7 +2,7 @@
 Projecttitle: "Future Insight Website"
 ProjectDescription: Explore cutting-edge insights on the 'Future Insight' Blog. Crafted with Node.js, Hugo, and deployed on Netlify for a seamless experience.
 ProjectImage: "https://7huqjqx8yo.ufs.sh/f/TViMykBJnLIJz7CgMIZB7pQ0TRPA9NYOdUsXcZvWxnjer5yg"
-draft: false
+draft: true
 ProjectTech:
   [
     "Hugo",

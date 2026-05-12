@@ -14,6 +14,7 @@
 		"showTermsandConditions": true,
 		"showPrivacyPolicy": true,
 		"showWiki": false,
+		"showOpenSource": true,
 		"showWhatsNew": true,
 		"showSeries": true,
 		"enableCoreServices": true,

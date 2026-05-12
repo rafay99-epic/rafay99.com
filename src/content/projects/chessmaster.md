@@ -2,7 +2,7 @@
 Projecttitle: "Chess Master"
 ProjectDescription: Dive into the strategic world of chess with this Flutter-powered game. Challenge friends 👥, master the art of checkmate! Your mobile chess arena awaits."
 ProjectImage: https://7huqjqx8yo.ufs.sh/f/TViMykBJnLIJL2SHmEGODv8zKEuQRClSiYAsbdfeG73ThV1q
-draft: false
+draft: true
 ProjectTech:
   ["Flutter", "Firebase", "Dart", "Postman", "Test Magic", "Git", "GitHub"]
 ProjectCategory: ["Mobile Apps"]

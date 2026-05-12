@@ -2,7 +2,7 @@
 Projecttitle: "Shafiq Law Chamber"
 ProjectDescription: "Explore Shafiq Law Chamber's expertise on our seamlessly crafted website. Powered by Hugo and Node.js, it ensures a professional and user-friendly online presence."
 ProjectImage: "https://7huqjqx8yo.ufs.sh/f/TViMykBJnLIJjnXPRn7o0V9P4TshizbmuY6NGtQZAdgDOBnK"
-draft: false
+draft: true
 ProjectTech:
   [
     "Hugo",

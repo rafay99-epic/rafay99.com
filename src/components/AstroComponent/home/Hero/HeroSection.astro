@@ -210,19 +210,33 @@ const stats = authorConfig.stats;
 
     <!-- CTA + Social -->
     <div class="hero-fade-up flex flex-col items-center gap-4 sm:gap-5" style="animation-delay: 0.4s;">
-      <button
-        id="connect-button"
-        class="group relative cursor-pointer overflow-hidden rounded-full bg-gradient-to-r from-[#7aa2f7] to-[#bb9af7] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#7aa2f7]/15 transition-all duration-300 hover:shadow-xl hover:shadow-[#7aa2f7]/25 sm:px-8 sm:py-3.5"
-      >
-        <span class="relative z-10 flex items-center gap-2">
-          Let's Work Together
-          <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-            <polyline points="12 5 19 12 12 19"></polyline>
+      <div class="flex flex-wrap items-center justify-center gap-3">
+        <button
+          id="connect-button"
+          class="group relative cursor-pointer overflow-hidden rounded-full bg-gradient-to-r from-[#7aa2f7] to-[#bb9af7] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#7aa2f7]/15 transition-all duration-300 hover:shadow-xl hover:shadow-[#7aa2f7]/25 sm:px-8 sm:py-3.5"
+        >
+          <span class="relative z-10 flex items-center gap-2">
+            Let's Work Together
+            <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </span>
+          <span class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/15 to-transparent transition-transform duration-700 group-hover:translate-x-full"></span>
+        </button>
+        <a
+          href="/downloads/Abdul_Rafay_CV.pdf"
+          download
+          class="group inline-flex items-center gap-2 rounded-full border border-[#414868]/40 px-6 py-3 text-sm font-semibold text-[#a9b1d6] transition-all duration-300 hover:border-[#7aa2f7]/40 hover:text-[#c0caf5] sm:px-8 sm:py-3.5"
+        >
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
           </svg>
-        </span>
-        <span class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/15 to-transparent transition-transform duration-700 group-hover:translate-x-full"></span>
-      </button>
+          Download CV
+        </a>
+      </div>
 
       <div class="flex items-center gap-0.5 sm:gap-1">
         <a href={socialLinks.github} target="_blank" rel="noopener noreferrer" class="flex h-9 w-9 items-center justify-center rounded-lg text-[#565f89] transition-colors duration-200 hover:text-[#c0caf5]" aria-label="GitHub">

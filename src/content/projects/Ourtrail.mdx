@@ -1,0 +1,64 @@
+---
+Projecttitle: "Ourtrail - Trip Memory Platform"
+ProjectDescription: "Privacy-first cross-platform app for collecting trip memories with shared albums, Google Photos import, Cloudinary upload pipeline, and a tiered billing system across web and mobile."
+ProjectImage: /ProjectImages/Ourtrail/logo.png
+draft: false
+ProjectTech:
+  [
+    "React Native",
+    "Expo 54",
+    "Next.js 16",
+    "TypeScript",
+    "Convex",
+    "Cloudinary",
+    "Clerk",
+    "Turborepo",
+    "Tailwind CSS",
+    "NativeWind",
+    "TanStack Router",
+  ]
+ProjectCategory: ["SaaS", "Web Apps", "Mobile Apps"]
+ProjectGithubLink: ""
+ProjectDeployedLink: "https://ourtrail.xyz"
+ProjectRanking: "2"
+---
+
+## Project Overview
+
+Ourtrail started from a simple frustration. After every group trip, everyone's photos end up scattered across WhatsApp threads, AirDrop transfers, and individual Google Photos libraries. Six months later, nobody can find the good ones, and assembling a complete album requires chasing people across three messaging apps. Ourtrail solves this by giving each trip a single shared space where every traveler can contribute their photos, whether by connecting Google Photos, uploading from their camera roll, or dragging files from their desktop.
+
+The platform ships as three applications from a single Turborepo monorepo: a Next.js 16 web app, an Expo 54 React Native mobile app for iOS and Android, and a Vite-based admin dashboard. All three share one Convex backend with full TypeScript type safety, which means the data model, validation logic, and real-time subscriptions are defined once and consumed everywhere without any API contract drift.
+
+## The Upload Pipeline
+
+The most technically interesting piece of Ourtrail is the upload architecture. Files never pass through the application server. Instead, when a user selects photos to upload, the client calls a Convex action that verifies their authentication, checks their billing plan's storage and per-trip photo limits, and generates a signed set of Cloudinary upload parameters including a SHA1 signature computed from the API secret. The client then posts the file directly to Cloudinary's upload endpoint using those signed parameters, which means the file travels from the user's device straight to Cloudinary's CDN without touching the Convex backend or any intermediate server.
+
+Once Cloudinary returns the upload metadata including the public ID, secure URL, dimensions, file size, and duration for videos, the client calls a Convex mutation to save that metadata. The mutation runs another round of billing enforcement before persisting the record, which prevents a race condition where a user could bypass limits by uploading multiple files simultaneously. Batch uploads are supported through a dedicated batchCreate mutation that processes multiple media entries in a single transaction.
+
+Deletion uses a soft-delete pattern. When a user removes a photo, the record is flagged with an isDeleted marker and a timestamp rather than being destroyed immediately. A 30-day grace period gives users a chance to recover accidentally deleted photos. After the grace period expires, a cleanup cron job runs a Convex workflow that deletes the actual file from Cloudinary asynchronously before removing the database record.
+
+## Google Photos Integration
+
+Users on paid plans can connect their Google account and import trip photos automatically. The integration stores an encrypted OAuth refresh token in the database and uses it to scan the user's Google Photos library by date range or album. The import runs as a multi-step Convex workflow that first scans for matching photos, then imports them one by one into Cloudinary and saves the metadata. Progress is tracked in a dedicated googlePhotosImports table with states for scanning, importing, completed, and failed, which lets the client show a real-time progress indicator.
+
+## Cross-Platform Architecture
+
+The monorepo is structured so that the Convex backend package is shared as a workspace dependency across all three apps. The web app uses Next.js 16 with the App Router and Tailwind CSS v4, styled with a warm peach and sage color palette defined through CSS variables. The mobile app runs on Expo 54 with React Native 0.81, Expo Router for file-based navigation, NativeWind for Tailwind-on-mobile styling, and React Native Reanimated for animations. The admin dashboard is a separate Vite app using TanStack Router and TanStack React Query.
+
+Authentication is handled by Clerk across all three surfaces. The web app uses Clerk's Next.js middleware to protect authenticated routes, the mobile app uses the Clerk Expo SDK with secure token caching, and the Convex backend verifies Clerk JWTs on every query and mutation. A shared set of auth helpers enforce trip membership and role-based access checks at the database layer.
+
+## Trip Membership and Sharing
+
+Each trip has a membership model with three roles: owner, admin, and member. Owners can delete trips, manage members, and edit all content. Admins can approve new members, manage media, and edit trip details. Members can upload photos, view the album, and mark favorites. Membership supports both direct invitations by user ID and email-based invitations for people who have not signed up yet, which are resolved when they create an account.
+
+For sharing outside the app, trip owners and admins can generate public share links with configurable expiration dates and download permissions. These token-based URLs render a public view of the album without requiring authentication, and the download toggle lets the creator decide whether visitors can save the original files or only view them in the browser.
+
+## Billing and Feature Gating
+
+Ourtrail uses a database-driven billing system rather than hardcoded tier logic. A feature registry table defines boolean features like video upload, share links, and Google Photos import, plus numeric limits like maximum trips, photos per trip, members per trip, and total storage in megabytes. A separate plan features table maps specific values to each pricing tier. This means the admin can create new plans, adjust limits, or enable features for individual users without deploying code.
+
+Enforcement happens at the mutation level. Before any media creation, the backend calls helper functions that calculate the user's current storage usage and compare it against their plan's limit, check the per-trip photo count, and verify that boolean features like video upload are enabled for their tier. The admin dashboard provides a full interface for managing plans, features, users, and their subscriptions.
+
+## Technical Stack
+
+The monorepo runs on Turborepo with Bun as the package manager and TypeScript 5.7 in strict mode across all packages. The web app ships on Vercel, the mobile app builds through EAS (Expo Application Services), and the backend runs on Convex's globally distributed serverless infrastructure. Media storage is on Cloudinary, which provides both CDN delivery and on-the-fly image transformations. Code quality is enforced by OxLint and Prettier.

@@ -1,0 +1,43 @@
+---
+import BaseHead from "@astro/base/BaseHead.astro";
+import Footer from "@astro/footer/Footer.astro";
+import Header from "@astro/header/Header.astro";
+import OpenSourceSection from "@astro/personal/OpenSource/OpenSourceSection.astro";
+import { featureFlags } from "@config/featureFlag/featureFlag.json";
+import authorConfig from "@config/siteConfig/info.json";
+
+export const prerender = true;
+try {
+	if (!featureFlags.showOpenSource) {
+		return Astro.redirect("/access-denied");
+	}
+} catch (_error) {
+	return Astro.redirect("/400");
+}
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead
+      title={`Open Source | ${authorConfig.SiteName}`}
+      description="Open source contributions by Abdul Rafay, including merged PRs to Mole (51k+ stars), TLDR Pages, and TinaCMS."
+    />
+
+    <style>
+      main[data-page="open-source"] {
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body class="bg-[#1a1b26]">
+    <Header />
+    <main data-page="open-source">
+      <OpenSourceSection />
+    </main>
+    <Footer />
+  </body>
+</html>
