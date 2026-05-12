@@ -1,12 +1,15 @@
 {
 	"name": "rafay99.com",
 	"type": "module",
-	"version": "10.2.0",
+	"version": "10.3.0",
 	"scripts": {
 		"dev": "astro dev",
 		"build": "astro build",
 		"preview": "astro preview",
 		"check": "astro check",
+		"typecheck": "tsc --noEmit --skipLibCheck",
+		"format:check": "biome format .",
+		"lint:check": "biome lint .",
 		"verify": "biome check . && tsc --noEmit --skipLibCheck && astro check",
 		"ci": "biome check . && tsc --noEmit --skipLibCheck && astro check && astro build",
 		"lint": "biome check . && tsc --noEmit --skipLibCheck",

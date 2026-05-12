@@ -4,17 +4,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Astro 5 portfolio and blog site (rafay99.com) with React 19 islands, TinaCMS for content management, Tailwind CSS styling, and Vercel deployment with ISR.
+Astro 5 portfolio and blog site (rafay99.com) with React 19 islands, Tailwind CSS styling, and Vercel deployment with ISR.
 
 **Important workflow guidelines for assistants:**
 
 - **Use Bun only**: Always use `bun` as the package manager (`bun run ...`, `bun x ...`). Do **not** introduce other package managers (npm, pnpm, yarn) or change the existing tooling.
-- **Dev server lifecycle**: Assume the dev server is already running during normal work sessions. Do **not** start or restart `bun run dev` unless explicitly asked, or when required after a TinaCMS config/schema change.
+- **Dev server lifecycle**: Assume the dev server is already running during normal work sessions. Do **not** start or restart `bun run dev` unless explicitly asked.
 - **Validate your changes**: After non-trivial code changes, you may verify your work with:
-  - `bun run lint` / `bun run lint:fix` (Prettier + TypeScript type check)
+  - `bun run lint` / `bun run lint:fix` (Biome + TypeScript type check)
   - `bun run check` (Astro diagnostics for components/templates)
-- **TinaCMS config changes**: If you modify anything in `tina/config.ts` or related TinaCMS collections, you **must** run `bun run dev` once locally to regenerate TinaCMS types and sync schema with the Tina cloud backend.
-- **.sitepins CMS prototype**: A second, experimental CMS is configured under `.sitepins/` (see `.sitepins/config.json` and `.sitepins/schema/*.json`). Treat this as a prototype: keep schemas in sync with `src/content/config.ts`, and do not remove or radically change it unless explicitly requested.
 
 ## Commands
 
@@ -43,8 +41,6 @@ bun run check            # Astro diagnostics (template/component checks)
 
 - `blog/` (MDX) - articles with draft/archived/featured flags, tags, SEO fields
 - `projects/` (MDX) - portfolio items with tech stack, categories, links
-
-**TinaCMS**: Config in `tina/config.ts`. Also manages feature flags and site configuration as JSON collections. Admin UI at `/admin`.
 
 **Feature Flags**: `src/config/featureFlag/featureFlag.json` toggles site sections (blog, projects, wiki, etc.) and API endpoints. Check these flags when adding new pages or sections.
 
@@ -76,5 +72,5 @@ bun run check            # Astro diagnostics (template/component checks)
 - **Tailwind theme**: Custom color system defined in `src/config/theme/colors.ts` (Tokyo Night inspired). Poppins font. Custom `mobile` breakpoint at max 767px.
 - **Build optimization**: Terser minification removes all `console.*` and `debugger` in production. Manual chunk splitting for react-vendor, ui-components, and vendor-mermaid.
 - **React Compiler**: Enabled via babel plugin (`babel-plugin-react-compiler`).
-- **Formatting**: Prettier with astro and tailwind plugins (class sorting). No semicolons are NOT enforced — the codebase uses semicolons.
+- **Formatting**: Biome with tailwind plugin (class sorting). The codebase uses semicolons.
 - **Content drafts**: Both `draft` and `archived` boolean fields control content visibility. Filter these when querying collections.
