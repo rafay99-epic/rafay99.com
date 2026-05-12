@@ -1,0 +1,130 @@
+---
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+import CodeCompareUI from "@react/blog/enhancements/code-compare/CodeCompareUI";
+import { codeToHtml } from "shiki";
+
+interface Props {
+	code1?: string;
+	code2?: string;
+	file1?: string;
+	file2?: string;
+	lang1?: string;
+	lang2?: string;
+	title1?: string;
+	title2?: string;
+}
+
+const {
+	code1: rawCode1,
+	code2: rawCode2,
+	file1,
+	file2,
+	lang1 = "plaintext",
+	lang2 = "plaintext",
+	title1 = "Before",
+	title2 = "After",
+} = Astro.props;
+
+function readPublicFile(filePath: string): string {
+	const cleaned = filePath.startsWith("/") ? filePath.slice(1) : filePath;
+	return readFileSync(join(process.cwd(), "public", cleaned), "utf-8");
+}
+
+function extractLineHtml(shikiHtml: string): string[] {
+	const inner = shikiHtml
+		.replace(/<pre[^>]*><code>/, "")
+		.replace(/<\/code><\/pre>/, "")
+		.trim();
+	if (!inner) return [];
+	return inner.split("\n").map((line) => {
+		const m = line.match(/^<span class="line">([\s\S]*)<\/span>$/);
+		return m?.[1] ?? line;
+	});
+}
+
+interface DiffOp {
+	type: "unchanged" | "removed" | "added";
+	i1: number | undefined;
+	i2: number | undefined;
+}
+
+function dpGet(dp: number[][], r: number, col: number): number {
+	const row = dp[r];
+	if (!row) return 0;
+	return row[col] ?? 0;
+}
+
+function computeDiff(a: string[], b: string[]): DiffOp[] {
+	const m = a.length;
+	const n = b.length;
+	const dp: number[][] = Array.from({ length: m + 1 }, () =>
+		new Array(n + 1).fill(0),
+	);
+	for (let i = 1; i <= m; i++) {
+		for (let j = 1; j <= n; j++) {
+			const row = dp[i];
+			if (row) {
+				row[j] =
+					a[i - 1] === b[j - 1]
+						? dpGet(dp, i - 1, j - 1) + 1
+						: Math.max(dpGet(dp, i - 1, j), dpGet(dp, i, j - 1));
+			}
+		}
+	}
+	const ops: DiffOp[] = [];
+	let i = m;
+	let j = n;
+	while (i > 0 || j > 0) {
+		if (i > 0 && j > 0 && a[i - 1] === b[j - 1]) {
+			ops.unshift({ type: "unchanged", i1: i - 1, i2: j - 1 });
+			i--;
+			j--;
+		} else if (
+			j > 0 &&
+			(i === 0 || dpGet(dp, i, j - 1) >= dpGet(dp, i - 1, j))
+		) {
+			ops.unshift({ type: "added", i1: undefined, i2: j - 1 });
+			j--;
+		} else {
+			ops.unshift({ type: "removed", i1: i - 1, i2: undefined });
+			i--;
+		}
+	}
+	return ops;
+}
+
+const src1 = (rawCode1 ?? (file1 ? readPublicFile(file1) : "")).trim();
+const src2 = (rawCode2 ?? (file2 ? readPublicFile(file2) : "")).trim();
+
+const [shiki1, shiki2] = await Promise.all([
+	codeToHtml(src1, { lang: lang1, theme: "tokyo-night" }),
+	codeToHtml(src2, { lang: lang2, theme: "tokyo-night" }),
+]);
+
+const htmlLines1 = extractLineHtml(shiki1);
+const htmlLines2 = extractLineHtml(shiki2);
+const rawLines1 = src1.split("\n");
+const rawLines2 = src2.split("\n");
+
+const diff = computeDiff(rawLines1, rawLines2);
+
+const entries = diff.map((op) => ({
+	type: op.type,
+	leftNum: op.i1 !== undefined ? op.i1 + 1 : undefined,
+	rightNum: op.i2 !== undefined ? op.i2 + 1 : undefined,
+	leftHtml: op.i1 !== undefined ? (htmlLines1[op.i1] ?? "") : undefined,
+	rightHtml: op.i2 !== undefined ? (htmlLines2[op.i2] ?? "") : undefined,
+}));
+---
+
+<CodeCompareUI
+	entries={entries}
+	title1={title1}
+	title2={title2}
+	raw1={src1}
+	raw2={src2}
+	lang1={lang1}
+	lang2={lang2}
+	client:visible
+/>

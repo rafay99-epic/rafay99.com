@@ -28,7 +28,7 @@ canonicalUrl: /blog/deepseak-vs-gpt-the-battle-of-ai-interfaces
 archived: True
 ---
 
-import CodeTabsWrapper from "../../components/ReactComponent/blog/enhancements/code-compare/CodeCompare";
+import CodeCompare from "../../components/AstroComponent/blog/CodeCompare.astro";
 
 While... While what? Today, we have a new AI model going wild on the internet, and it's called **Deepseak**—the new **thinking AI model** that's set to change everything! Will it take our jobs? Just kidding. But the future is here, and these new thinking models are truly fascinating. The ability to **think independently** is incredible.
 
@@ -49,20 +49,13 @@ So, this is the test. I am working on an app called **Meaning Mate**, which has 
 
 Here in the Tab form, both the UI are provided, The first one is the UI that is codede by me and the other one is the UI that chatgpt provided.
 
-<CodeTabsWrapper
-  code1={{
-    filePath: "/blog_code/deep_vs_chatgpt/chatgpt/chatgpt_orginal.dart",
-    language: "dart",
-  }}
-  code2={{
-    filePath: "/blog_code/deep_vs_chatgpt/chatgpt/chatgpt_modified_code.dart",
-    language: "dart",
-  }}
-  file1Title="Original UI"
-  file2Title="ChatGPT UI"
-  showLineNumbers={false}
-  showCopyButton={false}
-  client:load
+<CodeCompare
+  file1="/blog_code/deep_vs_chatgpt/chatgpt/chatgpt_orginal.dart"
+  file2="/blog_code/deep_vs_chatgpt/chatgpt/chatgpt_modified_code.dart"
+  lang1="dart"
+  lang2="dart"
+  title1="Original UI"
+  title2="ChatGPT UI"
 />
 
 #### Screenshot
@@ -98,25 +91,13 @@ Moreover, I don't see the need for a big box in the UI, especially since the ori
 
 Here is the **Quiz UI code** that I wrote:
 
-<CodeTabsWrapper
-file1Title="Orginal UI"
-file2Title="Deep Seak UI"
-showLineNumbers={false}
-showCopyButton={false}
-code1={
-{
-filePath: "/blog_code/deep_vs_chatgpt/deepseak/orginal.dart",
-language: "dart",
-}
-}
-
-code2={
-{
-filePath: "/blog_code/deep_vs_chatgpt/deepseak/modified_code.dart",
-language: "dart",
-}
-}
-client:load
+<CodeCompare
+  file1="/blog_code/deep_vs_chatgpt/deepseak/orginal.dart"
+  file2="/blog_code/deep_vs_chatgpt/deepseak/modified_code.dart"
+  lang1="dart"
+  lang2="dart"
+  title1="Original UI"
+  title2="Deep Seek UI"
 />
 
 #### Screenshot
