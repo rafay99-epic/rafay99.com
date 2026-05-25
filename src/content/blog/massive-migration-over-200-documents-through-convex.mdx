@@ -1,0 +1,349 @@
+---
+title: "The Six-File Problem: How I Learned to Stop Orchestrating and Love the Queue"
+date: "2026-05-16"
+draft: false
+slug: the-six-file-problem-how-i-learned-to-stop-orchestrating-and-love-the-queue
+authorName: Abdul Rafay
+tags: backend, Software Engineer, Convex, Web Development
+keywords: Web Development, Technical Content
+featured: true
+pubDate: "2026-05-25T08:00:00.000Z"
+authorAvatar: "https://7huqjqx8yo.ufs.sh/f/TViMykBJnLIJxZSVOvl9R3riI0XzKFH7a5TLmpyJl1P2Eewu"
+readTime: ""
+description: I didn’t build a CMS — I built an escape route from one. This post tells the story of Wryte, a Markdown-first sync layer between GitHub and Convex, and how six tiny files exposed the real problem with Promise.all, rate limits, and naive bulk processing.
+heroImage: "https://7huqjqx8yo.ufs.sh/f/TViMykBJnLIJM5kIGc1cKt7RFeBgNV6Ch1mJjMzqwfAQ8Ylp"
+---
+
+I didn't set out to build a CMS. I set out to escape one.
+
+The project is called Wryte — not WRITE,. GPT-5.4 named it, I kept it. It's a sync layer that sits between GitHub and Convex, letting me write in Markdown, schedule posts, and keep my SEO-friendly static site without surrendering to another bloated headless CMS. I wanted the control of files with the convenience of a database. The in-between space.
+
+What I got was a lesson in humility. Six files broke me.
+
+
+## The Gap Nobody Fills
+
+Existing CMSs force a false choice. Go full static — GitHub Actions, Python scripts, custom logic for scheduling and drafts — or go full dynamic with APIs and CRM bloat. I was already invested in the static side. My SEO was working. My URLs were clean. But I needed *just enough* dynamism: a place to write, schedule, and push without rewriting my entire platform.
+
+So I built the negotiator. Wryte imports my Markdown, lets me edit with AI assistance (bring your own API key), and syncs back to GitHub when I'm ready. Convex handles the reactive layer. GitHub remains the source of truth. Everyone stays in their lane.
+
+Except when they don't.
+
+## The Choke
+
+I was testing imports. Six Markdown files. Small files, nothing exotic. I hit the button and watched my system collapse.
+
+The problem wasn't the files. It was `Promise.all`.
+
+```ts
+// DON'T DO THIS — seriously, don't
+const results = await Promise.all(
+  filePaths.map((path) => importFile({ projectId, filePath: path }))
+);
+```
+
+Looks innocent, right? Maps over paths, fires all imports simultaneously, waits for completion. This is what every tutorial shows you. This is what I thought "concurrent" meant.
+
+I had two invisible walls. `Promise.all` sprinted into both.
+
+**First: my own rate limiting.** I configured Convex with a 200-call bucket to protect my bill. Six files shouldn't touch that. But `Promise.all` doesn't *pace* — it *floods*. Each import triggered multiple internal calls. The bucket drained. Requests failed with `RateLimited` errors that weren't even from GitHub. They were from *me*, protecting myself from myself.
+
+**Second: GitHub's Content API.** Different bucket, different rules, same result. My action timed out. The ceiling hit back.
+
+The error messages were lying to me. They said "rate limit" but the real problem was *shape*. I was treating a distributed system like a local loop.
+
+I tried the sequential fix. A `for` loop with retries, stepping through files one by one, backing off when rate limited. It worked. It was also *wrong* — slow, brittle, and fundamentally misunderstanding the problem. I wasn't importing files. I was performing surgery with a spoon. Eight minutes for 200 files. That's not "bulk import." That's "go make tea import."
+
+
+## The Wrong Fix (That I Actually Shipped)
+
+Here's what I wrote. It hurts to look at now.
+
+```ts
+// Attempt 2: sequential with retry — DO NOT SHIP THIS
+for (const filePath of filePaths) {
+  let attempts = 0;
+  while (attempts < 3) {
+    try {
+      await importFile({ projectId, filePath });
+      break; // success, move to next
+    } catch (err) {
+      if (isRateLimitError(err)) {
+        attempts++;
+        await sleep(Math.pow(2, attempts) * 1000); // exponential backoff, manually
+        continue;
+      }
+      throw err; // real error, give up
+    }
+  }
+}
+```
+
+This "worked." It imported files. It respected rate limits. It was also:
+
+- **Blocking**: The HTTP request stayed open for minutes. Browsers kill those.
+- **Fragile**: One unhandled error killed the whole batch, leaving partial state.
+- **Unobservable**: The user saw a spinner. No progress. No "3 of 200." Just... waiting.
+
+I shipped this. I'm not proud. But it got me to the next problem, which is how these things go.
+
+
+## Finding Workpool (By Accident)
+
+I was complaining in the Convex Discord — something I do a lot — and someone mentioned "Workpool." I thought it was a library I'd have to wire up. It's not. It's a **component**, which in Convex means you configure it, register it, and it becomes part of your infrastructure.
+
+The mental shift: I wasn't writing a loop anymore. I was declaring *policy*.
+
+```ts
+// convex/_pools/import.ts
+import { Workpool } from "@convex-dev/workpool";
+import { components } from "../_generated/api";
+
+export const importPool = new Workpool(components.githubImportPool, {
+  maxParallelism: 5,
+  retryActionsByDefault: true,
+  defaultRetryBehavior: {
+    maxAttempts: 3,
+    initialBackoffMs: 1500,
+    base: 2,
+  },
+});
+```
+
+Five parallel workers. Three retries. Exponential backoff starting at 1.5 seconds, doubling each time. The policy *is* the code. No manual orchestration, no sleep loops, no guessing.
+
+But here's the part that took me too long to understand: **the pool is shared infrastructure.** Every user enqueues into the same pool. That `maxParallelism: 5` is global, not per-user. This is actually what I wanted — it protects GitHub's API from me, and me from my users — but it means you have to think about fairness. One user importing 10,000 files would starve everyone else. I added a 200-file cap later. For now, five-at-a-time felt right.
+
+Register it in `convex.config.ts`:
+
+```ts
+import workpool from "@convex-dev/workpool/convex.config.js";
+import { defineApp } from "convex/server";
+
+const app = defineApp();
+app.use(workpool, { name: "githubImportPool" });
+export default app;
+```
+
+That's the entire setup. The complexity doesn't disappear — it gets *absorbed*.
+
+
+## The Coordinator Pattern
+
+Now I had to unlearn how I thought about actions. My old mental model: "an action is a function that does work and returns a result." The new model: **an action is a short-lived coordinator that fans out work to a durable queue, then exits.**
+
+Here's `startBulkImport`. I'm going to walk through it piece by piece because this took me multiple tries to get right.
+
+```ts
+// convex/integrations/github.ts
+export const startBulkImport = action({
+  args: {
+    projectId: v.id("projects"),
+    filePaths: v.array(v.string()),
+  },
+  handler: async (ctx, args): Promise<{ batchId: Id<"import_batches"> }> => {
+```
+
+First: this is an `action`, not a `mutation`. In Convex, mutations run in a deterministic sandbox and can't do arbitrary HTTP. Actions can. They spin up a Node.js environment, can use libraries like Octokit, and — crucially — can enqueue workpool jobs. If you're doing bulk operations that touch external APIs, you probably want an action.
+
+```ts
+    const key = await getRateLimitKey(ctx);
+    await rateLimiter.limit(ctx, "documents:startBulkImport", {
+      key,
+      throws: true,
+    });
+```
+
+Rate limiting happens *first*, before any work. This protects the enqueue operation itself. I'm using the Convex Rate Limiter component with a user-scoped key. `throws: true` means failed limit = hard error to the client. The user sees "too many requests" immediately, not a stuck import later.
+
+```ts
+    const uniquePaths = [...new Set(args.filePaths)];
+```
+
+Dedup at the boundary. The UI might send duplicates — multi-select bugs, "select all" overlapping folders, double-submit. If I didn't do this, `total` would be wrong and the progress bar would never complete. One job per path, guaranteed here.
+
+```ts
+    const user = await ctx.runQuery(internal.account.users.internalGetByToken, {
+      tokenIdentifier: /* ... */,
+    });
+    const project = await ctx.runQuery(internal.cms.projects.internalGet, {
+      projectId: args.projectId,
+    });
+    if (!project || project.userId !== user._id) {
+      throw new Error("Unauthorized");
+    }
+```
+
+This is the auth boundary, and it's critical. Workpool jobs run later, without a user session. They can't call `ctx.auth.getUserIdentity()` because there's no HTTP request context. So I verify ownership *once*, here, in the coordinator. Then I pass `projectId` into each job, and the jobs trust that `projectId` was validated.
+
+I learned this the hard way. My first version tried to re-auth inside the job. It failed silently because `ctx.auth` was undefined. The docs mention this, but not loudly enough. **Coordinator verifies, workers execute.**
+
+```ts
+    const batchId = await ctx.runMutation(internal.cms.documents._createImportBatch, {
+      projectId: args.projectId,
+      userId: user._id,
+      total: uniquePaths.length,
+    });
+```
+
+Create the tracking row. This is a `runMutation` because actions can't directly write to the database — they call mutations for that. The `import_batches` table stores:
+
+- `projectId`, `userId`: ownership
+- `total`: denominator for progress
+- `createdAt`: metadata
+
+In my *actual* production code, this happens *after* a classification step. I fetch the GitHub tree first, compare SHAs, and only enqueue files that are new or changed. So `total` reflects real work, not just "files you selected." But the pattern is the same: create the batch row, then enqueue.
+
+```ts
+    for (const filePath of uniquePaths) {
+      await importPool.enqueueAction(
+        ctx,
+        internal.integrations.github._importOneFromGithubJob,
+        { projectId: args.projectId, filePath, batchId },
+        { onComplete: internal.cms.documents._onImportFileComplete },
+      );
+    }
+
+    return { batchId };
+  },
+});
+```
+
+Here's the magic. The `for` loop awaits each `enqueueAction`, but **enqueueing is not executing**. It's registering a job with the pool. Registration is fast — milliseconds. The loop finishes quickly, the action returns `{ batchId }`, and the HTTP response completes.
+
+Meanwhile, the workpool is running up to 5 jobs in parallel, asynchronously, potentially over minutes. When each job finishes — success or failure — it calls `onComplete: _onImportFileComplete`.
+
+The coordinator exits. The pool owns the lifecycle now.
+
+
+## The Worker and the Callback
+
+Two more pieces. First, the worker itself:
+
+```ts
+// convex/integrations/github.ts (internal action)
+export const _importOneFromGithubJob = internalAction({
+  args: {
+    projectId: v.id("projects"),
+    filePath: v.string(),
+    batchId: v.id("import_batches"),
+  },
+  handler: async (ctx, args) => {
+    // Fetch from GitHub using Octokit
+    const content = await fetchGithubFile(args.filePath);
+    
+    // Parse frontmatter, validate
+    const parsed = parseMarkdown(content);
+    
+    // Insert or update document
+    await ctx.runMutation(internal.cms.documents._upsertFromImport, {
+      projectId: args.projectId,
+      filePath: args.filePath,
+      frontmatter: parsed.frontmatter,
+      body: parsed.body,
+    });
+    
+    // Return success — Workpool catches this for onComplete
+    return { success: true };
+  },
+});
+```
+
+This runs in the pool's concurrency slot. If it throws, Workpool retries up to 3 times with exponential backoff. If it still fails, the `onComplete` fires with an error.
+
+Now the callback:
+
+```ts
+// convex/cms/documents.ts
+export const _onImportFileComplete = internalMutation({
+  args: {
+    batchId: v.id("import_batches"),
+    filePath: v.string(),
+    success: v.boolean(),
+    errorMessage: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.insert("import_job_outcomes", {
+      batchId: args.batchId,
+      filePath: args.filePath,
+      status: args.success ? "success" : "failure",
+      errorMessage: args.errorMessage,
+      createdAt: Date.now(),
+    });
+  },
+});
+```
+
+This is where I got burned. My first version tried to `patch` the `import_batches` row directly:
+
+```ts
+// DON'T DO THIS — OCC hell
+const batch = await ctx.db.get(args.batchId);
+await ctx.db.patch(args.batchId, {
+  succeeded: batch.succeeded + 1,
+});
+```
+
+Five jobs finishing within milliseconds. All reading the same row, all computing `succeeded + 1`, all trying to write. Convex's optimistic concurrency control says: *no, you can't all win.* Retry storms. Latency spikes. Jobs failing after retries exhausted.
+
+The fix: **don't write to a hot row.** Each callback inserts its *own* row into `import_job_outcomes`. Inserts to different rows don't contend. Zero OCC conflicts.
+
+
+## The Reactive Query (No Polling, Finally)
+
+Client-side:
+
+```tsx
+const [batchId, setBatchId] = useState<Id<"import_batches"> | null>(null);
+
+const batch = useQuery(
+  api.cms.documents.getImportBatch,
+  batchId ? { batchId } : "skip",
+);
+
+const handleImport = async () => {
+  const result = await startBulkImport({ projectId, filePaths });
+  setBatchId(result.batchId); // subscribe immediately
+};
+```
+
+The query:
+
+```ts
+export const getImportBatch = query({
+  args: { batchId: v.id("import_batches") },
+  handler: async (ctx, args) => {
+    const batch = await ctx.db.get(args.batchId);
+    if (!batch) return null;
+
+    // Aggregate on read — no hot row updates
+    const outcomes = await ctx.db
+      .query("import_job_outcomes")
+      .withIndex("by_batchId", (q) => q.eq("batchId", args.batchId))
+      .collect();
+
+    let succeeded = 0;
+    let failed = 0;
+    for (const o of outcomes) {
+      if (o.status === "success") succeeded++;
+      else failed++;
+    }
+
+    return { ...batch, succeeded, failed };
+  },
+});
+```
+
+Every `insert` into `import_job_outcomes` invalidates this query. The UI re-renders. Progress bar updates. No `setInterval`, no manual refetch, no "Refresh" button.
+
+For 200 rows, `collect()` is fine. If I ever hit 10,000, I'd switch to `@convex-dev/aggregate`. For now, this is unmeasurable noise.
+
+****
+## What I Actually Learned
+
+Three rewrites for one feature. That's not unusual; that's the job. But the pattern — **coordinator + workpool + per-job outcomes + reactive read** — is reusable. I used it for bulk delete, for bulk publish, for a Git sync operation that reconciles hundreds of files.
+
+The specific technologies matter less than the shape. You could build this on AWS Step Functions, or Temporal, or a Postgres queue with a worker pool. The insight is: **don't orchestrate, declare.** Specify your constraints and let infrastructure enforce them.
+
+Six files broke me. Two hundred files proved the fix. Wryte is still personal, still free, still weirdly named by a language model. But now it imports without drama, and I understand something I thought I already knew: the best code is the code you don't have to write, and the best orchestration is the kind that disappears.
+
