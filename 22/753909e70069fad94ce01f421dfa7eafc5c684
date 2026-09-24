@@ -1,0 +1,24 @@
+src/components/ReactComponent/blog/enhancements/code-copy/styles.ts
+  s_c5b1332c7c5807::t_a94332d3c4fcd4 5,8
+src/styles/content-prose.css
+  s_c5b1332c7c5807::t_aeb6d238ed0ea2 422-425
+  s_c5b1332c7c5807::t_5a66e19f6f7a13 505,516
+  s_c5b1332c7c5807::t_a5040c39e396a4 22-25,280,283,288-289,291,296,307-311,313,318-319,324-327,333,341,376-381,384-385,391-392,394-395,397-398,402-415,428-430,432,436-446,472
+  s_c5b1332c7c5807::t_35421cf6ea5fd5 416-421,426-427,431,433-435
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "22753909e70069fad94ce01f421dfa7eafc5c684",
+  "prompts": {},
+  "sessions": {
+    "s_c5b1332c7c5807": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2b17688d-e3f5-4f75-aebb-971f5836abaa",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Abdul Rafay <99marafay@gmail.com>"
+    }
+  }
+}
