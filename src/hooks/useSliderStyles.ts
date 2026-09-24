@@ -18,28 +18,28 @@ export const useSliderStyles = (
 		switch (theme) {
 			case "light":
 				return {
-					container: "bg-[var(--text-light)]",
-					controls: "bg-[var(--text-light)]/75 text-[var(--accent-dark)]",
+					container: "bg-(--text-light)",
+					controls: "bg-(--text-light)/75 text-(--accent-dark)",
 					buttons:
-						"bg-[var(--text-light)]/75 text-[var(--accent-dark)] hover:bg-[var(--text-light)]",
-					ring: "ring-[var(--accent)]",
+						"bg-(--text-light)/75 text-(--accent-dark) hover:bg-(--text-light)",
+					ring: "ring-(--accent)",
 				};
 			case "glass":
 				return {
-					container: "backdrop-blur-md bg-[var(--accent-dark)]/10",
+					container: "backdrop-blur-md bg-(--accent-dark)/10",
 					controls:
-						"backdrop-blur-md bg-[var(--accent-dark)]/20 text-[var(--text-light)]",
+						"backdrop-blur-md bg-(--accent-dark)/20 text-(--text-light)",
 					buttons:
-						"backdrop-blur-md bg-[var(--accent)]/20 text-[var(--text-light)] hover:bg-[var(--accent)]/30",
-					ring: "ring-[var(--accent)]",
+						"backdrop-blur-md bg-(--accent)/20 text-(--text-light) hover:bg-(--accent)/30",
+					ring: "ring-(--accent)",
 				};
 			default:
 				return {
-					container: "bg-[var(--accent-dark)]",
-					controls: "bg-[var(--accent-dark)]/75 text-[var(--text-light)]",
+					container: "bg-(--accent-dark)",
+					controls: "bg-(--accent-dark)/75 text-(--text-light)",
 					buttons:
-						"bg-[var(--accent-dark)]/75 text-[var(--text-light)] hover:bg-[var(--accent)]",
-					ring: "ring-[var(--accent)]",
+						"bg-(--accent-dark)/75 text-(--text-light) hover:bg-(--accent)",
+					ring: "ring-(--accent)",
 				};
 		}
 	})();
@@ -111,7 +111,7 @@ export const useSliderStyles = (
 			case "video":
 				return "aspect-video";
 			case "wide":
-				return "aspect-[21/9]";
+				return "aspect-21/9";
 			default:
 				return "";
 		}

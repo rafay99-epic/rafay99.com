@@ -63,8 +63,10 @@ const wordCount = blogContent
 	? blogContent.trim().split(/\s+/).filter(Boolean).length
 	: 0;
 
-// Escape `<` so author content containing `</script>` can't break out of the
-// JSON-LD <script> block (JSON.stringify alone does not escape angle brackets).
+// Escape `<` so author content containing a closing script tag can't break
+// out of the JSON-LD script block (JSON.stringify doesn't escape angle
+// brackets). Keep literal tags out of this comment: Vite's dependency
+// scanner treats them as real script tags.
 const toJsonLd = (value: unknown): string =>
 	JSON.stringify(value).replace(/</g, "\\u003c");
 ---

@@ -78,11 +78,11 @@ const ShareButtons = function ShareButtons({
 			<div className="rounded-2xl border border-[#565f89]/30 bg-[#24283b]/40 p-8 backdrop-blur-xl">
 				<div className="mb-8 text-center">
 					<div className="mb-4 flex items-center justify-center gap-3">
-						<div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-r from-[#7aa2f7] to-[#bb9af7]">
+						<div className="flex h-10 w-10 items-center justify-center rounded-lg bg-linear-to-r from-[#7aa2f7] to-[#bb9af7]">
 							<LuSend className="h-5 w-5 text-white" />
 						</div>
 						<h3 className="text-xl font-bold">
-							<span className="bg-gradient-to-r from-[#7aa2f7] via-[#bb9af7] to-[#9ece6a] bg-clip-text text-transparent">
+							<span className="bg-linear-to-r from-[#7aa2f7] via-[#bb9af7] to-[#9ece6a] bg-clip-text text-transparent">
 								Share this {pagetitle}
 							</span>
 						</h3>

@@ -14,7 +14,7 @@ export function Thumbnail({
 			whileHover={{ scale: 1.05 }}
 			whileTap={{ scale: 0.95 }}
 			onClick={onClick}
-			className={`flex-shrink-0 transition-all duration-200 ${current === index ? `ring-2 ${themeClasses.ring} scale-95` : ""}`}
+			className={`shrink-0 transition-all duration-200 ${current === index ? `ring-2 ${themeClasses.ring} scale-95` : ""}`}
 		>
 			<img
 				src={image}

@@ -54,7 +54,7 @@ export function ImageSliderUI({
 			<div className={mainContentClasses}>
 				<div
 					ref={sliderRef}
-					className="relative flex-grow"
+					className="relative grow"
 					onTouchStart={handleTouchStart}
 					onTouchMove={handleTouchMove}
 				>
@@ -87,7 +87,7 @@ export function ImageSliderUI({
 									initial={{ opacity: 0 }}
 									animate={{ opacity: 1 }}
 									exit={{ opacity: 0 }}
-									className="bg-[var(--accent-dark)]/10 absolute inset-0 flex items-center justify-center backdrop-blur-sm"
+									className="bg-(--accent-dark)/10 absolute inset-0 flex items-center justify-center backdrop-blur-sm"
 								>
 									<m.div
 										animate={{
@@ -98,7 +98,7 @@ export function ImageSliderUI({
 												repeat: Infinity,
 											},
 										}}
-										className={`h-12 w-12 rounded-full border-4 border-[var(--accent)] border-t-transparent`}
+										className={`h-12 w-12 rounded-full border-4 border-(--accent) border-t-transparent`}
 									/>
 								</m.div>
 							)}

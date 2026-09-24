@@ -18,14 +18,14 @@ const VideoEmbed: FunctionComponent<VideoEmbedProps> = ({
 	return (
 		<div className="mx-auto mb-8 w-full max-w-[800px]">
 			<div
-				className="bg-[var(--accent-dark)]/10 relative w-full overflow-hidden rounded-xl"
+				className="bg-(--accent-dark)/10 relative w-full overflow-hidden rounded-xl"
 				style={{
 					paddingBottom: "56.25%",
 				}}
 			>
 				{isLoading && (
-					<div className="bg-[var(--accent-dark)]/10 absolute inset-0 flex items-center justify-center">
-						<div className="h-10 w-10 animate-spin rounded-full border-4 border-[var(--accent)] border-t-transparent" />
+					<div className="bg-(--accent-dark)/10 absolute inset-0 flex items-center justify-center">
+						<div className="h-10 w-10 animate-spin rounded-full border-4 border-(--accent) border-t-transparent" />
 					</div>
 				)}
 

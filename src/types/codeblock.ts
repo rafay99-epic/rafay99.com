@@ -42,22 +42,20 @@ const StylesSchema = z.object({
 	language: StyleValueSchema,
 });
 
-const CopyButtonPropsSchema = z.object({
-	codeText: z.string(),
-	isMobile: z.boolean(),
-	onCopy: z.function().args().returns(z.void()),
-});
-
-const UseCopyButtonPropsSchema = z.object({
-	buttonRef: z.custom<RefObject<HTMLButtonElement | null>>(),
-	codeText: z.string(),
-	onCopy: z.function().args().returns(z.void()),
-	toastStyles: ToastStylesSchema,
-});
-
 export type StyleValue = z.infer<typeof StyleValueSchema>;
 export type ToastStyle = z.infer<typeof ToastStyleSchema>;
 export type ToastStyles = z.infer<typeof ToastStylesSchema>;
 export type Styles = z.infer<typeof StylesSchema>;
-export type CopyButtonProps = z.infer<typeof CopyButtonPropsSchema>;
-export type UseCopyButtonProps = z.infer<typeof UseCopyButtonPropsSchema>;
+// Props carry callbacks, which Zod 4 no longer models inside object
+// schemas, so these are plain types.
+export type CopyButtonProps = {
+	codeText: string;
+	isMobile: boolean;
+	onCopy: () => void;
+};
+export type UseCopyButtonProps = {
+	buttonRef: RefObject<HTMLButtonElement | null>;
+	codeText: string;
+	onCopy: () => void;
+	toastStyles: ToastStyles;
+};
