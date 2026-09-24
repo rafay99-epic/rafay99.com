@@ -47,7 +47,11 @@ function buildBlogLastmod() {
 		if (!date) continue;
 		const ts = new Date(date).getTime();
 		if (Number.isNaN(ts)) continue;
-		const id = file.replace(/\.(md|mdx)$/, "");
+		// A frontmatter `slug` overrides the filename as the post's URL id.
+		const id =
+			typeof data.slug === "string" && data.slug
+				? data.slug
+				: file.replace(/\.(md|mdx)$/, "");
 		map.set(`/blog/${id}/`, new Date(ts).toISOString());
 	}
 	return map;
