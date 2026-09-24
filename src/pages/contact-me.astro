@@ -27,7 +27,7 @@ try {
   <body class="min-h-screen bg-[#1a1b26] text-[#c0caf5]">
     <Header />
 
-    <main class="pt-15 relative mt-0">
+    <main class="pt-15 relative mt-0 max-w-none">
       <section class="px-4 py-16 text-center sm:px-6 sm:py-20 lg:px-8">
         <div class="mx-auto max-w-4xl">
           <h1
@@ -214,6 +214,7 @@ try {
                           <input
                             type="email"
                             name="EMAIL"
+                            autocomplete="email"
                             class="required email w-full rounded-xl border-2 border-[#414868]/40 bg-[#1a1b26]/60 px-4 py-3 text-[#c0caf5] placeholder-[#565f89] transition-colors focus:border-[#7aa2f7] focus:outline-none focus:ring-0"
                             id="mce-EMAIL"
                             required=""
@@ -232,6 +233,7 @@ try {
                             <input
                               type="text"
                               name="FNAME"
+                              autocomplete="given-name"
                               class="text w-full rounded-xl border-2 border-[#414868]/40 bg-[#1a1b26]/60 px-4 py-3 text-[#c0caf5] placeholder-[#565f89] transition-colors focus:border-[#7aa2f7] focus:outline-none focus:ring-0"
                               id="mce-FNAME"
                               value=""
@@ -248,6 +250,7 @@ try {
                             <input
                               type="text"
                               name="LNAME"
+                              autocomplete="family-name"
                               class="text w-full rounded-xl border-2 border-[#414868]/40 bg-[#1a1b26]/60 px-4 py-3 text-[#c0caf5] placeholder-[#565f89] transition-colors focus:border-[#7aa2f7] focus:outline-none focus:ring-0"
                               id="mce-LNAME"
                               value=""
@@ -265,6 +268,7 @@ try {
                           <input
                             type="text"
                             name="COMPANY"
+                            autocomplete="organization"
                             class="text w-full rounded-xl border-2 border-[#414868]/40 bg-[#1a1b26]/60 px-4 py-3 text-[#c0caf5] placeholder-[#565f89] transition-colors focus:border-[#7aa2f7] focus:outline-none focus:ring-0"
                             id="mce-COMPANY"
                             value=""
@@ -281,6 +285,7 @@ try {
                           <input
                             type="tel"
                             name="PHONE"
+                            autocomplete="tel"
                             class="text w-full rounded-xl border-2 border-[#414868]/40 bg-[#1a1b26]/60 px-4 py-3 text-[#c0caf5] placeholder-[#565f89] transition-colors focus:border-[#7aa2f7] focus:outline-none focus:ring-0"
                             id="mce-PHONE"
                             value=""

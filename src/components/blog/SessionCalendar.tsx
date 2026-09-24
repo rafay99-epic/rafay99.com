@@ -112,7 +112,17 @@ export default function SessionCalendar() {
 				</div>
 
 				{/* Timeline */}
-				<div style={{ display: "flex", gap: 3, position: "relative" }}>
+				<div
+					style={{
+						display: "flex",
+						gap: 3,
+						position: "relative",
+						overflowX: "auto",
+						// Room for the glow shadows, which overflow would otherwise clip.
+						padding: 14,
+						margin: -14,
+					}}
+				>
 					{sessions.map((s, i) => {
 						const inWindow = i >= windowStart && i < windowStart + 7;
 						const isActive = i === day;

@@ -39,6 +39,8 @@ function SearchInput({
 				placeholder="Type to search"
 				aria-label="Search articles"
 				autoComplete="off"
+				autoCapitalize="off"
+				enterKeyHint="search"
 				spellCheck={false}
 				className="search__input"
 			/>
@@ -55,7 +57,7 @@ function SearchInput({
 						clear
 					</button>
 				) : (
-					<span>
+					<span className="search__hint">
 						<kbd>/</kbd> to focus
 					</span>
 				)}

@@ -116,6 +116,11 @@ const formattedDate = meta.latestDate.toLocaleDateString("en-US", {
 		animation: shimmer 1.8s ease-in-out infinite;
 	}
 
+	/* Stop repainting once there is nothing left to wait for. */
+	.series-card-image:has(.series-card-img.loaded, .series-card-fallback) {
+		animation: none;
+	}
+
 	@keyframes shimmer {
 		0% { background-position: 200% 0; }
 		100% { background-position: -200% 0; }

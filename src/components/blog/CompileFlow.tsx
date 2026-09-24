@@ -61,7 +61,17 @@ export default function CompileFlow() {
 				Compile pipeline · runs in your browser
 			</div>
 
-			<div style={{ display: "flex", alignItems: "stretch", gap: 6 }}>
+			<div
+				style={{
+					display: "flex",
+					alignItems: "stretch",
+					gap: 6,
+					overflowX: "auto",
+					// Room for the glow shadows, which overflow would otherwise clip.
+					padding: 14,
+					margin: -14,
+				}}
+			>
 				{stages.map((s, i) => {
 					const on = i === active;
 					const done = i < active;

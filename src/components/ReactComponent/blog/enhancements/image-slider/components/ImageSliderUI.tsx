@@ -77,8 +77,8 @@ export function ImageSliderUI({
 								onLoad={() => handleImageLoad(current)}
 								className={`w-full ${
 									isFullScreen
-										? "h-screen object-contain"
-										: "h-[500px] object-cover md:h-[600px] lg:h-[700px] xl:h-[800px]"
+										? "h-dvh object-contain"
+										: "h-auto object-contain md:h-[600px] md:object-cover lg:h-[700px] xl:h-[800px]"
 								} ${layoutClasses.image}`}
 							/>
 

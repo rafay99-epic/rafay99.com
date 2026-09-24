@@ -3,7 +3,6 @@
 @import "@fontsource-variable/bricolage-grotesque";
 @import "@fontsource/instrument-serif/400.css";
 @import "@fontsource/instrument-serif/400-italic.css";
-@import "./vendor/devicon/devicon.min.css";
 
 /* Everything below lives in the base layer so Tailwind v4 utilities (in the
    utilities layer) override these element defaults, as they did in v3. */

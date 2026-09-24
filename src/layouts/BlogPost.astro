@@ -85,18 +85,24 @@ const {
 } = Astro.props as Props;
 const lead = excerpt || description;
 
-// Cover image, optimised once and shown under the masthead.
+// Cover image, optimised once and shown under the masthead. The srcset
+// lets phones pick a smaller file than the 1600px desktop one.
+const coverSizes = "(min-width: 1280px) 1280px, 100vw";
 let coverSrc: string | null = null;
+let coverSrcSet: string | undefined;
 if (heroImage) {
 	try {
 		const optimized = await getImage({
 			src: heroImage,
 			width: 1600,
 			height: 900,
+			widths: [640, 960, 1280, 1600],
+			sizes: coverSizes,
 			format: "webp",
 			quality: 72,
 		});
 		coverSrc = optimized.src;
+		coverSrcSet = optimized.srcSet.attribute || undefined;
 	} catch {
 		coverSrc = heroImage;
 	}
@@ -190,6 +196,8 @@ const seriesContext =
             <figure class="post-cover">
               <img
                 src={coverSrc}
+                srcset={coverSrcSet}
+                sizes={coverSrcSet && coverSizes}
                 alt=""
                 width={1600}
                 height={900}

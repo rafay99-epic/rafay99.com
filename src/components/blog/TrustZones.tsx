@@ -76,7 +76,17 @@ export default function TrustZones() {
 				Where the code runs
 			</div>
 
-			<div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+			<div
+				style={{
+					display: "flex",
+					alignItems: "center",
+					gap: 8,
+					overflowX: "auto",
+					// Room for the glow shadows, which overflow would otherwise clip.
+					padding: 14,
+					margin: -14,
+				}}
+			>
 				{zones.map((z, i) => {
 					const here = pos === i;
 					return (

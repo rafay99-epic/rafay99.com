@@ -84,7 +84,16 @@ export default function KillChain() {
 			</div>
 
 			{/* Pipeline */}
-			<div style={{ display: "flex", gap: 4, marginBottom: 20 }}>
+			<div
+				style={{
+					display: "flex",
+					gap: 4,
+					overflowX: "auto",
+					// Room for the glow shadows, which overflow would otherwise clip.
+					padding: 14,
+					margin: "-14px -14px 6px",
+				}}
+			>
 				{stages.map((s, i) => {
 					const on = i === step;
 					const done = i < step;

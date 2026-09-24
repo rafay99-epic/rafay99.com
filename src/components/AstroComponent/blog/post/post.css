@@ -537,6 +537,12 @@
 		border-color var(--dur-1);
 }
 
+@media (pointer: coarse) {
+	.post-toc .toc-link {
+		padding-block: 0.6rem;
+	}
+}
+
 .post-toc .toc-link:hover {
 	color: var(--color-text-primary);
 }
@@ -629,9 +635,10 @@
 		position: fixed;
 		inset: auto 0 0;
 		z-index: 60;
-		max-height: 82vh;
+		max-height: 82dvh;
 		padding: 1rem 1.25rem calc(1.5rem + env(safe-area-inset-bottom));
 		overflow-y: auto;
+		overscroll-behavior: contain;
 		border-top: 1px solid var(--color-line);
 		background: var(--color-bg-primary);
 		transform: translateY(100%);
@@ -651,9 +658,9 @@
 		align-self: flex-end;
 		align-items: center;
 		justify-content: center;
-		width: 2rem;
-		height: 2rem;
-		margin-bottom: -0.75rem;
+		width: 2.75rem;
+		height: 2.75rem;
+		margin-bottom: -1.125rem;
 		border: 0;
 		background: transparent;
 		color: var(--color-text-secondary);

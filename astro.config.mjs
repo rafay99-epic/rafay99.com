@@ -249,6 +249,12 @@ export default defineConfig({
 			rolldownOptions: {
 				onwarn(warning, warn) {
 					if (
+						// Astro stamps "use astro:head-inject" on every content entry's
+						// ?astroPropagatedAssets module. Nothing reads it (head
+						// propagation keys off the module id), so Rolldown dropping it
+						// is harmless.
+						(warning.code === "MODULE_LEVEL_DIRECTIVE" &&
+							warning.message?.includes("astro:head-inject")) ||
 						warning.code === "EMPTY_BUNDLE" ||
 						warning.code === "CIRCULAR_DEPENDENCY" ||
 						warning.message?.includes("Generated an empty chunk") ||
@@ -258,25 +264,11 @@ export default defineConfig({
 					}
 					warn(warning);
 				},
-				output: {
-					codeSplitting: {
-						groups: [
-							{ test: /d3-/, name: "vendor-d3" },
-							{ test: /@chevrotain|langium/, name: "vendor-parser" },
-							{
-								test: /cytoscape|dagre-d3-es|dagre/,
-								name: "vendor-graph",
-							},
-							{ test: /mermaid/, name: "vendor-mermaid" },
-							{ test: /katex/, name: "vendor-katex" },
-							{ test: /framer-motion/, name: "vendor-framer" },
-							{
-								test: /\/react\/|\/react-dom\/|\/scheduler\//,
-								name: "react-vendor",
-							},
-						],
-					},
-				},
+				// No manual chunk groups: Rolldown's groups also capture each
+				// match's dependencies, which pulled the preload helper into
+				// vendor-graph (so every page loaded mermaid's graph code) and
+				// react/jsx-runtime into vendor-framer. Default splitting keeps
+				// mermaid behind its dynamic import.
 			},
 		},
 		ssr: {

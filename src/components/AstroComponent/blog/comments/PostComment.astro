@@ -43,12 +43,6 @@ const { theme = "dark" } = Astro.props;
 
         this.setLoadingState();
 
-        this.loadingTimeout = setTimeout(() => {
-          if (!this.isLoaded) {
-            this.handleTimeout();
-          }
-        }, 10000);
-
         if (document.readyState === "loading") {
           document.addEventListener("DOMContentLoaded", () =>
             this.setupGiscus(),
@@ -83,11 +77,11 @@ const { theme = "dark" } = Astro.props;
       setupGiscus() {
         const observer = new IntersectionObserver(
           (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting && !this.isLoaded) {
-                this.loadGiscus();
-              }
-            });
+            // Load once, only when the reader actually reaches the comments.
+            if (entries.some((entry) => entry.isIntersecting)) {
+              observer.disconnect();
+              this.loadGiscus();
+            }
           },
           {
             rootMargin: "100px 0px",
@@ -99,6 +93,8 @@ const { theme = "dark" } = Astro.props;
       }
 
       async loadGiscus() {
+        clearTimeout(this.loadingTimeout);
+        this.loadingTimeout = setTimeout(() => this.handleTimeout(), 10000);
         try {
           const script = document.createElement("script");
           script.src = "https://giscus.app/client.js";

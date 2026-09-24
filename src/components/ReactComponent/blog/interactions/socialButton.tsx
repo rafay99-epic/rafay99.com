@@ -60,7 +60,7 @@ const ShareButtons = function ShareButtons({
 							target="_blank"
 							rel="noopener noreferrer"
 							aria-label={`Share on ${platform.label}`}
-							className="flex h-9 w-9 items-center justify-center rounded-lg border border-[#565f89]/40 bg-[#24283b]/60 text-[#a9b1d6] transition-[border-color,color,transform] duration-200 hover:scale-105 hover:border-[#7aa2f7]/50 hover:text-[#c0caf5]"
+							className="flex h-11 w-11 items-center justify-center rounded-lg md:h-9 md:w-9 border border-[#565f89]/40 bg-[#24283b]/60 text-[#a9b1d6] transition-[border-color,color,transform] duration-200 hover:scale-105 hover:border-[#7aa2f7]/50 hover:text-[#c0caf5]"
 						>
 							<IconComponent
 								className="h-4 w-4"
@@ -75,7 +75,7 @@ const ShareButtons = function ShareButtons({
 
 	return (
 		<div className="mt-12">
-			<div className="rounded-2xl border border-[#565f89]/30 bg-[#24283b]/40 p-8 backdrop-blur-xl">
+			<div className="rounded-2xl border border-[#565f89]/30 bg-[#24283b]/40 p-6 backdrop-blur-xl sm:p-8">
 				<div className="mb-8 text-center">
 					<div className="mb-4 flex items-center justify-center gap-3">
 						<div className="flex h-10 w-10 items-center justify-center rounded-lg bg-linear-to-r from-[#7aa2f7] to-[#bb9af7]">
@@ -94,7 +94,7 @@ const ShareButtons = function ShareButtons({
 				</div>
 
 				<div className="flex justify-center">
-					<div className="grid grid-cols-4 gap-6">
+					<div className="grid grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-6">
 						{sharePlatforms.map((platform) => {
 							const IconComponent = platform.icon;
 							return (

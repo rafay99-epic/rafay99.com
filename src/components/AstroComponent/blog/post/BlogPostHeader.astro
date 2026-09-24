@@ -60,7 +60,14 @@ const {
 		<span class="post-author">
 			{
 				authorAvatar ? (
-					<img src={authorAvatar} alt="" aria-hidden="true" loading="eager" />
+					<img
+						src={authorAvatar}
+						alt=""
+						aria-hidden="true"
+						width="32"
+						height="32"
+						decoding="async"
+					/>
 				) : (
 					<span class="post-avatar-fallback" aria-hidden="true">
 						{authorName?.charAt(0)?.toUpperCase()}

@@ -405,6 +405,16 @@ main.ed {
 	background: var(--color-bg-secondary);
 }
 
+@media (pointer: coarse) {
+	.ed-pager__pages a,
+	.ed-pager__pages span {
+		display: inline-grid;
+		place-items: center;
+		min-width: 2.75rem;
+		min-height: 2.75rem;
+	}
+}
+
 .ed-pager__pages [aria-current="page"] {
 	color: var(--color-bg-primary);
 	background: var(--color-text-primary);
@@ -529,5 +539,18 @@ main.ed {
 @media (max-width: 767px) {
 	.search__nav-keys {
 		display: none;
+	}
+}
+
+/* Keyboard hints mean nothing on touch; the clear button needs a real target. */
+@media (hover: none) {
+	.search__hint {
+		display: none;
+	}
+}
+
+@media (pointer: coarse) {
+	.search__keys .ed-link {
+		padding-block: 0.6rem;
 	}
 }
