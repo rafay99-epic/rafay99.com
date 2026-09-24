@@ -1,0 +1,29 @@
+CLAUDE.md
+  s_c5b1332c7c5807::t_0dc74928d8df8e 72-73
+src/components/ReactComponent/blog/metadata/SearchField/components/SearchStats.tsx
+  s_c5b1332c7c5807::t_0dc74928d8df8e 3-4,8
+src/components/AstroComponent/editorial/format.ts
+  s_c5b1332c7c5807::t_0dc74928d8df8e 14-15,21
+src/components/AstroComponent/personal/AboutMe/AboutMe.astro
+  s_c5b1332c7c5807::t_0dc74928d8df8e 114-119
+src/components/AstroComponent/header/Header.astro
+  s_c5b1332c7c5807::t_9b9ba5dae0191d 111-112,114-118,129-154,165,168-170,174-175,314-316
+src/styles/editorial.css
+  s_c5b1332c7c5807::t_3e645c0ae65fac 502-505
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "9a295fa12f7158f8dc2b321623596808095112e6",
+  "prompts": {},
+  "sessions": {
+    "s_c5b1332c7c5807": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2b17688d-e3f5-4f75-aebb-971f5836abaa",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Abdul Rafay <99marafay@gmail.com>"
+    }
+  }
+}
