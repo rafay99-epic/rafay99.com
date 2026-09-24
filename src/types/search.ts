@@ -6,14 +6,11 @@ const SearchInputPropsSchema = z.object({
 	setQuery: z.function().args(z.string()).returns(z.void()),
 	isSearchFocused: z.boolean(),
 	setIsSearchFocused: z.function().args(z.boolean()).returns(z.void()),
-	setShowSearchTips: z.function().args(z.boolean()).returns(z.void()),
 	setSelectedResultIndex: z.function().args(z.number()).returns(z.void()),
-	isMobile: z.boolean(),
-	resultsLength: z.number(),
 });
 
 const SearchTipsPropsSchema = z.object({
-	showSearchTips: z.boolean(),
+	examples: z.array(z.string()),
 	query: z.string(),
 	setQuery: z.function().args(z.string()).returns(z.void()),
 });

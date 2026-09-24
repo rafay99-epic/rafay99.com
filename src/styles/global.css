@@ -1,9 +1,8 @@
-@import "@fontsource/poppins/300.css";
-@import "@fontsource/poppins/400.css";
-@import "@fontsource/poppins/500.css";
-@import "@fontsource/poppins/600.css";
-@import "@fontsource/poppins/700.css";
-@import "@fontsource/poppins/900.css";
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/geist-mono";
+@import "@fontsource-variable/bricolage-grotesque";
+@import "@fontsource/instrument-serif/400.css";
+@import "@fontsource/instrument-serif/400-italic.css";
 @import "./vendor/devicon/devicon.min.css";
 
 :root {
@@ -25,24 +24,14 @@
 	--copy-btn-margin: 10px;
 }
 
-/* Font utilities */
-.font-poppins {
-	font-family: "Poppins", sans-serif;
-}
-
-/* Ensure all elements use Poppins by default */
-* {
-	font-family: "Poppins", sans-serif;
-}
-
 html {
 	scroll-behavior: smooth;
-	font-family: "Poppins", sans-serif;
+	font-family: var(--font-sans);
 	background-color: #1a1b26;
 }
 
 body {
-	font-family: "Poppins", sans-serif;
+	font-family: var(--font-sans);
 	margin: 0;
 	padding: 0;
 	text-align: left;
@@ -98,7 +87,7 @@ h3,
 h4,
 h5,
 h6 {
-	font-family: "Poppins", sans-serif;
+	font-family: var(--font-display);
 	margin: 0 0 0.5em 0;
 	line-height: 1.2;
 	font-weight: 600;
@@ -366,7 +355,7 @@ html {
 
 /* Ensure diagram text is readable */
 .mermaid-diagram-container svg text {
-	font-family: "Poppins", sans-serif;
+	font-family: var(--font-sans);
 	font-size: 16px;
 	font-weight: 600;
 	fill: var(--color-text-primary);

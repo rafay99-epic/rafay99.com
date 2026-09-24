@@ -1,278 +1,178 @@
 ---
-import experienceData from "@config/siteConfig/info.json";
-import { ArrowRight, Send } from "lucide-react";
+import { accentAt, startYear } from "@astro/editorial/format";
+import PageHead from "@astro/editorial/PageHead.astro";
+import authorConfig from "@config/siteConfig/info.json";
 
-const { workExperience, techStack } = experienceData;
+const { workExperience } = authorConfig;
+const WORDS = [
+	"Zero",
+	"One",
+	"Two",
+	"Three",
+	"Four",
+	"Five",
+	"Six",
+	"Seven",
+	"Eight",
+	"Nine",
+	"Ten",
+];
+const count = WORDS[workExperience.length] ?? String(workExperience.length);
 
-const totalPositions = workExperience.length;
-const totalTechnologies = new Set(
-	workExperience.flatMap((job) => job.toolsUsed),
-).size;
-const totalResponsibilities = workExperience.reduce(
-	(total, job) => total + job.roles.length,
-	0,
-);
-
-const accentColors = ["#7aa2f7", "#bb9af7", "#9ece6a"];
-
-const categoryColors: Record<string, string> = {
-	"App Development": "#bb9af7",
-	"Frontend Development": "#7aa2f7",
-	"Backend Development": "#9ece6a",
-	"Cloud Computing": "#7aa2f7",
-	Scripting: "#bb9af7",
-};
-
-const deviconMap: Record<string, string> = {
-	flutter: "flutter",
-	androidstudio: "androidstudio",
-	xcode: "xcode",
-	vscode: "vscode",
-	"react native": "react",
-	astro: "astro",
-	tailwindcss: "tailwindcss",
-	nodejs: "nodejs",
-	react: "react",
-	typescript: "typescript",
-	nextjs: "nextjs",
-	firebase: "firebase",
-	supabase: "supabase",
-	postgresql: "postgresql",
-	prisma: "prisma",
-	convex: "convex",
-	sql: "azuresqldatabase",
-	express: "express",
-	vercel: "vercel",
-	netlify: "netlify",
-	aws: "amazonwebservices",
-	docker: "docker",
-	powershell: "powershell",
-	bash: "bash",
-	python: "python",
-};
+// Newest first, grouped under the year each role started. Each role keeps
+// its own accent; the year numeral takes the colour of its first role.
+type Role = { job: (typeof workExperience)[number]; color: string };
+const byYear = new Map<number, Role[]>();
+workExperience.forEach((job, i) => {
+	const year = startYear(job.employmentTime);
+	byYear.set(year, [...(byYear.get(year) ?? []), { job, color: accentAt(i) }]);
+});
+const firstYear = Math.min(...byYear.keys());
 ---
 
-<style>
-  .fade-up {
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeInUp 0.6s ease-out forwards;
-  }
-  @keyframes fadeInUp {
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  .delay-1 { animation-delay: 0.1s; }
-  .delay-2 { animation-delay: 0.2s; }
-  .delay-3 { animation-delay: 0.3s; }
-</style>
-
-<!-- ============================================================
-     Section 1: Hero Header
-     ============================================================ -->
-<section class="relative bg-[#1a1b26] px-4 pb-12 pt-24 sm:px-8 sm:pb-16 sm:pt-32 lg:px-12">
-  <div class="mx-auto max-w-4xl text-center">
-    <p class="fade-up mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#7aa2f7]">
-      Career Path
-    </p>
-    <h1
-      style="font-size: clamp(2.25rem, 4.5vw, 3.75rem); line-height: 1.15;"
-      class="fade-up delay-1 font-bold text-[#c0caf5]"
-    >
-      Professional{" "}
-      <span class="bg-gradient-to-r from-[#7aa2f7] to-[#bb9af7] bg-clip-text text-transparent">
-        Experience
-      </span>
-    </h1>
+<PageHead
+  lines={[`${count} roles.`, "One direction:", "closer to the model."]}
+  accent={2}
+  lede={`From TensorFlow models in ${firstYear} to AI systems in production today, via mobile, web and a team to lead.`}
+>
+  <div slot="aside" class="ed-stats">
+    <span class="ed-stat"><b>{new Date().getFullYear() - firstYear}</b>years</span>
+    <span class="ed-stat"><b>{workExperience.length}</b>companies</span>
   </div>
-</section>
+</PageHead>
 
-<!-- ============================================================
-     Section 2: Stats Strip
-     ============================================================ -->
-<div class="border-y border-[#414868]/30 px-4 py-8 sm:px-8 sm:py-10">
-  <div class="mx-auto grid max-w-4xl grid-cols-3 gap-4 sm:gap-0">
-    <div class="flex flex-col items-center border-r border-[#414868]/30 px-2 text-center sm:px-4">
-      <div class="text-2xl font-black text-[#c0caf5] sm:text-4xl">{totalPositions}</div>
-      <div class="mt-1 text-[10px] uppercase tracking-wider text-[#565f89] sm:text-xs">Positions</div>
-    </div>
-    <div class="flex flex-col items-center border-r border-[#414868]/30 px-2 text-center sm:px-4">
-      <div class="text-2xl font-black text-[#c0caf5] sm:text-4xl">{totalTechnologies}</div>
-      <div class="mt-1 text-[10px] uppercase tracking-wider text-[#565f89] sm:text-xs">
-        <span class="hidden sm:inline">Technologies</span>
-        <span class="sm:hidden">Tech</span>
-      </div>
-    </div>
-    <div class="flex flex-col items-center px-2 text-center sm:px-4">
-      <div class="text-2xl font-black text-[#c0caf5] sm:text-4xl">{totalResponsibilities}</div>
-      <div class="mt-1 text-[10px] uppercase tracking-wider text-[#565f89] sm:text-xs">
-        <span class="hidden sm:inline">Responsibilities</span>
-        <span class="sm:hidden">Roles</span>
-      </div>
-    </div>
-  </div>
+<div class="ed-wrap xp">
+  {
+    [...byYear].map(([year, roles]) => (
+      <section class="xp__year" style={`--c:${roles[0]?.color}`} aria-label={String(year)}>
+        <span class="xp__num" aria-hidden="true">{year}</span>
+        <div>
+          {roles.map(({ job, color }) => {
+            return (
+              <article class="xp__role" style={`--c:${color}`} data-rev>
+                <h2 class="xp__company">{job.companyName}</h2>
+                <p class="ed-mono xp__pos">
+                  {job.position} · {job.employmentTime.replace(/\s-\s/, " → ")}
+                </p>
+                <ul class="xp__list">
+                  {job.roles.map((line) => <li>{line}</li>)}
+                </ul>
+                <p class="ed-mono xp__tools">{job.toolsUsed.join(" · ")}</p>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+    ))
+  }
 </div>
 
-<!-- ============================================================
-     Section 3: Vertical Timeline — Editorial, No Cards
-     ============================================================ -->
-<section class="relative bg-[#1a1b26] px-4 py-14 sm:px-8 sm:py-20 lg:px-12">
-  <div class="mx-auto max-w-3xl">
-    <div class="mb-10 sm:mb-12">
-      <p class="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#7aa2f7]">
-        Timeline
-      </p>
-      <h2
-        style="font-size: clamp(1.875rem, 3.5vw, 3rem); line-height: 1.2;"
-        class="font-bold text-[#c0caf5]"
-      >
-        Work{" "}
-        <span class="bg-gradient-to-r from-[#7aa2f7] to-[#bb9af7] bg-clip-text text-transparent">
-          History
-        </span>
-      </h2>
-    </div>
+<style>
+  .xp {
+    padding-block: clamp(2rem, 5vw, 4rem) clamp(4rem, 10vw, 8rem);
+  }
 
-    <div class="ml-2 border-l border-[#414868]/40 pl-7 sm:ml-4 sm:pl-10">
-      {workExperience.map((job, index) => {
-        const dotColor = accentColors[index % accentColors.length]!;
-        return (
-          <div
-            class="fade-up relative pb-12 last:pb-0"
-            style={`animation-delay: ${0.1 + index * 0.1}s;`}
-          >
-            <span
-              class="absolute top-1.5 -left-[1.875rem] h-2 w-2 rounded-full sm:-left-[2.625rem]"
-              style={`background-color: ${dotColor};`}
-            />
+  .xp__year {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: clamp(1.5rem, 4vw, 4rem);
+    padding-top: 1.5rem;
+    margin-top: 2.5rem;
+    border-top: 1px solid var(--color-line);
+  }
 
-            <p
-              class="mb-1 text-xs font-semibold uppercase tracking-[0.15em]"
-              style={`color: ${dotColor};`}
-            >
-              {job.employmentTime}
-            </p>
-            <h3 class="text-lg font-bold text-[#c0caf5] sm:text-xl">
-              {job.position}
-            </h3>
-            <p class="mb-4 text-sm font-medium text-[#a9b1d6]">@ {job.companyName}</p>
+  /* Outlined year that fills with the accent as it scrolls into view. */
+  .xp__num {
+    position: sticky;
+    top: 5.5rem;
+    align-self: start;
+    padding-right: 0.08em;
+    font-family: var(--font-display);
+    font-size: clamp(4.5rem, 12vw, 10.5rem);
+    font-weight: 700;
+    line-height: 0.8;
+    letter-spacing: -0.03em;
+    white-space: nowrap;
+    color: transparent;
+    /* Accent layer on top of a dim base; the accent grows from the bottom.
+       No text-stroke: it traces the variable font's overlapping contours. */
+    background:
+      linear-gradient(var(--c), var(--c)) no-repeat left bottom / 100% 100%,
+      linear-gradient(var(--color-line), var(--color-line));
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
 
-            <ul class="mb-4 list-disc space-y-1.5 pl-4 marker:text-[#565f89]">
-              {job.roles.map((role: string) => (
-                <li class="text-sm leading-relaxed text-[#a9b1d6]">{role}</li>
-              ))}
-            </ul>
+  @supports (animation-timeline: view()) {
+    .xp__num {
+      animation: xp-fill linear both;
+      animation-timeline: view();
+      animation-range: entry 20% cover 45%;
+    }
+  }
 
-            <p class="text-xs leading-relaxed text-[#565f89]">
-              {job.toolsUsed.join(" &middot; ")}
-            </p>
-          </div>
-        );
-      })}
-    </div>
-  </div>
-</section>
+  @keyframes xp-fill {
+    from {
+      background-size:
+        100% 0%,
+        auto;
+    }
+  }
 
-<!-- ============================================================
-     Section 4: Full Tech Stack by Category — Editorial Index
-     ============================================================ -->
-<section class="relative bg-[#1a1b26] px-4 py-14 sm:px-8 sm:py-20 lg:px-12">
-  <div class="mx-auto max-w-5xl">
-    <div class="mb-10 sm:mb-12">
-      <p class="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#7aa2f7]">
-        Tech Arsenal
-      </p>
-      <h2
-        style="font-size: clamp(1.875rem, 3.5vw, 3rem); line-height: 1.2;"
-        class="font-bold text-[#c0caf5]"
-      >
-        Complete{" "}
-        <span class="bg-gradient-to-r from-[#7aa2f7] to-[#bb9af7] bg-clip-text text-transparent">
-          Stack
-        </span>
-      </h2>
-    </div>
+  .xp__role {
+    padding-bottom: 2.5rem;
+  }
 
-    <div class="grid grid-cols-1 gap-x-16 gap-y-10 sm:grid-cols-2">
-      {techStack.map((cat, index) => {
-        const color = categoryColors[cat.category] ?? "#7aa2f7";
-        return (
-          <div
-            class="fade-up border-t border-[#414868]/40 pt-5"
-            style={`animation-delay: ${index * 0.1}s;`}
-          >
-            <h3
-              class="mb-4 text-xs font-semibold uppercase tracking-[0.15em]"
-              style={`color: ${color};`}
-            >
-              {cat.category}
-            </h3>
-            <div class="flex flex-wrap gap-x-5 gap-y-2.5">
-              {cat.tools.map((tool: string) => {
-                const iconClass = deviconMap[tool];
-                return (
-                  <span class="inline-flex items-center gap-2 text-sm text-[#a9b1d6]">
-                    {iconClass && (
-                      <i
-                        class={`devicon-${iconClass}-plain text-base`}
-                        style={`color: ${color};`}
-                      />
-                    )}
-                    {tool}
-                  </span>
-                );
-              })}
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  </div>
-</section>
+  .xp__role + .xp__role {
+    padding-top: 2rem;
+    border-top: 1px dashed var(--color-line);
+  }
 
-<!-- ============================================================
-     Section 5: CTA Closer
-     ============================================================ -->
-<section class="relative bg-[#1a1b26] px-4 py-16 sm:px-8 sm:py-24 lg:px-12">
-  <div class="mx-auto max-w-3xl text-center">
-    <p class="fade-up mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#7aa2f7]">
-      What's Next
-    </p>
-    <h2
-      style="font-size: clamp(1.875rem, 3.5vw, 2.5rem); line-height: 1.2;"
-      class="fade-up delay-1 mb-8 font-bold text-[#c0caf5]"
-    >
-      Ready to work{" "}
-      <span class="bg-gradient-to-r from-[#7aa2f7] to-[#bb9af7] bg-clip-text text-transparent">
-        together?
-      </span>
-    </h2>
+  .xp__company {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+    color: var(--color-text-primary);
+  }
 
-    <div class="flex flex-wrap items-center justify-center gap-4">
-      <a
-        href="/contact-me"
-        class="group inline-flex items-center gap-2 rounded-full bg-[#7aa2f7] px-7 py-3 text-sm font-semibold text-[#1a1b26] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#89b4fa] active:translate-y-0"
-      >
-        Get in Touch
-        <Send className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
-      </a>
-      <a
-        href="/downloads/Abdul_Rafay_CV.pdf"
-        download
-        class="inline-flex items-center gap-2 rounded-full border border-[#414868]/40 px-7 py-3 text-sm font-semibold text-[#a9b1d6] transition-colors duration-200 hover:border-[#565f89] hover:text-[#c0caf5]"
-      >
-        Download CV
-        <ArrowRight className="h-4 w-4" />
-      </a>
-      <a
-        href="/project"
-        class="inline-flex items-center gap-2 rounded-full border border-[#414868]/40 px-7 py-3 text-sm font-semibold text-[#a9b1d6] transition-colors duration-200 hover:border-[#565f89] hover:text-[#c0caf5]"
-      >
-        View Projects
-        <ArrowRight className="h-4 w-4" />
-      </a>
-    </div>
-  </div>
-</section>
+  .xp__pos {
+    margin-top: 0.5rem;
+    color: var(--c);
+  }
+
+  .xp__list {
+    display: grid;
+    gap: 0.6rem;
+    margin-top: 1.25rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+  }
+
+  .xp__list li {
+    position: relative;
+    padding-left: 1.25rem;
+  }
+
+  .xp__list li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: var(--color-text-muted);
+  }
+
+  .xp__tools {
+    margin-top: 1.25rem;
+  }
+
+  @media (max-width: 767px) {
+    .xp__year {
+      grid-template-columns: 1fr;
+    }
+
+    .xp__num {
+      position: static;
+    }
+  }
+</style>

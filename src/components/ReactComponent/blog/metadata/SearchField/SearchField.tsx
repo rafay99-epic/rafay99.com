@@ -1,23 +1,42 @@
-import { useIsMobile } from "@hooks/useIsMobile";
 import useSearch from "@hooks/useSearch";
 import SearchInput from "@react/blog/metadata/SearchField/components/SearchInput";
-import SearchResults from "@react/blog/metadata/SearchField/components/SearchResults";
+import SearchResults, {
+	ResultRow,
+} from "@react/blog/metadata/SearchField/components/SearchResults";
 import SearchStats from "@react/blog/metadata/SearchField/components/SearchStats";
 import SearchTips from "@react/blog/metadata/SearchField/components/SearchTips";
-import { domAnimation, LazyMotion, m } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { type CSSProperties, useEffect, useRef, useState } from "react";
 import type { Post } from "types/articles";
 
 interface SearchProps {
 	posts: Post[];
 }
 
+const HEADLINE = ["Search", "the archive."];
+
+// Two most-used tags become "tag:" examples under the input.
+function topTagExamples(posts: Post[]): string[] {
+	const counts = new Map<string, number>();
+	for (const post of posts) {
+		for (const tag of post.data.tags ?? []) {
+			counts.set(tag, (counts.get(tag) ?? 0) + 1);
+		}
+	}
+	return [...counts]
+		.sort((a, b) => b[1] - a[1])
+		.slice(0, 2)
+		.map(([tag]) => `tag:${tag}`);
+}
+
 function Search({ posts }: SearchProps) {
 	const { query, setQuery, results, searchStats } = useSearch(posts);
-	const isMobile = useIsMobile();
 	const [isSearchFocused, setIsSearchFocused] = useState(false);
-	const [showSearchTips, setShowSearchTips] = useState(false);
 	const [selectedResultIndex, setSelectedResultIndex] = useState(-1);
+	const examples = [
+		...topTagExamples(posts),
+		`${new Date().getFullYear()}`,
+		"author:rafay",
+	];
 
 	// Mirror state into refs so the global keydown listener can stay bound once
 	// instead of being re-registered on every keystroke / result change.
@@ -60,7 +79,7 @@ function Search({ posts }: SearchProps) {
 				case "Enter": {
 					const selected = resultsRef.current[selectedIndexRef.current];
 					if (selected) {
-						window.location.href = `/blog/${selected.id}`;
+						window.location.href = `/blog/${selected.id}/`;
 					}
 					break;
 				}
@@ -86,83 +105,62 @@ function Search({ posts }: SearchProps) {
 	}, [selectedResultIndex]);
 
 	return (
-		<LazyMotion features={domAnimation}>
-			<section className="relative overflow-hidden px-4 py-8">
-				<div className="absolute inset-0 opacity-5">
-					<div className="absolute left-1/4 top-1/4 h-64 w-64 rounded-full bg-[#7aa2f7] blur-3xl" />
-					<div className="absolute bottom-1/4 right-1/4 h-48 w-48 rounded-full bg-[#bb9af7] blur-3xl" />
+		<>
+			<header className="ed-head search__head">
+				<div className="ed-wrap">
+					<h1 className="ed-mega is-md" aria-label={HEADLINE.join(" ")}>
+						{HEADLINE.map((line, i) => (
+							<span className="ed-line" aria-hidden="true" key={line}>
+								<span style={{ "--i": i } as CSSProperties}>
+									{i === 1 ? <em>{line}</em> : line}
+								</span>
+							</span>
+						))}
+					</h1>
+					<p className="ed-lede ed-after search__lede">
+						{posts.length} posts. Titles, tags, authors and dates.
+					</p>
 				</div>
+			</header>
 
-				<div className="container relative z-10 mx-auto max-w-6xl">
-					<m.div
-						className="mb-8 text-center"
-						initial={{ opacity: 0, y: -20 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{ duration: 0.6 }}
-					>
-						<m.h1
-							className={`mb-4 bg-gradient-to-r from-[#7aa2f7] via-[#bb9af7] to-[#9ece6a] bg-clip-text font-bold text-transparent ${
-								isMobile ? "text-3xl" : "text-4xl lg:text-5xl"
-							}`}
-							initial={{ scale: 0.9, opacity: 0 }}
-							animate={{ scale: 1, opacity: 1 }}
-							transition={{ duration: 0.6, delay: 0.1 }}
-						>
-							Search Articles
-						</m.h1>
-						<m.p
-							className={`mx-auto max-w-2xl text-[#a9b1d6] ${
-								isMobile ? "text-sm" : "text-lg"
-							}`}
-							initial={{ opacity: 0 }}
-							animate={{ opacity: 1 }}
-							transition={{ delay: 0.3, duration: 0.6 }}
-						>
-							Smart search across titles, tags, authors, and content
-						</m.p>
-					</m.div>
+			<div className="ed-wrap search__body">
+				<SearchInput
+					query={query}
+					setQuery={updateQuery}
+					isSearchFocused={isSearchFocused}
+					setIsSearchFocused={setIsSearchFocused}
+					setSelectedResultIndex={setSelectedResultIndex}
+				/>
+				<SearchTips examples={examples} query={query} setQuery={updateQuery} />
+				<SearchStats
+					query={query}
+					results={results}
+					searchStats={searchStats}
+				/>
 
-					<m.div
-						className="mb-8"
-						initial={{ opacity: 0, y: 20 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{ delay: 0.4, duration: 0.6 }}
-					>
-						<div className="rounded-3xl border border-[#565f89]/30 bg-[#24283b]/60 p-6 shadow-2xl backdrop-blur-xl md:p-8">
-							<SearchInput
-								query={query}
-								setQuery={updateQuery}
-								isSearchFocused={isSearchFocused}
-								setIsSearchFocused={setIsSearchFocused}
-								setShowSearchTips={setShowSearchTips}
-								setSelectedResultIndex={setSelectedResultIndex}
-								isMobile={isMobile}
-								resultsLength={results.length}
-							/>
-
-							<SearchTips
-								showSearchTips={showSearchTips}
-								query={query}
-								setQuery={updateQuery}
-							/>
-
-							<SearchStats
-								query={query}
-								results={results}
-								searchStats={searchStats}
-							/>
-						</div>
-					</m.div>
-
+				{query ? (
 					<SearchResults
 						query={query}
 						results={results}
 						selectedResultIndex={selectedResultIndex}
 						setSelectedResultIndex={setSelectedResultIndex}
 					/>
-				</div>
-			</section>
-		</LazyMotion>
+				) : (
+					<section className="search__recent">
+						<div className="ed-section__head">
+							<h2 className="ed-h2">
+								Recent <em>posts</em>
+							</h2>
+						</div>
+						<ol className="ed-index">
+							{posts.slice(0, 6).map((post, index) => (
+								<ResultRow key={post.id} post={post} index={index} />
+							))}
+						</ol>
+					</section>
+				)}
+			</div>
+		</>
 	);
 }
 

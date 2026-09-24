@@ -6,8 +6,14 @@ export default {
 	theme: {
 		extend: {
 			fontFamily: {
-				poppins: ["Poppins", "sans-serif"],
-				sans: ["Poppins", "sans-serif"],
+				sans: ["Geist Variable", "system-ui", "sans-serif"],
+				mono: ["Geist Mono Variable", "ui-monospace", "monospace"],
+				display: [
+					"Bricolage Grotesque Variable",
+					"Geist Variable",
+					"sans-serif",
+				],
+				serif: ["Instrument Serif", "Georgia", "serif"],
 			},
 			colors: {
 				...generateTailwindColors(colors),

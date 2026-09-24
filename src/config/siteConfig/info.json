@@ -64,13 +64,13 @@
 		}
 	],
 	"SiteName": "Abdul Rafay",
-	"SiteDescription": "Senior Full Stack Developer building production SaaS platforms, cross-platform mobile apps, and AI-integrated systems. Writing about software engineering, architecture, and the craft of shipping real products.",
+	"SiteDescription": "AI engineer and full stack developer shipping production SaaS, cross-platform apps and AI-integrated systems. Writing about AI engineering, architecture and the craft of shipping real products.",
 	"name": "Abdul Rafay",
-	"jobTitle": "Senior Full Stack Developer",
-	"position": "Senior Full Stack Developer",
+	"jobTitle": "AI Engineer & Full Stack Developer",
+	"position": "AI Engineer & Full Stack Developer",
 	"picture": "/author.webp",
 	"avator": "/favicon.png",
-	"tag_line": "I build production SaaS platforms, cross-platform apps, and AI-integrated systems.",
+	"tag_line": "I ship AI products end to end: production SaaS, cross-platform apps and the systems around the model.",
 	"socialLinks": {
 		"twitter": "https://x.com/abdul_rafay99",
 		"linkedin": "abdul-rafay1999",
@@ -80,9 +80,29 @@
 		"whatsNumber": "+923035650798"
 	},
 	"about": {
-		"whoAmI": "I am a Senior Full Stack Developer who architects and ships production SaaS platforms, cross-platform mobile apps, and AI-integrated systems. At Tudo Tech Lab I built TudoNum’s professional services module from the ground up — a schema-driven form engine, multi-tier RBAC, calendar-driven booking, and multi-region payment rails across three countries. On my own time I ship products like Wryte, a collaborative Markdown editor with a custom GitHub-to-Convex sync engine, and Env Pilot, a secrets management SaaS with a VS Code extension, CLI, and granular per-variable permissions. I work with LLMs daily — Claude SDK, OpenAI, OpenRouter — and I have strong opinions about where they help and where they hurt, because I have shipped enough with them to know. I think through system design, edge cases, and long-term maintainability, and I build the scaffolding around AI tools so teams don’t ship what the model hallucinated.",
+		"whoAmI": "I am an AI engineer and full stack developer who architects and ships production SaaS platforms, cross-platform mobile apps, and AI-integrated systems. At Tudo Tech Lab I built TudoNum’s professional services module from the ground up — a schema-driven form engine, multi-tier RBAC, calendar-driven booking, and multi-region payment rails across three countries. On my own time I ship products like Wryte, a collaborative Markdown editor with a custom GitHub-to-Convex sync engine, and Env Pilot, a secrets management SaaS with a VS Code extension, CLI, and granular per-variable permissions. I work with LLMs daily — Claude SDK, OpenAI, OpenRouter — and I have strong opinions about where they help and where they hurt, because I have shipped enough with them to know. I think through system design, edge cases, and long-term maintainability, and I build the scaffolding around AI tools so teams don’t ship what the model hallucinated.",
 		"lifeBeyondCode": "Outside of work, I enjoy challenges that demand focus and strategic thinking. Competitive gaming plays a big role in how I recharge, sharpening decision-making, teamwork, and adaptability under pressure. Exploring new experiences helps me reset and maintain balance, which directly influences how I approach problem-solving and collaboration in my professional life.",
-		"continuousLearning": "I treat learning as a core part of my work. I continuously refine my skills by adopting new tools, revisiting architectural decisions, and improving how systems are built and maintained. My learning is driven by real problems such as scaling applications, improving performance, reducing complexity, and helping teams work more effectively together. Through mentorship, collaboration, and technical leadership, I focus on building software that lasts."
+		"continuousLearning": "I treat learning as a core part of my work. I continuously refine my skills by adopting new tools, revisiting architectural decisions, and improving how systems are built and maintained. My learning is driven by real problems such as scaling applications, improving performance, reducing complexity, and helping teams work more effectively together. Through mentorship, collaboration, and technical leadership, I focus on building software that lasts.",
+		"principles": [
+			{
+				"title": "Simple beats clever.",
+				"body": "Build complex things as simply as possible. The best code is the code you never had to write."
+			},
+			{
+				"title": "YAGNI.",
+				"body": "Nothing gets built for a future that hasn't asked for it yet."
+			},
+			{
+				"title": "Types are the contract.",
+				"body": "Systems should adapt to change instead of demanding edits everywhere. Inferred types over hand-written ones."
+			},
+			{
+				"title": "Own the edges.",
+				"body": "System design, edge cases and long-term maintainability come before the demo."
+			}
+		],
+		"quote": "I build the scaffolding around AI tools so teams don't ship what the model hallucinated.",
+		"onAI": "I work with LLMs every day: Claude SDK, OpenAI and OpenRouter in production, whisper.cpp and Core ML on device. I have strong opinions about where they help and where they hurt, because I've shipped enough with them to know. The model drafts; types, tests and review decide what ships."
 	},
 	"techStack": [
 		{
@@ -222,52 +242,6 @@
 				"Gained hands-on experience in Agile workflows and sprint planning"
 			],
 			"toolsUsed": ["Java", "XML", "Figma", "Firebase"]
-		}
-	],
-	"testimonials": [
-		{
-			"id": 1,
-			"name": "Sarah Johnson",
-			"position": "CEO",
-			"company": "TechStart Inc.",
-			"avatar": "/api/placeholder/80/80",
-			"rating": 5,
-			"testimonial": "Working with this developer was an absolute game-changer for our startup. They delivered a robust, scalable solution that exceeded our expectations. The attention to detail and technical expertise is unmatched.",
-			"project": "E-commerce Platform",
-			"technologies": ["React", "Node.js", "MongoDB"]
-		},
-		{
-			"id": 2,
-			"name": "Michael Chen",
-			"position": "CTO",
-			"company": "Digital Solutions Ltd.",
-			"avatar": "/api/placeholder/80/80",
-			"rating": 5,
-			"testimonial": "Exceptional work on our enterprise application. The code quality is outstanding, and the project was delivered on time and within budget. Communication throughout the process was excellent.",
-			"project": "Enterprise Dashboard",
-			"technologies": ["Vue.js", "Python", "PostgreSQL"]
-		},
-		{
-			"id": 3,
-			"name": "Emily Rodriguez",
-			"position": "Product Manager",
-			"company": "InnovateCorp",
-			"avatar": "/api/placeholder/80/80",
-			"rating": 5,
-			"testimonial": "From concept to deployment, the entire experience was seamless. They understood our vision perfectly and brought it to life with modern, efficient code. Highly recommend for any serious project.",
-			"project": "Mobile App Backend",
-			"technologies": ["React Native", "Express.js", "AWS"]
-		},
-		{
-			"id": 4,
-			"name": "David Thompson",
-			"position": "Founder",
-			"company": "StartupHub",
-			"avatar": "/api/placeholder/80/80",
-			"rating": 5,
-			"testimonial": "Outstanding technical skills combined with great communication. They helped us scale our platform to handle thousands of users. The performance improvements were remarkable.",
-			"project": "Platform Optimization",
-			"technologies": ["Next.js", "Redis", "Docker"]
 		}
 	],
 	"services": [

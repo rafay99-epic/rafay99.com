@@ -1,54 +1,293 @@
 ---
-import { type CollectionEntry, getCollection } from "astro:content";
+import { Image } from "astro:assets";
 import BaseHead from "@astro/base/BaseHead.astro";
+import { accentAt, shortTitle } from "@astro/editorial/format";
+import PageHead from "@astro/editorial/PageHead.astro";
+import ProjectIndex from "@astro/editorial/ProjectIndex.astro";
 import Footer from "@astro/footer/Footer.astro";
 import Header from "@astro/header/Header.astro";
-import ProjectShowcase from "@astro/projects/ProjectShowcase.astro";
 import { featureFlags } from "@config/featureFlag/featureFlag.json";
 import authorConfig from "@config/siteConfig/info.json";
+import { getRankedProjects } from "@util/collections";
 
-const projects = await getCollection("projects");
 export const prerender = true;
 
-try {
-	if (!featureFlags.showProjects) {
-		return Astro.redirect("/access-denied");
-	}
-} catch (_error) {
-	return Astro.redirect("/404");
+if (!featureFlags.showProjects) {
+	return Astro.redirect("/access-denied");
 }
 
-const filteredProjects: CollectionEntry<"projects">[] = projects
-	.filter((project: CollectionEntry<"projects">) => !project.data.draft)
-	.sort((a: CollectionEntry<"projects">, b: CollectionEntry<"projects">) => {
-		const rankingA = parseInt(a.data.ProjectRanking || "9999", 10);
-		const rankingB = parseInt(b.data.ProjectRanking || "9999", 10);
-		return rankingA - rankingB;
-	});
+const projects = await getRankedProjects();
+const featured = projects.slice(0, 3);
+const rest = projects.slice(3);
+
+const categoryCounts = new Map<string, number>();
+const stacks = new Set<string>();
+for (const { data } of projects) {
+	for (const c of data.ProjectCategory ?? []) {
+		categoryCounts.set(c, (categoryCounts.get(c) ?? 0) + 1);
+	}
+	for (const t of data.ProjectTech ?? []) stacks.add(t);
+}
+// Single-use categories add noise to the filter bar.
+const filters = [...categoryCounts]
+	.filter(([, n]) => n > 1)
+	.sort((a, b) => b[1] - a[1]);
 ---
 
+<!doctype html>
 <html lang="en">
   <head>
     <BaseHead
-      title={`Projects | ${authorConfig.SiteName}`}
-      description={`Browse all projects on ${authorConfig.SiteName} and explore categorized content.`}
+      title={`Work | ${authorConfig.SiteName}`}
+      description={`Every product, tool and experiment ${authorConfig.name} has shipped: SaaS, mobile, native macOS and AI.`}
     />
   </head>
-
-  <body
-    class="bg-[#1a1b26] text-[#c0caf5]"
-    style="overflow-x: hidden; overflow-y: auto;"
-  >
+  <body>
     <Header />
-    <main class="min-h-screen" style="margin: 0; padding: 0; max-width: 100%;">
-      <ProjectShowcase
-        projects={filteredProjects}
-        title="Project Archive"
-        subtitle="A complete index of my builds, experiments, and production-grade launches."
-        eyebrow="All Projects"
-      />
-    </main>
+    <main class="ed">
+      <PageHead
+        lines={["Things I've", "shipped."]}
+        accent={1}
+        lede="Every product, tool and experiment, ranked by how much I'd want you to see it."
+      >
+        <div slot="aside" class="ed-stats">
+          <span class="ed-stat"><b>{projects.length}</b>projects</span>
+          <span class="ed-stat"><b>{stacks.size}</b>technologies</span>
+        </div>
+      </PageHead>
 
+      <div class="ed-wrap">
+        <div class="work__filters ed-mono" role="group" aria-label="Filter by category">
+          <button type="button" data-filter="" aria-pressed="true">
+            All <span>{projects.length}</span>
+          </button>
+          {
+            filters.map(([name, n]) => (
+              <button type="button" data-filter={name} aria-pressed="false">
+                {name} <span>{n}</span>
+              </button>
+            ))
+          }
+        </div>
+
+        <section class="work__featured" aria-label="Featured projects">
+          {
+            featured.map((project, i) => {
+              const d = project.data;
+              const href = `/project/${project.id}/`;
+              return (
+                <article
+                  class="pf"
+                  style={`--c:${accentAt(i)}`}
+                  data-cats={(d.ProjectCategory ?? []).join("|")}
+                  data-rev
+                >
+                  <a href={href} class="pf__img" tabindex="-1" aria-hidden="true">
+                    {d.ProjectImage && (
+                      <Image
+                        src={d.ProjectImage}
+                        alt=""
+                        width={1120}
+                        height={700}
+                        loading={i === 0 ? "eager" : "lazy"}
+                        decoding="async"
+                      />
+                    )}
+                  </a>
+                  <div class="pf__body">
+                    <p class="ed-mono">
+                      {String(i + 1).padStart(2, "0")} · {(d.ProjectCategory ?? []).join(" · ")}
+                    </p>
+                    <h2 class="pf__title">
+                      <a href={href}>{shortTitle(d.Projecttitle)}</a>
+                    </h2>
+                    <p class="pf__desc">{d.ProjectDescription}</p>
+                    <p class="ed-mono pf__tech">{(d.ProjectTech ?? []).slice(0, 6).join(" · ")}</p>
+                    <p class="ed-mono pf__links">
+                      <a class="ed-link" href={href}>Case study →</a>
+                      {d.ProjectDeployedLink && (
+                        <a class="ed-link" href={d.ProjectDeployedLink} target="_blank" rel="noopener noreferrer">
+                          Live ↗
+                        </a>
+                      )}
+                      {d.ProjectGithubLink && (
+                        <a class="ed-link" href={d.ProjectGithubLink} target="_blank" rel="noopener noreferrer">
+                          Code ↗
+                        </a>
+                      )}
+                    </p>
+                  </div>
+                </article>
+              );
+            })
+          }
+        </section>
+
+        {
+          rest.length > 0 && (
+            <section class="ed-section work__rest">
+              <div class="ed-section__head">
+                <h2 class="ed-h2">
+                  Everything <em>else</em>
+                </h2>
+                <span class="ed-mono">{rest.length} more</span>
+              </div>
+              <ProjectIndex projects={rest} start={featured.length + 1} />
+              <p class="ed-lede work__none" hidden>Nothing else in this category.</p>
+            </section>
+          )
+        }
+      </div>
+    </main>
     <Footer />
   </body>
 </html>
+
+<script>
+  // Category filter: hides featured pieces and index rows outside the category.
+  document.addEventListener("click", (e) => {
+    const button = (e.target as Element | null)?.closest<HTMLButtonElement>(
+      "[data-filter]",
+    );
+    if (!button) return;
+    const filter = button.dataset.filter ?? "";
+    for (const b of document.querySelectorAll("[data-filter]")) {
+      b.setAttribute("aria-pressed", String(b === button));
+    }
+    let visibleRows = 0;
+    for (const el of document.querySelectorAll<HTMLElement>("[data-cats]")) {
+      const show = !filter || el.dataset.cats?.split("|").includes(filter);
+      el.hidden = !show;
+      if (show && el.classList.contains("ed-row")) visibleRows++;
+    }
+    const none = document.querySelector<HTMLElement>(".work__none");
+    if (none) none.hidden = visibleRows > 0;
+  });
+</script>
+
+<style>
+  .work__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding-block: 2rem;
+  }
+
+  .work__filters button {
+    padding: 0.4rem 0.85rem;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    color: var(--color-text-secondary);
+    transition:
+      color var(--dur-1),
+      background-color var(--dur-1),
+      border-color var(--dur-1);
+  }
+
+  .work__filters button span {
+    color: var(--color-text-muted);
+  }
+
+  .work__filters button:hover {
+    border-color: var(--color-text-soft);
+    color: var(--color-text-primary);
+  }
+
+  .work__filters button[aria-pressed="true"] {
+    background: var(--color-text-primary);
+    border-color: var(--color-text-primary);
+    color: var(--color-bg-primary);
+  }
+
+  .work__filters button[aria-pressed="true"] span {
+    color: inherit;
+    opacity: 0.6;
+  }
+
+  .pf {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+    align-items: center;
+    padding-block: clamp(2rem, 4vw, 3.5rem);
+    border-top: 1px solid var(--color-line);
+  }
+
+  .pf:nth-child(even) .pf__img {
+    order: 2;
+  }
+
+  .pf[hidden] {
+    display: none;
+  }
+
+  .pf__img {
+    display: block;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: color-mix(in srgb, var(--c) 18%, var(--color-bg-secondary));
+  }
+
+  .pf__img :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.2s var(--ease-out);
+  }
+
+  .pf:hover .pf__img :global(img) {
+    transform: scale(1.03);
+  }
+
+  .pf__title {
+    margin-top: 0.75rem;
+    font-family: var(--font-display);
+    font-size: clamp(2.25rem, 5vw, 4.25rem);
+    font-weight: 700;
+    line-height: 0.95;
+    letter-spacing: -0.05em;
+  }
+
+  .pf__title a {
+    transition: color var(--dur-2);
+  }
+
+  .pf__title a:hover {
+    color: var(--c);
+  }
+
+  .pf__desc {
+    margin-top: 1rem;
+    color: var(--color-text-secondary);
+  }
+
+  .pf__tech {
+    margin-top: 1rem;
+  }
+
+  .pf__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    margin-top: 1.25rem;
+    color: var(--color-text-primary);
+  }
+
+  .work__rest :global(.ed-row[hidden]) {
+    display: none;
+  }
+
+  .work__none {
+    padding-block: 2rem;
+  }
+
+  @media (max-width: 767px) {
+    .pf {
+      grid-template-columns: 1fr;
+    }
+
+    .pf:nth-child(even) .pf__img {
+      order: 0;
+    }
+  }
+</style>

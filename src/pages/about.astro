@@ -22,21 +22,13 @@ try {
   <head>
     <BaseHead
       title={`About Me | ${authorConfig.SiteName}`}
-      description={`Learn more about me and my journey.`}
+      description="How I think about building software and AI, and what I use to do it."
     />
 
-    <style>
-      main[data-page="about"] {
-        max-width: 100%;
-        margin: 0;
-        padding: 0;
-        width: 100%;
-      }
-    </style>
   </head>
-  <body class="bg-[#1a1b26]">
+  <body>
     <Header />
-    <main data-page="about">
+    <main class="ed">
       <AboutMe />
     </main>
     <Footer class="mt-auto" />

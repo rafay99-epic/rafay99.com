@@ -1,0 +1,18 @@
+<script>
+  // Hover previews in [data-float] lists follow the cursor. One delegated
+  // listener for the whole site; the hovered row gets --fx/--fy.
+  document.addEventListener(
+    "pointermove",
+    (e) => {
+      const row = (e.target as Element | null)?.closest<HTMLElement>(
+        "[data-float] .ed-row",
+      );
+      if (!row) return;
+      const r = row.getBoundingClientRect();
+      const x = Math.min(e.clientX - r.left + 24, r.width - 290);
+      row.style.setProperty("--fx", `${x}px`);
+      row.style.setProperty("--fy", `${e.clientY - r.top - 90}px`);
+    },
+    { passive: true },
+  );
+</script>

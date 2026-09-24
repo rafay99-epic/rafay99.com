@@ -53,6 +53,20 @@
 		#7aa2f7
 	);
 
+	/* Editorial tokens (redesign) */
+	--color-line: #3b4261;
+	--color-text-soft: #7b83ac;
+	--color-cyan: #7dcfff;
+	--color-orange: #ff9e64;
+	--font-sans: "Geist Variable", system-ui, -apple-system, sans-serif;
+	--font-mono: "Geist Mono Variable", ui-monospace, "SFMono-Regular", monospace;
+	--font-display: "Bricolage Grotesque Variable", var(--font-sans);
+	--font-serif: "Instrument Serif", Georgia, serif;
+	--ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+	--dur-1: 160ms;
+	--dur-2: 320ms;
+	--dur-3: 700ms;
+
 	/* Social Colors */
 	--color-twitter: #1da1f2;
 	--color-facebook: #1877f2;

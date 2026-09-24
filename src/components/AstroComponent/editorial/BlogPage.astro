@@ -1,0 +1,239 @@
+---
+import { Image } from "astro:assets";
+import BaseHead from "@astro/base/BaseHead.astro";
+import { formatDate } from "@astro/editorial/format";
+import PageHead from "@astro/editorial/PageHead.astro";
+import Pager from "@astro/editorial/Pager.astro";
+import PostIndex from "@astro/editorial/PostIndex.astro";
+import TopicList from "@astro/editorial/TopicList.astro";
+import Footer from "@astro/footer/Footer.astro";
+import Header from "@astro/header/Header.astro";
+import { featureFlags } from "@config/featureFlag/featureFlag.json";
+import authorConfig from "@config/siteConfig/info.json";
+import {
+	countTags,
+	getPublishedPosts,
+	POSTS_PER_PAGE,
+} from "@util/collections";
+import { toJsonLd } from "@util/jsonLd";
+
+/**
+ * Full /blog listing page. Page 1 (`/blog/`) gets the featured story and the
+ * topic cloud; later pages (`/blog/page/n/`) are the plain index.
+ */
+interface Props {
+	page: number;
+}
+
+const { page } = Astro.props;
+const allPosts = await getPublishedPosts();
+const totalPages = Math.max(1, Math.ceil(allPosts.length / POSTS_PER_PAGE));
+const posts = allPosts.slice(
+	(page - 1) * POSTS_PER_PAGE,
+	page * POSTS_PER_PAGE,
+);
+const tags = countTags(allPosts);
+
+const isFirst = page === 1;
+const featured = isFirst
+	? (posts.find((post) => post.data.featured) ?? posts[0])
+	: undefined;
+const listed = featured ? posts.filter((post) => post !== featured) : posts;
+
+const description = isFirst
+	? "Essays on AI engineering, architecture and shipping real products."
+	: `Articles, page ${page} of ${totalPages}.`;
+const url = isFirst
+	? "https://rafay99.com/blog"
+	: `https://rafay99.com/blog/page/${page}`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead
+      title={isFirst
+        ? `Writing | ${authorConfig.SiteName}`
+        : `Writing, page ${page} | ${authorConfig.SiteName}`}
+      description={description}
+      noindex={!isFirst}
+    />
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={toJsonLd({
+        "@context": "https://schema.org",
+        "@type": "Blog",
+        name: `${authorConfig.SiteName} Blog`,
+        description,
+        url,
+        publisher: {
+          "@type": "Organization",
+          name: authorConfig.SiteName,
+          logo: { "@type": "ImageObject", url: "https://rafay99.com/favicon.webp" },
+        },
+        blogPost: posts.map((post) => ({
+          "@type": "BlogPosting",
+          headline: post.data.title,
+          description: post.data.description,
+          author: { "@type": "Person", name: post.data.authorName },
+          datePublished: post.data.pubDate.toISOString(),
+          url: `https://rafay99.com/blog/${post.id}`,
+          keywords: post.data.tags?.join(", ") || "blog, technology",
+        })),
+      })}
+    />
+  </head>
+  <body>
+    <Header />
+    <main class="ed">
+      <PageHead
+        lines={isFirst ? ["Field notes", "from the build."] : ["Writing,", `page ${page}.`]}
+        accent={1}
+        size={isFirst ? "lg" : "md"}
+        lede={description}
+      >
+        <p class="ed-mono blog__links">
+          <a class="ed-link" href="/blog/archive/">archive</a>
+          {featureFlags.showSeries && <a class="ed-link" href="/blog/series/">series</a>}
+          {featureFlags.showTags && <a class="ed-link" href="/tag/">tags</a>}
+          {featureFlags.showSearch && <a class="ed-link" href="/search/">search</a>}
+          <a class="ed-link" href="/rss.xml">rss</a>
+        </p>
+        <div slot="aside" class="ed-stats">
+          <span class="ed-stat"><b>{allPosts.length}</b>posts</span>
+          <span class="ed-stat"><b>{tags.length}</b>topics</span>
+        </div>
+      </PageHead>
+
+      <div class="ed-wrap">
+        {posts.length === 0 && <p class="ed-lede blog__empty">No published articles yet.</p>}
+
+        {
+          featured && (
+            <a href={`/blog/${featured.id}/`} class="feat" data-rev>
+              <figure class="feat__img">
+                {featured.data.heroImage && (
+                  <Image
+                    src={featured.data.heroImage}
+                    alt=""
+                    width={960}
+                    height={600}
+                    loading="eager"
+                    decoding="async"
+                  />
+                )}
+              </figure>
+              <div class="feat__body">
+                <p class="ed-mono">
+                  Latest · {formatDate(featured.data.pubDate)}
+                  {featured.data.readTime && ` · ${featured.data.readTime}`}
+                </p>
+                <h2 class="feat__title">{featured.data.title}</h2>
+                <p class="feat__excerpt">
+                  {featured.data.excerpt || featured.data.description}
+                </p>
+                <span class="ed-mono feat__cta">Read the story →</span>
+              </div>
+            </a>
+          )
+        }
+
+        <PostIndex posts={listed} start={(page - 1) * POSTS_PER_PAGE + 1} />
+        <Pager current={page} total={totalPages} base="/blog/" pageBase="/blog/page/" />
+
+        {
+          isFirst && featureFlags.showTags && tags.length > 0 && (
+            <section class="ed-section blog__topics">
+              <div class="ed-section__head">
+                <h2 class="ed-h2">Topics</h2>
+                <a href="/tag/" class="ed-mono ed-link">all {tags.length} →</a>
+              </div>
+              <TopicList tags={tags.slice(0, 18)} />
+            </section>
+          )
+        }
+      </div>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .blog__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.25rem;
+    margin-top: 1.25rem;
+  }
+
+  .blog__empty {
+    padding-block: 4rem;
+  }
+
+  .feat {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+    align-items: center;
+    padding-block: clamp(2.5rem, 5vw, 4rem);
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .feat__img {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: var(--color-bg-secondary);
+  }
+
+  .feat__img :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.2s var(--ease-out);
+  }
+
+  .feat:hover .feat__img :global(img) {
+    transform: scale(1.03);
+  }
+
+  .feat__title {
+    margin-top: 0.9rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.9rem, 3.6vw, 3.25rem);
+    font-weight: 600;
+    line-height: 1.02;
+    letter-spacing: -0.04em;
+    color: var(--color-text-primary);
+    transition: color var(--dur-2);
+  }
+
+  .feat:hover .feat__title {
+    color: var(--color-secondary);
+  }
+
+  .feat__excerpt {
+    margin-top: 1rem;
+    color: var(--color-text-secondary);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .feat__cta {
+    display: inline-block;
+    margin-top: 1.25rem;
+    color: var(--color-text-primary);
+  }
+
+  .blog__topics {
+    padding-bottom: clamp(3rem, 6vw, 5rem);
+  }
+
+  @media (max-width: 767px) {
+    .feat {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

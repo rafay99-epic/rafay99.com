@@ -1,42 +1,23 @@
 import type { SearchStatsProps } from "types/search";
 
-const SearchStats = function SearchStats({
-	query,
-	results,
-	searchStats,
-}: SearchStatsProps) {
+function SearchStats({ query, results, searchStats }: SearchStatsProps) {
 	if (!query) return null;
 
 	return (
-		<div className="mt-4 rounded-xl border border-[#565f89]/30 bg-[#1a1b26]/40 p-4">
-			<div className="flex flex-wrap items-center justify-between gap-4">
-				<div className="flex items-center gap-2">
-					<span className="text-[#a9b1d6]">
-						{results.length > 0 ? (
-							<>
-								Found{" "}
-								<span className="font-semibold text-[#7aa2f7]">
-									{searchStats.totalResults}
-								</span>{" "}
-								results in{" "}
-								<span className="font-semibold text-[#bb9af7]">
-									{searchStats.searchTime}ms
-								</span>
-								{searchStats.totalResults > results.length && (
-									<span className="text-[#565f89]">
-										{" "}
-										(showing top {results.length})
-									</span>
-								)}
-							</>
-						) : (
-							<>No results found</>
-						)}
-					</span>
-				</div>
-			</div>
-		</div>
+		<p className="ed-mono search__stats" aria-live="polite">
+			{results.length > 0 ? (
+				<>
+					{searchStats.totalResults}{" "}
+					{searchStats.totalResults === 1 ? "result" : "results"} ·{" "}
+					{searchStats.searchTime}ms
+					{searchStats.totalResults > results.length &&
+						` · showing top ${results.length}`}
+				</>
+			) : (
+				<>Nothing for “{query}”. Try a tag, a year, or fewer words.</>
+			)}
+		</p>
 	);
-};
+}
 
 export default SearchStats;

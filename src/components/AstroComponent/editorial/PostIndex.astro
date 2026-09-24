@@ -1,0 +1,75 @@
+---
+import { Image } from "astro:assets";
+import EdFloat from "./EdFloat.astro";
+import { accentAt, formatDate } from "./format";
+
+// Structural type so both content entries and search/tag `Post`s fit.
+type IndexPost = {
+	id: string;
+	data: {
+		title: string;
+		description: string;
+		pubDate: Date;
+		excerpt?: string;
+		heroImage?: string;
+		tags?: string[];
+		readTime?: string;
+	};
+};
+
+interface Props {
+	posts: IndexPost[];
+	/** Offset for colour cycling so paginated lists stay stable. */
+	start?: number;
+	level?: 2 | 3;
+}
+
+const { posts, start = 0, level = 2 } = Astro.props;
+const Heading = level === 2 ? "h2" : "h3";
+---
+
+<ol class="ed-index" data-float>
+  {
+    posts.map((post, i) => (
+      <li class="ed-row" style={`--c:${accentAt(start + i)}`} data-rev>
+        <time class="ed-row__meta" datetime={post.data.pubDate.toISOString()}>
+          {formatDate(post.data.pubDate)}
+        </time>
+        <div>
+          <a class="ed-row__hit" href={`/blog/${post.id}/`}>
+            <Heading class="ed-row__title">{post.data.title}</Heading>
+          </a>
+          <p class="ed-row__desc">
+            {post.data.excerpt || post.data.description}
+          </p>
+        </div>
+        <div class="ed-row__meta is-end">
+          {post.data.tags?.slice(0, 2).map((tag) => <span>#{tag} </span>)}
+          {post.data.readTime && <span class="ed-post__rt">{post.data.readTime}</span>}
+        </div>
+        <div class="ed-preview" aria-hidden="true">
+          {post.data.heroImage ? (
+            <Image
+              src={post.data.heroImage}
+              alt=""
+              width={480}
+              height={300}
+              loading="lazy"
+              decoding="async"
+            />
+          ) : (
+            <span class="ed-preview__fallback">{post.data.title}</span>
+          )}
+        </div>
+      </li>
+    ))
+  }
+</ol>
+<EdFloat />
+
+<style>
+  .ed-post__rt {
+    display: block;
+    margin-top: 0.25rem;
+  }
+</style>

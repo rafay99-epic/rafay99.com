@@ -1,153 +1,209 @@
 ---
-import { Image } from "astro:assets";
-import SocialMedia from "@astro/SocialMedia/SocialMedia.astro";
 import { featureFlags } from "@config/featureFlag/featureFlag.json";
 import authorConfig from "@config/siteConfig/info.json";
 import packageJson from "../../../../package.json";
+
+interface Props {
+	class?: string;
+}
+
+type Link = { href: string; label: string };
+
+const { class: className } = Astro.props;
+const { socialLinks } = authorConfig;
+
+const site: Link[] = [
+	{ href: "/", label: "Home" },
+	featureFlags.showProjects && { href: "/project/", label: "Work" },
+	featureFlags.showBlog && { href: "/blog/", label: "Writing" },
+	featureFlags.showAbout && { href: "/about/", label: "About" },
+	featureFlags.showExperience && { href: "/experience/", label: "Experience" },
+	featureFlags.showContact && { href: "/contact-me/", label: "Contact" },
+].filter((l): l is Link => Boolean(l));
+
+const elsewhere: Link[] = [
+	{ href: socialLinks.github, label: "GitHub" },
+	{ href: socialLinks.twitter, label: "X / Twitter" },
+	{
+		href: `https://www.linkedin.com/in/${socialLinks.linkedin}`,
+		label: "LinkedIn",
+	},
+	{ href: socialLinks.youtube, label: "YouTube" },
+	{ href: socialLinks.upwork, label: "Upwork" },
+];
+
+const more: Link[] = [
+	{ href: "/rss.xml", label: "RSS" },
+	{ href: "/llms.txt", label: "llms.txt" },
+	featureFlags.showPrivacy && { href: "/privacy-policy/", label: "Privacy" },
+	featureFlags.showTermsOfService && {
+		href: "/terms-and-conditions/",
+		label: "Terms",
+	},
+].filter((l): l is Link => Boolean(l));
 ---
 
-<footer
-  class="border-t border-[#565f89]/20 bg-[#1a1b26]/30 px-4 pb-6 pt-10"
-  transition:name="footer"
->
-  <div class="container mx-auto max-w-6xl">
-    <div class="mb-8 grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
-      <!-- Brand -->
-      <div class="sm:col-span-2 lg:col-span-1">
-        <div class="mb-4 flex items-center gap-3">
-          <Image
-            src={authorConfig.avator}
-            alt={authorConfig.name}
-            width={48}
-            height={48}
-            class="h-12 w-12 rounded-full border-2 border-[#7aa2f7]/30"
-            loading="lazy"
-          />
-          <div>
-            <h3 class="text-lg font-semibold text-[#c0caf5]">
-              {authorConfig.name}
-            </h3>
-            <p class="text-sm text-[#565f89]">{authorConfig.jobTitle}</p>
-          </div>
-        </div>
-        <p class="mb-5 max-w-xs text-sm leading-relaxed text-[#565f89]">
-          {authorConfig.SiteDescription}
-        </p>
-        <SocialMedia class="flex gap-4 text-[#565f89]" />
-      </div>
+<footer class:list={["ftr", className]} transition:name="footer">
+  <div class="ftr__inner">
+    {
+      featureFlags.showContact && (
+        <a href="/contact-me/" class="ftr__cta">
+          <span>Let's build</span>
+          <em>something.</em>
+          <span class="ftr__arrow" aria-hidden="true">→</span>
+        </a>
+      )
+    }
 
-      <!-- Navigate -->
-      <div>
-        <h3
-          class="mb-4 text-xs font-semibold uppercase tracking-wider text-[#565f89]"
-        >
-          Navigate
-        </h3>
-        <nav class="flex flex-col gap-2.5">
-          {
-            featureFlags.showAbout && (
-              <a
-                href="/about"
-                class="text-sm text-[#a9b1d6] transition-colors duration-200 hover:text-[#7aa2f7]"
-              >
-                About
-              </a>
-            )
-          }
-          {
-            featureFlags.showBlog && (
-              <a
-                href="/blog"
-                class="text-sm text-[#a9b1d6] transition-colors duration-200 hover:text-[#7aa2f7]"
-              >
-                Blog
-              </a>
-            )
-          }
-          {
-            featureFlags.showProjects && (
-              <a
-                href="/project"
-                class="text-sm text-[#a9b1d6] transition-colors duration-200 hover:text-[#7aa2f7]"
-              >
-                Projects
-              </a>
-            )
-          }
-          {
-            featureFlags.showContact && (
-              <a
-                href="/contact-me"
-                class="text-sm text-[#a9b1d6] transition-colors duration-200 hover:text-[#7aa2f7]"
-              >
-                Contact
-              </a>
-            )
-          }
-        </nav>
+    <div class="ftr__grid">
+      <div class="ftr__id">
+        <p class="ftr__name">{authorConfig.name}</p>
+        <p class="ftr__role">{authorConfig.jobTitle}</p>
       </div>
-
-      <!-- Resources -->
-      <div>
-        <h3
-          class="mb-4 text-xs font-semibold uppercase tracking-wider text-[#565f89]"
-        >
-          Resources
-        </h3>
-        <nav class="flex flex-col gap-2.5">
-          {
-            featureFlags.showPrivacy && (
-              <a
-                href="/privacy-policy"
-                class="text-sm text-[#a9b1d6] transition-colors duration-200 hover:text-[#7aa2f7]"
-              >
-                Privacy Policy
-              </a>
-            )
-          }
-          {
-            featureFlags.showTermsOfService && (
-              <a
-                href="/terms-and-conditions"
-                class="text-sm text-[#a9b1d6] transition-colors duration-200 hover:text-[#7aa2f7]"
-              >
-                Terms of Service
-              </a>
-            )
-          }
-          {
-            featureFlags.showWiki && (
-              <a
-                href="https://rafay99-docs.vercel.app/"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-sm text-[#a9b1d6] transition-colors duration-200 hover:text-[#7aa2f7]"
-              >
-                Documentation
-              </a>
-            )
-          }
-          <a
-            href="https://github.com/rafay99-epic"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-sm text-[#a9b1d6] transition-colors duration-200 hover:text-[#7aa2f7]"
-          >
-            GitHub
-          </a>
-        </nav>
-      </div>
+      <nav aria-label="Site">
+        <p class="ftr__h">Site</p>
+        {site.map((l) => <a href={l.href}>{l.label}</a>)}
+      </nav>
+      <nav aria-label="Elsewhere">
+        <p class="ftr__h">Elsewhere</p>
+        {
+          elsewhere.map((l) => (
+            <a href={l.href} target="_blank" rel="noopener noreferrer">
+              {l.label}
+            </a>
+          ))
+        }
+      </nav>
+      <nav aria-label="More">
+        <p class="ftr__h">More</p>
+        {more.map((l) => <a href={l.href}>{l.label}</a>)}
+      </nav>
     </div>
 
-    <!-- Bottom bar -->
-    <div
-      class="flex flex-col items-center justify-between gap-3 border-t border-[#565f89]/10 pt-6 text-xs text-[#565f89] sm:flex-row"
-    >
-      <p>
-        &copy; {new Date().getFullYear()}
-        {authorConfig.name}
-      </p>
-      <p>v{(packageJson as { version: string }).version}</p>
+    <div class="ftr__bottom">
+      <span>&copy; {new Date().getFullYear()} {authorConfig.name}</span>
+      <span>v{(packageJson as { version: string }).version}</span>
     </div>
   </div>
 </footer>
+
+<style>
+  .ftr {
+    border-top: 1px solid var(--color-line);
+    font-family: var(--font-sans);
+    color: var(--color-text-secondary);
+  }
+
+  .ftr__inner {
+    max-width: 1280px;
+    margin-inline: auto;
+    padding: clamp(3rem, 7vw, 6rem) clamp(1.25rem, 4vw, 3rem) 2rem;
+  }
+
+  .ftr__cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: 0.25em;
+    font-family: var(--font-display);
+    font-size: clamp(2.75rem, 8.5vw, 7.5rem);
+    font-weight: 700;
+    line-height: 0.9;
+    letter-spacing: -0.055em;
+    color: var(--color-text-primary);
+    text-decoration: none;
+  }
+
+  .ftr__cta em {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    color: var(--color-accent);
+  }
+
+  .ftr__arrow {
+    font-family: var(--font-sans);
+    font-weight: 300;
+    transition: transform 0.5s var(--ease-out);
+  }
+
+  .ftr__cta:hover .ftr__arrow,
+  .ftr__cta:focus-visible .ftr__arrow {
+    transform: translateX(0.3em);
+  }
+
+  .ftr__grid {
+    display: grid;
+    grid-template-columns: 2fr repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: clamp(3rem, 6vw, 5rem);
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .ftr__grid nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .ftr__grid a {
+    width: fit-content;
+    font-size: 0.9375rem;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: color var(--dur-1);
+  }
+
+  .ftr__grid a:hover {
+    color: var(--color-text-primary);
+  }
+
+  .ftr p {
+    margin: 0;
+    color: inherit;
+  }
+
+  .ftr__name {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--color-text-primary);
+  }
+
+  .ftr__role,
+  .ftr__h,
+  .ftr__bottom {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--color-text-soft);
+  }
+
+  .ftr__h {
+    margin-bottom: 0.4rem;
+  }
+
+  .ftr__bottom {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 3rem;
+  }
+
+  .ftr a:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 3px;
+  }
+
+  @media (max-width: 767px) {
+    .ftr__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .ftr__id {
+      grid-column: 1 / -1;
+    }
+  }
+</style>
