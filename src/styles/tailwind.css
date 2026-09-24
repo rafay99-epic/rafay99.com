@@ -1,9 +1,6 @@
 @import "tailwindcss";
-/* Keep the JS config (Tokyo Night colours, `mobile` breakpoint, fonts). */
 @config "../../tailwind.config.mjs";
 
-/* Tailwind v4 changed two preflight defaults; restore v3 behaviour so
-   components written for v3 look and feel the same. */
 @layer base {
 	*,
 	::after,

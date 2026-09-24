@@ -1,11 +1,7 @@
 import { useEffect } from "react";
 
-// Marker class on the clickable image container; a single delegated listener
-// (installed by the effect) opens the fullscreen viewer for any of them.
 const CLICKABLE_CLASS = "enhanced-image-clickable";
 
-// Build and show the fullscreen image viewer. Fully self-contained: every
-// listener and the injected node are removed again on close.
 function openFullscreen(src: string, alt: string): void {
 	if (document.querySelector(".fullscreen-modal-active")) return;
 
@@ -68,7 +64,6 @@ function openFullscreen(src: string, alt: string): void {
 	document.body.appendChild(overlay);
 }
 
-// One delegated handler for every enhanced image on the page.
 function handleImageClick(event: MouseEvent): void {
 	const trigger = (event.target as HTMLElement | null)?.closest<HTMLElement>(
 		`.${CLICKABLE_CLASS}`,
@@ -104,8 +99,6 @@ const EnhancedImageCaptionRenderer = function EnhancedImageCaptionRenderer() {
 				return;
 			}
 
-			// Not loaded yet — re-run once dimensions are known. `once` auto-removes
-			// the listener so it can't leak.
 			if (img.naturalWidth === 0 || img.naturalHeight === 0) {
 				img.addEventListener("load", () => processImage(img), { once: true });
 				return;
@@ -122,7 +115,6 @@ const EnhancedImageCaptionRenderer = function EnhancedImageCaptionRenderer() {
 				"max-w-full h-auto rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl";
 			enhancedImg.setAttribute("data-enhanced-processed", "true");
 
-			// If the enhanced clone fails to load, restore the original image.
 			enhancedImg.addEventListener(
 				"error",
 				() => {
@@ -191,7 +183,6 @@ const EnhancedImageCaptionRenderer = function EnhancedImageCaptionRenderer() {
 			observer.observe(mainContent, { childList: true, subtree: true });
 		}
 
-		// One delegated listener for all enhanced images.
 		document.addEventListener("click", handleImageClick);
 
 		return () => {

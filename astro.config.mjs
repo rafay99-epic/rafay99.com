@@ -14,9 +14,6 @@ import robotsTxt from "astro-robots-txt";
 import { load as loadYaml } from "js-yaml";
 import { remarkReadingTime } from "./remark-reading-time.mjs";
 
-// Map each published blog post's URL path -> last-modified ISO date, read
-// straight from frontmatter at config time. Used to stamp <lastmod> on the
-// sitemap so Google recrawls updated posts instead of treating them as stale.
 function buildBlogLastmod() {
 	const dir = new URL("./src/content/blog/", import.meta.url);
 	const map = new Map();
@@ -47,7 +44,6 @@ function buildBlogLastmod() {
 		if (!date) continue;
 		const ts = new Date(date).getTime();
 		if (Number.isNaN(ts)) continue;
-		// A frontmatter `slug` overrides the filename as the post's URL id.
 		const id =
 			typeof data.slug === "string" && data.slug
 				? data.slug
@@ -58,10 +54,6 @@ function buildBlogLastmod() {
 }
 const blogLastmod = buildBlogLastmod();
 
-// Astro always asks the MDX renderer first whether it owns a component, and
-// its check() calls the component as a plain function, outside React. Every
-// hook-using island then logs "Invalid hook call" during SSR. Tagging each
-// React module's default export with Astro's renderer symbol skips that probe.
 function tagReactIslands() {
 	const reactModule = /\/src\/components\/.+\.(tsx|jsx)$/;
 	return {
@@ -191,8 +183,6 @@ export default defineConfig({
 		react({
 			experimentalDisableStreaming: true,
 			include: ["**/ReactComponent/**", "**/*.{jsx,tsx}"],
-			// React Compiler via Oxc (@astrojs/react 7). Memoizes client
-			// components automatically; server rendering is not compiled.
 			compiler: true,
 		}),
 		robotsTxt({
@@ -200,11 +190,6 @@ export default defineConfig({
 			host: "www.rafay99.com",
 		}),
 		playformCompress({
-			// CSS minification is handled by Vite/Rolldown (lightningcss, cssMinify
-			// below). Do NOT re-run CSSO here: lightningcss emits modern range-syntax
-			// media queries (e.g. `@media (width>=1024px)`) which CSSO doesn't
-			// understand and silently DROPS — that nuked every responsive breakpoint
-			// in production while dev (unminified) looked fine. Keep this false.
 			CSS: false,
 			HTML: {
 				"html-minifier-terser": {
@@ -249,10 +234,6 @@ export default defineConfig({
 			rolldownOptions: {
 				onwarn(warning, warn) {
 					if (
-						// Astro stamps "use astro:head-inject" on every content entry's
-						// ?astroPropagatedAssets module. Nothing reads it (head
-						// propagation keys off the module id), so Rolldown dropping it
-						// is harmless.
 						(warning.code === "MODULE_LEVEL_DIRECTIVE" &&
 							warning.message?.includes("astro:head-inject")) ||
 						warning.code === "EMPTY_BUNDLE" ||
@@ -264,11 +245,6 @@ export default defineConfig({
 					}
 					warn(warning);
 				},
-				// No manual chunk groups: Rolldown's groups also capture each
-				// match's dependencies, which pulled the preload helper into
-				// vendor-graph (so every page loaded mermaid's graph code) and
-				// react/jsx-runtime into vendor-framer. Default splitting keeps
-				// mermaid behind its dynamic import.
 			},
 		},
 		ssr: {

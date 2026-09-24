@@ -1,4 +1,3 @@
-// NOTE: This endpoint includes archived posts so legacy content is accessible when explicitly requested.
 import { type CollectionEntry, getCollection } from "astro:content";
 import { createHash } from "node:crypto";
 import { featureFlags } from "@config/featureFlag/featureFlag.json";

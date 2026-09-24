@@ -12,7 +12,6 @@ function SearchInput({
 		undefined,
 	);
 
-	// Delay blur so click events on result items fire before focus state clears
 	const handleBlur = () => {
 		clearTimeout(blurTimerRef.current);
 		blurTimerRef.current = setTimeout(() => setIsSearchFocused(false), 150);

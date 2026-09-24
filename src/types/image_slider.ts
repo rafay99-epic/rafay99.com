@@ -37,7 +37,7 @@ const LayoutClassesSchema = z.object({
 
 const NavigationButtonPropsSchema = z.object({
 	direction: z.enum(["prev", "next"]),
-	onClick: z.any(), // Function type - validated at TypeScript level
+	onClick: z.any(),
 	themeClasses: ThemeClassesSchema.pick({ buttons: true, ring: true }),
 });
 
@@ -45,7 +45,7 @@ const ThumbnailPropsSchema = z.object({
 	image: z.string(),
 	index: z.number(),
 	current: z.number(),
-	onClick: z.any(), // Function type - validated at TypeScript level
+	onClick: z.any(),
 	thumbnailPosition: z.string(),
 	themeClasses: ThemeClassesSchema.pick({ ring: true }),
 });
@@ -57,16 +57,16 @@ const UseImageSliderResultSchema = z.object({
 	isHovered: z.boolean(),
 	sliderRef: z.custom<RefObject<HTMLDivElement | null>>(),
 	containerRef: z.custom<RefObject<HTMLDivElement | null>>(),
-	handleImageLoad: z.any(), // Function type - validated at TypeScript level
-	isImageLoaded: z.any(), // Function type - validated at TypeScript level
-	prevSlide: z.any(), // Function type - validated at TypeScript level
-	nextSlide: z.any(), // Function type - validated at TypeScript level
-	goToSlide: z.any(), // Function type - validated at TypeScript level
-	toggleFullScreen: z.any(), // Function type - validated at TypeScript level
-	handleTouchStart: z.any(), // Function type - validated at TypeScript level
-	handleTouchMove: z.any(), // Function type - validated at TypeScript level
-	handleMouseEnter: z.any(), // Function type - validated at TypeScript level
-	handleMouseLeave: z.any(), // Function type - validated at TypeScript level
+	handleImageLoad: z.any(),
+	isImageLoaded: z.any(),
+	prevSlide: z.any(),
+	nextSlide: z.any(),
+	goToSlide: z.any(),
+	toggleFullScreen: z.any(),
+	handleTouchStart: z.any(),
+	handleTouchMove: z.any(),
+	handleMouseEnter: z.any(),
+	handleMouseLeave: z.any(),
 });
 
 export type AspectRatio = z.infer<typeof AspectRatioSchema>;

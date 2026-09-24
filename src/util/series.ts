@@ -1,13 +1,6 @@
 import type { CollectionEntry } from "astro:content";
 import type { SeriesContext, SeriesMeta, SeriesPost } from "types/series";
 
-// ─── Slug Helpers ───
-
-/**
- * Convert a human-readable series name into a URL-safe slug.
- *
- * @example toSeriesSlug("Building a SaaS") → "building-a-saas"
- */
 export function toSeriesSlug(name: string): string {
 	return name
 		.toLowerCase()
@@ -16,11 +9,6 @@ export function toSeriesSlug(name: string): string {
 		.replace(/^-+|-+$/g, "");
 }
 
-/**
- * Convert a URL slug back to a display-friendly title.
- *
- * @example fromSeriesSlug("building-a-saas") → "Building A Saas"
- */
 export function fromSeriesSlug(slug: string): string {
 	return slug
 		.split("-")
@@ -28,9 +16,6 @@ export function fromSeriesSlug(slug: string): string {
 		.join(" ");
 }
 
-// ─── Post Filters ───
-
-/** Type guard: narrows a collection entry to a `SeriesPost`. */
 export function isSeriesPost(
 	post: CollectionEntry<"blog">,
 ): post is SeriesPost {
@@ -42,10 +27,6 @@ export function isSeriesPost(
 	);
 }
 
-/**
- * From a full collection of blog posts, return only published, non-archived
- * posts that belong to a series. The result is typed as `SeriesPost[]`.
- */
 export function getSeriesPosts(
 	allPosts: CollectionEntry<"blog">[],
 ): SeriesPost[] {
@@ -64,12 +45,6 @@ export function getSeriesPosts(
 		}) as SeriesPost[];
 }
 
-// ─── Grouping ───
-
-/**
- * Group posts into a `Map` keyed by the normalised series slug.
- * Each value is an array of posts sorted by `seriesPart`.
- */
 export function groupBySeries(posts: SeriesPost[]): Map<string, SeriesPost[]> {
 	const map = new Map<string, SeriesPost[]>();
 	for (const post of posts) {
@@ -81,7 +56,6 @@ export function groupBySeries(posts: SeriesPost[]): Map<string, SeriesPost[]> {
 			map.set(slug, [post]);
 		}
 	}
-	// Ensure each group is sorted by part
 	const entries = Array.from(map.values());
 	for (const group of entries) {
 		group.sort(
@@ -91,12 +65,6 @@ export function groupBySeries(posts: SeriesPost[]): Map<string, SeriesPost[]> {
 	return map;
 }
 
-// ─── Series Metadata ───
-
-/**
- * Build an array of `SeriesMeta` objects — one per unique series.
- * Sorted by most-recent post date descending (latest series first).
- */
 export function getAllSeriesMeta(
 	allPosts: CollectionEntry<"blog">[],
 ): SeriesMeta[] {
@@ -139,12 +107,6 @@ export function getAllSeriesMeta(
 	return metas.sort((a, b) => b.latestDate.valueOf() - a.latestDate.valueOf());
 }
 
-// ─── Series Context (for in-post navigator) ───
-
-/**
- * Build the full `SeriesContext` for a given post.
- * Returns `null` if the post does not belong to a series.
- */
 export function getSeriesContext(
 	currentPost: CollectionEntry<"blog">,
 	allPosts: CollectionEntry<"blog">[],

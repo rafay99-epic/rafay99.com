@@ -1,4 +1,3 @@
-// NOTE: Archived posts stay out of the public blog API/search and only appear in /api/blog/archive.
 import { type CollectionEntry, getCollection } from "astro:content";
 import { createHash } from "node:crypto";
 import { featureFlags } from "@config/featureFlag/featureFlag.json";
@@ -29,7 +28,6 @@ export async function GET() {
 				!post.data.draft && !post.data.archived,
 		);
 
-		// Validate posts with Zod before returning
 		const validatedPosts = filteredPosts.map(
 			(post: CollectionEntry<"blog">) => {
 				try {

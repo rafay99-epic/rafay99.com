@@ -4,11 +4,8 @@
 @import "@fontsource/instrument-serif/400.css";
 @import "@fontsource/instrument-serif/400-italic.css";
 
-/* Everything below lives in the base layer so Tailwind v4 utilities (in the
-   utilities layer) override these element defaults, as they did in v3. */
 @layer base {
 	:root {
-		/* Legacy variables for backward compatibility - will be migrated gradually */
 		--accent: var(--color-primary, #7aa2f7);
 		--accent-dark: var(--color-bg-secondary, #1f2335);
 		--black: 8, 12, 17;
@@ -46,7 +43,6 @@
 		line-height: 1.7;
 	}
 
-	/* Ensure consistent styling across all pages - Prevent white flash */
 	html {
 		background-color: #1a1b26;
 	}
@@ -56,14 +52,12 @@
 		transition: none;
 	}
 
-	/* Prevent any flash during page load */
 	html,
 	body,
 	main {
 		background-color: #1a1b26;
 	}
 
-	/* Ensure no white background appears during navigation */
 	* {
 		background-color: transparent;
 	}
@@ -174,8 +168,6 @@
 		color: var(--text-light);
 	}
 
-	/* Lists in articles: .content-prose (content-prose.css). Component lists: use Tailwind. */
-
 	textarea,
 	input {
 		width: 100%;
@@ -194,13 +186,10 @@
 		margin-bottom: 1em;
 	}
 
-	/* Code blocks: default chrome lives in content-prose.css (.content-prose pre).
-	   Copy-button spacing applies to enhanced blocks anywhere on the site. */
 	pre {
 		position: relative;
 	}
 
-	/* Code copy button styling */
 	.code-copy-button-container {
 		position: absolute;
 		top: 0;
@@ -208,17 +197,13 @@
 		z-index: 10;
 	}
 
-	/* Ensure copy buttons work with different code block themes */
 	pre[data-copy-enhanced="true"] {
 		padding-top: 2.5rem;
-		/* Give extra space for the copy button */
 	}
 
-	/* Mobile responsiveness for copy buttons */
 	@media (max-width: 640px) {
 		pre[data-copy-enhanced="true"] {
 			padding-top: 3rem;
-			/* Extra space on mobile */
 		}
 
 		.code-copy-button-container {
@@ -238,7 +223,6 @@
 		}
 	}
 
-	/* pre > code: Shiki wrapper; token colors live in content-prose.css (.content-prose pre code …) */
 	pre > code {
 		all: unset;
 	}
@@ -345,7 +329,6 @@
 		background-color: #a4c2fb;
 	}
 
-	/* Diagram renderer styles for better readability */
 	.mermaid-diagram-container svg {
 		width: 100%;
 		max-width: 100%;
@@ -355,7 +338,6 @@
 		overflow: visible;
 	}
 
-	/* Ensure diagram text is readable */
 	.mermaid-diagram-container svg text {
 		font-family: var(--font-sans);
 		font-size: 16px;
@@ -363,25 +345,21 @@
 		fill: var(--color-text-primary);
 	}
 
-	/* Improve node readability */
 	.mermaid-diagram-container svg .node rect,
 	.mermaid-diagram-container svg .node circle,
 	.mermaid-diagram-container svg .node polygon {
 		stroke-width: 2px;
 	}
 
-	/* Ensure text in nodes is readable */
 	.mermaid-diagram-container svg .node text {
 		font-size: 16px;
 		font-weight: 600;
 	}
 
-	/* Improve arrow readability */
 	.mermaid-diagram-container svg .edgePath path {
 		stroke-width: 2px;
 	}
 
-	/* Responsive sizing for better readability */
 	@media (max-width: 768px) {
 		.mermaid-diagram-container svg {
 			min-height: 250px;
@@ -486,17 +464,11 @@
 		transition: none;
 	}
 
-	/* ============================================================
-	   View Transitions — Premium page navigation animations
-	   ============================================================ */
-
-	/* Prevent white/transparent flash during transitions */
 	::view-transition-old(root),
 	::view-transition-new(root) {
 		background-color: #1a1b26;
 	}
 
-	/* --- Default page transition: fade + subtle lift --- */
 	@keyframes vt-fade-in {
 		from {
 			opacity: 0;
@@ -527,7 +499,6 @@
 		animation: vt-fade-in 0.3s cubic-bezier(0, 0, 0.2, 1) 0.1s both;
 	}
 
-	/* --- Header: stay perfectly still during transitions --- */
 	::view-transition-old(header),
 	::view-transition-new(header) {
 		animation: none;
@@ -535,14 +506,12 @@
 		background-color: transparent;
 	}
 
-	/* --- Footer: gentle crossfade, no movement --- */
 	::view-transition-old(footer),
 	::view-transition-new(footer) {
 		animation-duration: 0.2s;
 		animation-timing-function: ease;
 	}
 
-	/* Reduce motion for users who prefer it */
 	@media (prefers-reduced-motion: reduce) {
 		::view-transition-old(root),
 		::view-transition-new(root),

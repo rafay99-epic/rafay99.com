@@ -1,12 +1,4 @@
 ---
-/**
- * SeriesSidebarNav — compact series widget designed for the right rail sidebar.
- *
- * Follows the existing `.post-card` pattern so it sits naturally between
- * the Table of Contents and the Ads section. Shows a progress bar,
- * collapsible parts list, and prev/next links.
- */
-
 import type { SeriesContext } from "types/series";
 
 interface Props {
@@ -26,7 +18,6 @@ const progressPercent = Math.round(((currentIndex + 1) / totalParts) * 100);
 ---
 
 <div class="post-card post-card--series">
-	<!-- Label + Title -->
 	<div class="post-card-title series-sidebar-label">
 		<svg
 			width="12"
@@ -49,7 +40,6 @@ const progressPercent = Math.round(((currentIndex + 1) / totalParts) * 100);
 		{name}
 	</a>
 
-	<!-- Progress -->
 	<div class="series-sidebar-progress">
 		<div class="series-sidebar-progress-track">
 			<div
@@ -62,7 +52,6 @@ const progressPercent = Math.round(((currentIndex + 1) / totalParts) * 100);
 		</span>
 	</div>
 
-	<!-- Parts list — collapsed by default to save space -->
 	<details class="series-sidebar-parts">
 		<summary class="series-sidebar-toggle">
 			<span>All parts</span>
@@ -111,7 +100,6 @@ const progressPercent = Math.round(((currentIndex + 1) / totalParts) * 100);
 		</ol>
 	</details>
 
-	<!-- Prev / Next -->
 	{(prevPost || nextPost) && (
 		<div class="series-sidebar-nav">
 			{prevPost ? (
@@ -139,11 +127,6 @@ const progressPercent = Math.round(((currentIndex + 1) / totalParts) * 100);
 </div>
 
 <style is:global>
-	/* ═══════════════════════════════════════════
-	   Series Sidebar Nav — right rail widget
-	   Follows the existing .post-card pattern
-	   ═══════════════════════════════════════════ */
-
 	.post-card--series {
 		padding: 0.85rem 0.9rem 0.9rem !important;
 		border-radius: 11px;
@@ -182,7 +165,6 @@ const progressPercent = Math.round(((currentIndex + 1) / totalParts) * 100);
 		color: #bb9af7;
 	}
 
-	/* ─── Progress ─── */
 	.series-sidebar-progress {
 		display: flex;
 		align-items: center;
@@ -213,7 +195,6 @@ const progressPercent = Math.round(((currentIndex + 1) / totalParts) * 100);
 		font-weight: 500;
 	}
 
-	/* ─── Parts list ─── */
 	.series-sidebar-parts {
 		margin-bottom: 0.5rem;
 	}
@@ -322,7 +303,6 @@ const progressPercent = Math.round(((currentIndex + 1) / totalParts) * 100);
 		color: #565f89;
 	}
 
-	/* ─── Prev / Next ─── */
 	.series-sidebar-nav {
 		display: flex;
 		justify-content: space-between;
@@ -351,7 +331,6 @@ const progressPercent = Math.round(((currentIndex + 1) / totalParts) * 100);
 		background: rgba(122, 162, 247, 0.08);
 	}
 
-	/* ─── Responsive: hide on mobile (shown inline instead) ─── */
 	@media (max-width: 1024px) {
 		.post-card--series {
 			display: none;

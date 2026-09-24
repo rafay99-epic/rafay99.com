@@ -203,8 +203,6 @@
   .project-article {
     min-width: 0;
     display: grid;
-    /* An implicit auto track can't shrink below its widest child, which
-       pushed wide prose/embeds past the viewport on phones. */
     grid-template-columns: minmax(0, 1fr);
     gap: 1.75rem;
   }

@@ -1,17 +1,3 @@
-/*
- * Editorial design system ("Kinetic Editorial").
- * Shared by the redesigned pages: home, about, experience, blog, tags,
- * search and projects. Tokens live in theme.css.
- *
- * Motion rules: every animation runs once and stops. Reveals use CSS
- * scroll-driven animations where supported and are simply visible elsewhere.
- * prefers-reduced-motion gets the end state.
- */
-
-/* ---------- Scope reset ----------
- * global.css styles bare h1-h6, p, a and img for articles. Inside `.ed`
- * those defaults are neutralised; :where keeps specificity at one class so
- * component styles still win. */
 .ed {
 	font-family: var(--font-sans);
 	font-size: 1rem;
@@ -66,7 +52,6 @@ main.ed {
 	padding-inline: clamp(1.25rem, 4vw, 3rem);
 }
 
-/* ---------- Type ---------- */
 .ed-mono {
 	font-family: var(--font-mono);
 	font-size: 0.8125rem;
@@ -88,8 +73,6 @@ main.ed {
 	letter-spacing: -0.01em;
 }
 
-/* Masked, line-by-line headline. Markup:
- * <h1 class="ed-mega"><span class="ed-line"><span style="--i:0">Line</span></span></h1> */
 .ed-mega {
 	font-family: var(--font-display);
 	font-weight: 700;
@@ -130,7 +113,6 @@ main.ed {
 	}
 }
 
-/* Fades in after the headline lands. */
 .ed-after {
 	animation: ed-fade-up 0.8s var(--ease-out) both;
 	animation-delay: var(--d, 420ms);
@@ -143,7 +125,6 @@ main.ed {
 	}
 }
 
-/* ---------- Page head ---------- */
 .ed-head {
 	padding-top: clamp(7.5rem, 14vw, 11rem);
 	padding-bottom: clamp(2.5rem, 5vw, 4rem);
@@ -188,7 +169,6 @@ main.ed {
 	font-variant-numeric: tabular-nums;
 }
 
-/* ---------- Sections ---------- */
 .ed-section {
 	padding-block: clamp(3.5rem, 7vw, 6rem);
 }
@@ -221,7 +201,6 @@ main.ed {
 	color: var(--c, var(--color-cyan));
 }
 
-/* Text link with an underline that sweeps in. */
 .ed-link {
 	background:
 		linear-gradient(currentColor, currentColor) no-repeat left bottom / 0% 1px;
@@ -242,7 +221,6 @@ main.ed {
 	outline-offset: 3px;
 }
 
-/* ---------- Index rows (posts, projects, roles) ---------- */
 .ed-index {
 	position: relative;
 }
@@ -324,8 +302,6 @@ main.ed {
 	}
 }
 
-/* Cursor-following preview. The list sets --fx/--fy (see EdFloat script);
- * each row shows its own preview while hovered. Hidden on touch. */
 .ed-preview {
 	position: absolute;
 	top: 0;
@@ -374,7 +350,6 @@ main.ed {
 	}
 }
 
-/* ---------- Pager ---------- */
 .ed-pager {
 	display: flex;
 	align-items: center;
@@ -425,7 +400,6 @@ main.ed {
 	pointer-events: none;
 }
 
-/* ---------- Scroll reveals ---------- */
 @supports (animation-timeline: view()) {
 	[data-rev] {
 		animation: ed-fade-up linear both;
@@ -445,7 +419,6 @@ main.ed {
 	}
 }
 
-/* ---------- Search (React island, so styles live here) ---------- */
 .search__lede {
 	margin-top: clamp(1.5rem, 3vw, 2.5rem);
 }
@@ -477,7 +450,6 @@ main.ed {
 	outline: none;
 }
 
-/* The underline turns purple on focus, so the outline would be redundant. */
 .search__input:focus-visible {
 	outline: none;
 }
@@ -542,7 +514,6 @@ main.ed {
 	}
 }
 
-/* Keyboard hints mean nothing on touch; the clear button needs a real target. */
 @media (hover: none) {
 	.search__hint {
 		display: none;

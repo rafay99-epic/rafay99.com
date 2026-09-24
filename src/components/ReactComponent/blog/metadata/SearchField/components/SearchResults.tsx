@@ -26,7 +26,6 @@ function SearchResults({
 	);
 }
 
-// One post in the editorial index style; also used for "Recent posts".
 export function ResultRow({
 	post,
 	index,

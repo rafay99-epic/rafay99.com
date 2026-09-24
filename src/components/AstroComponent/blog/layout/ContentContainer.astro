@@ -8,41 +8,6 @@ const { class: className = "", withBackground = true } = Astro.props;
 ---
 
 <style>
-  /* .content-container {
-    border: 1px solid var(--color-border-secondary);
-    border-radius: 20px;
-    padding: 40px;
-    margin-top: 32px;
-    position: relative;
-    overflow: hidden;
-    text-align: justify;
-  }
-
-  .content-container.with-background {
-    background: var(--color-bg-overlay);
-    backdrop-filter: blur(20px);
-  } */
-
-  /* .content-container::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--color-primary) 4%, transparent) 0%,
-      color-mix(in srgb, var(--color-secondary) 4%, transparent) 100%
-    );
-    pointer-events: none;
-  }
-
-  .content-wrapper {
-    position: relative;
-    z-index: 1;
-  } */
-
   @media (max-width: 768px) {
     .content-container {
       padding: 24px;

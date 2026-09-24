@@ -43,7 +43,6 @@ const {
 	seriesPart,
 } = Astro.props;
 
-/** One canonical absolute URL for OG / Twitter / schema (fixes wrong default when sharing). */
 const baseOrigin = Astro.site ?? Astro.url;
 function toAbsoluteImageUrl(src: string | undefined | null): string {
 	const s = typeof src === "string" ? src.trim() : "";
@@ -63,16 +62,10 @@ const wordCount = blogContent
 	? blogContent.trim().split(/\s+/).filter(Boolean).length
 	: 0;
 
-// Escape `<` so author content containing a closing script tag can't break
-// out of the JSON-LD script block (JSON.stringify doesn't escape angle
-// brackets). Keep literal tags out of this comment: Vite's dependency
-// scanner treats them as real script tags.
 const toJsonLd = (value: unknown): string =>
 	JSON.stringify(value).replace(/</g, "\\u003c");
 ---
 
-{/* BaseHead is the single source for title, description, canonical, and the
-core OG/Twitter tags. Here we only add article-specific metadata and JSON-LD. */}
 <BaseHead
 	title={title}
 	description={excerpt || description}
@@ -84,7 +77,6 @@ core OG/Twitter tags. Here we only add article-specific metadata and JSON-LD. */
 />
 
     <style is:global>
-      /* Prevent white flash - Critical styles */
       html {
         background-color: #1a1b26 !important;
       }

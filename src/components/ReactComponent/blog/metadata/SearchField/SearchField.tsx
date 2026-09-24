@@ -14,7 +14,6 @@ interface SearchProps {
 
 const HEADLINE = ["Search", "the archive."];
 
-// Two most-used tags become "tag:" examples under the input.
 function topTagExamples(posts: Post[]): string[] {
 	const counts = new Map<string, number>();
 	for (const post of posts) {
@@ -38,8 +37,6 @@ function Search({ posts }: SearchProps) {
 		"author:rafay",
 	];
 
-	// Mirror state into refs so the global keydown listener can stay bound once
-	// instead of being re-registered on every keystroke / result change.
 	const resultsRef = useRef(results);
 	const selectedIndexRef = useRef(selectedResultIndex);
 	const isFocusedRef = useRef(isSearchFocused);

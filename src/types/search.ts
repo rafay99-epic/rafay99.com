@@ -1,8 +1,5 @@
 import type { Post } from "./articles";
 
-// Plain types: none of these are validated at runtime, and Zod 4 no longer
-// models callbacks inside object schemas.
-
 export type { Post };
 
 export type SearchStatsData = {

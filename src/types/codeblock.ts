@@ -46,8 +46,6 @@ export type StyleValue = z.infer<typeof StyleValueSchema>;
 export type ToastStyle = z.infer<typeof ToastStyleSchema>;
 export type ToastStyles = z.infer<typeof ToastStylesSchema>;
 export type Styles = z.infer<typeof StylesSchema>;
-// Props carry callbacks, which Zod 4 no longer models inside object
-// schemas, so these are plain types.
 export type CopyButtonProps = {
 	codeText: string;
 	isMobile: boolean;

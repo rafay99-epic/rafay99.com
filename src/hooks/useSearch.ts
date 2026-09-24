@@ -1,11 +1,7 @@
-// NOTE: Search excludes archived posts to keep results aligned with public blog listings.
-
 import Fuse, { type IFuseOptions } from "fuse.js";
 import { useEffect, useRef, useState } from "react";
 import type { Post } from "types/articles";
 import type { SearchCache, SearchState } from "types/search";
-
-// --- Constants ---
 
 const CACHE_DURATION = 5 * 60 * 1000;
 const MAX_CACHE_SIZE = 50;
@@ -13,14 +9,7 @@ const MAX_HISTORY_ITEMS = 10;
 const SEARCH_HISTORY_KEY = "search_history:v1";
 const DEBOUNCE_MS = 250;
 const HISTORY_COMMIT_MS = 1000;
-// Cap how many results we render. Fuse already sorts by relevance, so beyond
-// this nothing useful is lost — but it keeps the animated result list cheap.
 const MAX_RENDERED_RESULTS = 30;
-
-// --- Fuse Configuration ---
-// NOTE: `body` is intentionally excluded. Fuzzy-matching full article text
-// with ignoreLocation is O(n*m) per post and dominates search time. Title,
-// description, tags, and author cover the vast majority of search intents.
 
 const FUSE_CONFIG: IFuseOptions<Post> = {
 	keys: [
@@ -50,8 +39,6 @@ const FUSE_CONFIG: IFuseOptions<Post> = {
 	shouldSort: true,
 };
 
-// --- Search Intent Detection ---
-
 const INTENT_PATTERNS: Record<string, RegExp> = {
 	date: /^(date:|on:)?\s*(\d{4}(-\d{2})?(-\d{2})?|yesterday|today|last\s+week|last\s+month|this\s+month)/i,
 	tag: /^(tag:|tags:|#)\s*\w+/i,
@@ -72,8 +59,6 @@ const detectSearchIntent = (query: string): SearchIntentType => {
 const stripIntentPrefix = (query: string): string =>
 	query.replace(PREFIX_PATTERN, "");
 
-// --- Search Syntax Processing ---
-
 const processSearchTerms = (query: string): string =>
 	query
 		.split(" ")
@@ -87,8 +72,6 @@ const processSearchTerms = (query: string): string =>
 		})
 		.join(" ");
 
-// --- Relevance Scoring ---
-
 const calculateRelevance = (
 	fuseScore: number,
 	pubDate: Date,
@@ -96,7 +79,6 @@ const calculateRelevance = (
 ): number => {
 	const baseScore = 1 - fuseScore;
 
-	// Linear decay: 0.15 for brand-new posts → 0 at 5 years old
 	const ageInDays = (Date.now() - pubDate.getTime()) / (1000 * 60 * 60 * 24);
 	const freshnessBoost = Math.max(0, 0.15 * (1 - ageInDays / (5 * 365)));
 
@@ -104,8 +86,6 @@ const calculateRelevance = (
 
 	return baseScore + freshnessBoost + intentBonus;
 };
-
-// --- Cache Management (module-level, survives re-renders) ---
 
 const searchCache = new Map<string, SearchCache>();
 
@@ -123,7 +103,6 @@ const addToCache = (
 	searchResults: Post[],
 	stats: SearchState["searchStats"],
 ): void => {
-	// Delete first to update insertion order (LRU behavior)
 	searchCache.delete(query);
 	if (searchCache.size >= MAX_CACHE_SIZE) {
 		const oldestKey = searchCache.keys().next().value;
@@ -135,8 +114,6 @@ const addToCache = (
 		timestamp: Date.now(),
 	});
 };
-
-// --- localStorage Helpers (with shape validation) ---
 
 const loadSearchHistory = (): string[] => {
 	try {
@@ -155,12 +132,8 @@ const loadSearchHistory = (): string[] => {
 const saveSearchHistory = (history: string[]): void => {
 	try {
 		localStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(history));
-	} catch {
-		// localStorage might be full or disabled
-	}
+	} catch {}
 };
-
-// --- Hook ---
 
 const useSearch = (posts: Post[]): SearchState => {
 	const [query, setQuery] = useState("");
@@ -177,7 +150,6 @@ const useSearch = (posts: Post[]): SearchState => {
 		undefined,
 	);
 
-	// Safety net: filter drafts/archived even if caller already did
 	const clearHistory = () => {
 		setSearchHistory([]);
 	};
@@ -186,7 +158,6 @@ const useSearch = (posts: Post[]): SearchState => {
 		saveSearchHistory(searchHistory);
 	}, [searchHistory]);
 
-	// Debounced search execution
 	useEffect(() => {
 		const filteredPosts = posts.filter(
 			(post) => !post.data.draft && !post.data.archived,
@@ -241,7 +212,6 @@ const useSearch = (posts: Post[]): SearchState => {
 					scoredResults.length
 				: 0;
 
-			// Render only the top slice; report the true match count in stats.
 			const rankedPosts = scoredResults
 				.slice(0, MAX_RENDERED_RESULTS)
 				.map((r) => r.post);
@@ -262,7 +232,6 @@ const useSearch = (posts: Post[]): SearchState => {
 		return () => clearTimeout(id);
 	}, [query, posts]);
 
-	// Delayed history commit: only saves after user stops typing for 1s
 	useEffect(() => {
 		clearTimeout(historyTimerRef.current);
 		if (query.trim()) {

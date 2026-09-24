@@ -3,8 +3,6 @@ import PageHead from "@astro/editorial/PageHead.astro";
 import authorConfig from "@config/siteConfig/info.json";
 
 const { about, techStack, picture, name, tag_line } = authorConfig;
-// whoAmI is one long paragraph: the first sentence becomes the serif lede,
-// the next two the body. The rest (AI opinions) lives in its own section.
 const [lede = "", ...rest] = about.whoAmI.split(/(?<=\.)\s+/);
 const whoBody = rest.slice(0, 2);
 
@@ -99,7 +97,6 @@ const sectionId = (label: string) =>
 </div>
 
 <script>
-  // Highlights the section currently in view in the sticky index.
   let observer: IntersectionObserver | undefined;
 
   document.addEventListener("astro:page-load", () => {
@@ -111,7 +108,6 @@ const sectionId = (label: string) =>
         for (const entry of entries) {
           if (!entry.isIntersecting) continue;
           for (const link of links) {
-            // An empty aria-current reads as "false"; use a real token.
             if (link.dataset.spy === entry.target.id) {
               link.setAttribute("aria-current", "location");
             } else {
@@ -254,7 +250,6 @@ const sectionId = (label: string) =>
     box-decoration-break: clone;
   }
 
-  /* The marker sweeps across as the quote scrolls into view. */
   @supports (animation-timeline: view()) {
     .about__quote mark {
       animation: about-mark linear both;

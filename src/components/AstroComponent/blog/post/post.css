@@ -1,18 +1,9 @@
-/*
- * Blog post reading template (editorial redesign).
- * Global on purpose: the markup spans BlogPost.astro, BlogPostHeader,
- * BlogPostRightRail and BlogPostBelowContent. Behaviour hooks (data-*
- * attributes, #post-toc, .toc-link.is-active, .is-loading/.is-success,
- * .post-rail--right.is-open) are driven by BlogPostClientScript.
- */
-
 .blog-container .main-content {
 	margin: 0;
 	padding: 0;
 	max-width: 100%;
 }
 
-/* ---------- Reading progress (CSS scroll timeline, no JS) ---------- */
 .post-progress {
 	display: none;
 }
@@ -40,7 +31,6 @@
 	}
 }
 
-/* ---------- Shell ---------- */
 .post-shell {
 	width: 100%;
 	max-width: 1280px;
@@ -48,7 +38,6 @@
 	padding: clamp(7rem, 12vw, 9.5rem) clamp(1.25rem, 4vw, 3rem) 3rem;
 }
 
-/* ---------- Masthead ---------- */
 .post-header {
 	padding-bottom: clamp(2rem, 4vw, 3rem);
 	border-bottom: 1px solid var(--color-line);
@@ -162,7 +151,6 @@
 	color: var(--color-secondary);
 }
 
-/* ---------- Cover ---------- */
 .post-cover {
 	margin: clamp(2rem, 4vw, 3rem) 0 0;
 	aspect-ratio: 16 / 9;
@@ -179,7 +167,6 @@
 	object-fit: cover;
 }
 
-/* ---------- Body grid ---------- */
 .post-grid {
 	display: grid;
 	gap: 3rem;
@@ -200,7 +187,6 @@
 	}
 }
 
-/* ---------- Article prose (overrides content-prose for posts only) ---------- */
 .post-content {
 	min-width: 0;
 	font-size: clamp(1.05rem, 0.3vw + 1rem, 1.1875rem);
@@ -239,7 +225,6 @@
 	content: none;
 }
 
-/* Opening paragraph: drop cap in the display face. */
 .post-content.content-prose > p:first-of-type::first-letter {
 	float: left;
 	margin: 0.08em 0.12em 0 0;
@@ -275,7 +260,6 @@
 	border-top-color: var(--color-line);
 }
 
-/* ---------- Right rail ---------- */
 .post-rail {
 	display: flex;
 	flex-direction: column;
@@ -311,7 +295,6 @@
 	min-height: 2.25rem;
 }
 
-/* Copy page split button + dropdown */
 .post-action-menu {
 	position: relative;
 }
@@ -410,7 +393,6 @@
 		transform 0.2s ease;
 }
 
-/* Loading shimmer/spinner only run while an action is in flight. */
 .post-action-main.is-loading,
 .post-action-option.is-loading {
 	color: var(--color-primary);
@@ -516,7 +498,6 @@
 	display: none;
 }
 
-/* Table of contents */
 .post-toc {
 	display: flex;
 	flex-direction: column;
@@ -562,7 +543,6 @@
 	color: var(--color-text-soft);
 }
 
-/* Ads */
 .ads-section--rail {
 	width: 100%;
 	margin: 0;
@@ -589,7 +569,6 @@
 	max-width: 100%;
 }
 
-/* Mobile drawer chrome: hidden on desktop. */
 .post-rail-fab,
 .post-rail-close,
 .post-rail-backdrop {
@@ -673,7 +652,6 @@
 	}
 }
 
-/* ---------- Series (mobile bar; desktop uses the rail) ---------- */
 .series-mobile-bar {
 	display: none;
 	margin-top: 1.5rem;
@@ -715,7 +693,6 @@
 	}
 }
 
-/* ---------- Below the article ---------- */
 .comments-section {
 	width: 100%;
 	max-width: 1280px;

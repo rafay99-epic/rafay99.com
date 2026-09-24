@@ -85,8 +85,6 @@ const {
 } = Astro.props as Props;
 const lead = excerpt || description;
 
-// Cover image, optimised once and shown under the masthead. The srcset
-// lets phones pick a smaller file than the 1600px desktop one.
 const coverSizes = "(min-width: 1280px) 1280px, 100vw";
 let coverSrc: string | null = null;
 let coverSrcSet: string | undefined;
@@ -137,7 +135,6 @@ const postActionPayload = JSON.stringify({
 
 const updatedDate = currentBlog.data.updatedDate;
 
-// ─── Series context ───
 const allBlogPosts = featureFlags.showBlog ? await getCollection("blog") : [];
 const seriesContext =
 	featureFlags.showSeries && currentBlog

@@ -1,19 +1,8 @@
 ---
-/**
- * SeriesBadge — compact pill shown on blog cards and list items.
- *
- * Usage:
- *   <SeriesBadge series="Building a SaaS" part={2} total={5} />
- */
-
 interface Props {
-	/** Human-readable series name. */
 	series: string;
-	/** Which part this post is (1-based). */
 	part: number;
-	/** Total parts in the series (declared or inferred). */
 	total?: number | undefined;
-	/** When true, render a minimal "Part N" chip. */
 	compact?: boolean | undefined;
 }
 
@@ -66,7 +55,6 @@ const href = `/blog/series/${seriesSlug}`;
 }
 
 <style>
-	/* ─── Full Badge ─── */
 	.series-badge {
 		display: inline-flex;
 		align-items: center;
@@ -108,7 +96,6 @@ const href = `/blog/series/${seriesSlug}`;
 		font-variant-numeric: tabular-nums;
 	}
 
-	/* ─── Compact Badge ─── */
 	.series-badge-compact {
 		display: inline-flex;
 		align-items: center;

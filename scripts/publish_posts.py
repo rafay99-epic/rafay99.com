@@ -48,11 +48,9 @@ def generate_seo_keywords(title: str, tags: List[str], content: str) -> List[str
     """Generate SEO keywords based on title, tags, and content."""
     keywords = []
     
-    # Add existing tags
     if tags:
         keywords.extend(tags)
     
-    # Extract words from title (common tech terms)
     title_words = re.findall(r'\b\w+\b', title.lower())
     tech_keywords = ['python', 'javascript', 'react', 'astro', 'typescript', 'node', 'web', 'development', 
                     'coding', 'programming', 'tutorial', 'guide', 'tips', 'tricks', 'best', 'practices',
@@ -63,7 +61,6 @@ def generate_seo_keywords(title: str, tags: List[str], content: str) -> List[str
         if word in tech_keywords and word not in keywords:
             keywords.append(word)
     
-    # Add common variations
     if 'python' in keywords:
         keywords.append('programming')
     if 'javascript' in keywords or 'js' in keywords:
@@ -73,34 +70,29 @@ def generate_seo_keywords(title: str, tags: List[str], content: str) -> List[str
     if 'astro' in keywords:
         keywords.append('static site')
     
-    # Limit to reasonable number
     return keywords[:10]
 
 def generate_excerpt(content: str, max_length: int = 160) -> str:
     """Generate excerpt from content."""
-    # Remove markdown formatting
-    clean_content = re.sub(r'!\[.*?\]\(.*?\)', '', content)  # Remove images
-    clean_content = re.sub(r'\[.*?\]\(.*?\)', '', clean_content)  # Remove links
-    clean_content = re.sub(r'#{1,6}\s*', '', clean_content)  # Remove headers
-    clean_content = re.sub(r'\*\*(.*?)\*\*', r'\1', clean_content)  # Remove bold
-    clean_content = re.sub(r'\*(.*?)\*', r'\1', clean_content)  # Remove italic
-    clean_content = re.sub(r'`(.*?)`', r'\1', clean_content)  # Remove code
-    clean_content = re.sub(r'\n+', ' ', clean_content)  # Replace newlines with spaces
-    clean_content = re.sub(r'\s+', ' ', clean_content).strip()  # Clean whitespace
+    clean_content = re.sub(r'!\[.*?\]\(.*?\)', '', content)
+    clean_content = re.sub(r'\[.*?\]\(.*?\)', '', clean_content)
+    clean_content = re.sub(r'#{1,6}\s*', '', clean_content)
+    clean_content = re.sub(r'\*\*(.*?)\*\*', r'\1', clean_content)
+    clean_content = re.sub(r'\*(.*?)\*', r'\1', clean_content)
+    clean_content = re.sub(r'`(.*?)`', r'\1', clean_content)
+    clean_content = re.sub(r'\n+', ' ', clean_content)
+    clean_content = re.sub(r'\s+', ' ', clean_content).strip()
     
-    # Get first paragraph or sentence
     sentences = re.split(r'[.!?]', clean_content)
     first_sentence = sentences[0].strip() if sentences else clean_content
     
     if len(first_sentence) <= max_length:
         return first_sentence
     
-    # Truncate to max_length
     return first_sentence[:max_length-3] + "..."
 
 def generate_canonical_url(title: str) -> str:
     """Generate canonical URL from title."""
-    # Convert title to slug
     slug = re.sub(r'[^\w\s-]', '', title.lower())
     slug = re.sub(r'[-\s]+', '-', slug)
     slug = slug.strip('-')
@@ -108,14 +100,11 @@ def generate_canonical_url(title: str) -> str:
 
 def generate_alt_text_suggestion(image_path: str, content_context: str) -> str:
     """Generate alt text suggestions based on image path and content context."""
-    # Extract filename without extension
     base_name = os.path.basename(image_path)
     name_without_ext = os.path.splitext(base_name)[0]
     
-    # Clean up the filename
     clean_name = name_without_ext.replace('-', ' ').replace('_', ' ').replace('.', ' ')
     
-    # Common patterns for alt text generation
     patterns = {
         'screenshot': 'Screenshot showing',
         'ssd_contactform_error': 'Contact form error message showing validation failure',
@@ -136,28 +125,23 @@ def generate_alt_text_suggestion(image_path: str, content_context: str) -> str:
         'desktop': 'Desktop interface showing'
     }
     
-    # Check for specific patterns first
     for pattern, suggestion in patterns.items():
         if pattern.lower() in name_without_ext.lower():
             return suggestion
     
-    # Try to extract context from surrounding content
     if content_context:
-        # Look for nearby headings or text
         lines = content_context.split('\n')
         for line in lines:
             if line.strip().startswith('#'):
                 heading = re.sub(r'^#+\s*', '', line.strip())
                 return f"Image related to: {heading}"
     
-    # Default suggestion based on filename
     return f"Image showing {clean_name}"
 
 def add_alt_text_to_content(content: str) -> Tuple[str, int]:
     """Add alt text to images in content. Returns (updated_content, images_updated)."""
     images_updated = 0
     
-    # Find markdown images without alt text: ![](url)
     markdown_pattern = r'!\[\]\(([^)]+)\)'
     
     def replace_markdown(match):
@@ -170,7 +154,6 @@ def add_alt_text_to_content(content: str) -> Tuple[str, int]:
     
     content = re.sub(markdown_pattern, replace_markdown, content)
     
-    # Find HTML images without alt text: <img src="..." />
     html_pattern = r'<img([^>]+src=["\']([^"\']+)["\'][^>]*?)>'
     
     def replace_html(match):
@@ -178,7 +161,6 @@ def add_alt_text_to_content(content: str) -> Tuple[str, int]:
         img_attrs = match.group(1)
         image_path = match.group(2)
         
-        # Skip if already has alt text
         if 'alt=' in img_attrs:
             logging.debug(f"HTML image already has alt text: {image_path}")
             return match.group(0)
@@ -197,7 +179,6 @@ def enhance_seo_metadata(metadata: Dict, body: str, title: str) -> Tuple[Dict, b
     updated = False
     enhanced_metadata = metadata.copy()
     
-    # Generate keywords if missing
     if not enhanced_metadata.get('keywords'):
         tags = enhanced_metadata.get('tags', [])
         keywords = generate_seo_keywords(title, tags, body)
@@ -207,7 +188,6 @@ def enhance_seo_metadata(metadata: Dict, body: str, title: str) -> Tuple[Dict, b
     else:
         logging.debug(f"Keywords already exist: {enhanced_metadata.get('keywords')}")
     
-    # Generate excerpt if missing
     if not enhanced_metadata.get('excerpt'):
         excerpt = generate_excerpt(body)
         enhanced_metadata['excerpt'] = excerpt
@@ -216,7 +196,6 @@ def enhance_seo_metadata(metadata: Dict, body: str, title: str) -> Tuple[Dict, b
     else:
         logging.debug(f"Excerpt already exists: {enhanced_metadata.get('excerpt')[:50]}...")
     
-    # Generate canonical URL if missing
     if not enhanced_metadata.get('canonicalUrl'):
         canonical_url = generate_canonical_url(title)
         enhanced_metadata['canonicalUrl'] = canonical_url
@@ -225,7 +204,6 @@ def enhance_seo_metadata(metadata: Dict, body: str, title: str) -> Tuple[Dict, b
     else:
         logging.debug(f"Canonical URL already exists: {enhanced_metadata.get('canonicalUrl')}")
     
-    # Set featured to false if missing
     if 'featured' not in enhanced_metadata:
         enhanced_metadata['featured'] = False
         updated = True
@@ -238,12 +216,10 @@ def enhance_seo_metadata(metadata: Dict, body: str, title: str) -> Tuple[Dict, b
 def update_yaml_frontmatter(original_yaml: str, metadata: Dict) -> str:
     """Update YAML frontmatter with new metadata, preserving original formatting."""
     try:
-        # Parse existing YAML
         existing_metadata = yaml.safe_load(original_yaml)
         if not isinstance(existing_metadata, dict):
             return original_yaml
         
-        # Check if we actually need to add any fields
         fields_to_add = {}
         for key, value in metadata.items():
             if key not in existing_metadata:
@@ -252,15 +228,11 @@ def update_yaml_frontmatter(original_yaml: str, metadata: Dict) -> str:
             else:
                 logging.debug(f"Field '{key}' already exists, skipping")
         
-        # If no fields to add, return original unchanged
         if not fields_to_add:
             return original_yaml
         
-        # For now, let's use a simpler approach that preserves the original structure
-        # by only adding the missing fields at the end, before the closing ---
         lines = original_yaml.split('\n')
         
-        # Find the last line before the closing ---
         last_content_line = -1
         for i, line in enumerate(lines):
             if line.strip() == '---':
@@ -270,10 +242,8 @@ def update_yaml_frontmatter(original_yaml: str, metadata: Dict) -> str:
         if last_content_line < 0:
             return original_yaml
         
-        # Insert new fields before the closing ---
         new_lines = lines[:last_content_line + 1]
         
-        # Add new fields
         for key, value in fields_to_add.items():
             if isinstance(value, list):
                 new_lines.append(f"{key}:")
@@ -282,7 +252,6 @@ def update_yaml_frontmatter(original_yaml: str, metadata: Dict) -> str:
             else:
                 new_lines.append(f"{key}: {value}")
         
-        # Add the closing --- and any remaining content
         new_lines.extend(lines[last_content_line + 1:])
         
         return '\n'.join(new_lines)
@@ -314,7 +283,6 @@ def publish_post_if_ready(file_path: Path):
 
         logging.debug(f"File: {file_name}, Draft Status: {is_draft}, PubDate Value: {pub_date_value}")
 
-        # Process draft posts for publishing
         if is_draft is True:
             if pub_date_value is not None:
                 pub_date_dt = None
@@ -339,19 +307,15 @@ def publish_post_if_ready(file_path: Path):
                         if pub_date_dt <= now_utc:
                             logging.info(f"Publishing {file_name} (pubDate: {pub_date_value})")
 
-                            # Enhance SEO metadata
                             enhanced_metadata, seo_updated = enhance_seo_metadata(metadata, body, title)
                             
-                            # Add alt text to images
                             updated_body, images_updated = add_alt_text_to_content(body)
                             
-                            # Update draft status
                             new_yaml = re.sub(r"^\s*draft:\s*true\s*$", "draft: false", original_yaml, flags=re.MULTILINE | re.IGNORECASE)
                             if new_yaml == original_yaml:
                                 temp_yaml = original_yaml.replace('draft: true', 'draft: false', 1)
                                 new_yaml = temp_yaml.replace('draft: True', 'draft: false', 1)
 
-                            # Update YAML with enhanced metadata
                             if seo_updated:
                                 new_yaml = update_yaml_frontmatter(new_yaml, enhanced_metadata)
 
@@ -382,17 +346,13 @@ def publish_post_if_ready(file_path: Path):
             else:
                  logging.warning(f"Skipping {file_name}: Draft is true, but 'pubDate' key is missing.")
         else:
-            # Even for non-draft posts, enhance SEO and alt text if missing
             logging.info(f"Enhancing SEO and alt text for published post: {file_name}")
             
-            # Enhance SEO metadata
             enhanced_metadata, seo_updated = enhance_seo_metadata(metadata, body, title)
             
-            # Add alt text to images
             updated_body, images_updated = add_alt_text_to_content(body)
             
             if seo_updated or images_updated > 0:
-                # Update YAML with enhanced metadata
                 new_yaml = original_yaml
                 if seo_updated:
                     new_yaml = update_yaml_frontmatter(original_yaml, enhanced_metadata)

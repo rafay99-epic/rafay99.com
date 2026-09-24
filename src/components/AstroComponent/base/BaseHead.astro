@@ -41,7 +41,6 @@ declare global {
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <link rel="icon" type="image/svg+xml" href="/favicon.webp" />
 
-<!-- Site-wide view transitions for smooth page navigation -->
 <ClientRouter fallback="swap" />
 <meta name="generator" content={Astro.generator} />
 
@@ -103,10 +102,8 @@ declare global {
 
 <link rel="sitemap" href="/sitemap-index.xml" />
 
-<!-- LLMs.txt for AI/LLM discovery -->
 <link rel="alternate" type="text/plain" title="LLMs.txt" href="/llms.txt" />
 
-<!-- Google AdSense -->
 <script
   is:inline
   async
@@ -115,7 +112,6 @@ declare global {
   src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2480387803052595"
   crossorigin="anonymous"></script>
 
-<!-- Google tag (gtag.js) -->
 <script
   is:inline
   async
@@ -132,7 +128,6 @@ declare global {
   gtag("config", "AW-17413331660");
 </script>
 
-<!-- Cookie consent: default styles + Tokyo Night theme -->
 <link rel="stylesheet" href="/css/cookieconsent.css" />
 <link rel="stylesheet" href="/css/cookieconsent-theme.css" />
 <script is:inline>
@@ -140,10 +135,3 @@ declare global {
 </script>
 <script is:inline type="module" src="/js/cookieconsent-config.js"></script>
 
-<!-- <script is:inline type="text/partytown">
-  (function(w,d,e,u,f,l,n){w[f]=w[f]||function(){(w[f].q=w[f].q||[])
-  .push(arguments);},l=d.createElement(e),l.async=1,l.src=u,
-  n=d.getElementsByTagName(e)[0],n.parentNode.insertBefore(l,n);})
-  (window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');
-  ml('account', '1747196');
-</script> -->

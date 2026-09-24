@@ -7,7 +7,6 @@ type Contribution = {
 	project: string;
 	context: string;
 	status: string;
-	/** Paragraphs; `backticks` render as inline code. */
 	body: string[];
 	tags: string[];
 	links: { label: string; href: string }[];
@@ -52,9 +51,7 @@ const contributions: Contribution[] = [
 	},
 ];
 
-// Every linked PR is merged; bug reports carry no links.
 const mergedPrs = contributions.reduce((n, c) => n + c.links.length, 0);
-// Split on backticks: odd segments are code.
 const segments = (text: string) => text.split("`");
 ---
 

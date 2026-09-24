@@ -11,7 +11,6 @@ interface Props {
 }
 
 const { isArchive, prevPost, nextPost } = Astro.props;
-// Posts are ordered oldest first: previous is older, next is newer.
 const base = isArchive ? "/blog/archive" : "/blog";
 ---
 

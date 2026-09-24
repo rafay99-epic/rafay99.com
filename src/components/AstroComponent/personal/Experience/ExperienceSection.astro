@@ -19,8 +19,6 @@ const WORDS = [
 ];
 const count = WORDS[workExperience.length] ?? String(workExperience.length);
 
-// Newest first, grouped under the year each role started. Each role keeps
-// its own accent; the year numeral takes the colour of its first role.
 type Role = { job: (typeof workExperience)[number]; color: string };
 const byYear = new Map<number, Role[]>();
 workExperience.forEach((job, i) => {
@@ -81,7 +79,6 @@ const firstYear = Math.min(...byYear.keys());
     border-top: 1px solid var(--color-line);
   }
 
-  /* Outlined year that fills with the accent as it scrolls into view. */
   .xp__num {
     position: sticky;
     top: 5.5rem;
@@ -94,8 +91,6 @@ const firstYear = Math.min(...byYear.keys());
     letter-spacing: -0.03em;
     white-space: nowrap;
     color: transparent;
-    /* Accent layer on top of a dim base; the accent grows from the bottom.
-       No text-stroke: it traces the variable font's overlapping contours. */
     background:
       linear-gradient(var(--c), var(--c)) no-repeat left bottom / 100% 100%,
       linear-gradient(var(--color-line), var(--color-line));

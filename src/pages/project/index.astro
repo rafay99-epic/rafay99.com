@@ -28,7 +28,6 @@ for (const { data } of projects) {
 	}
 	for (const t of data.ProjectTech ?? []) stacks.add(t);
 }
-// Single-use categories add noise to the filter bar.
 const filters = [...categoryCounts]
 	.filter(([, n]) => n > 1)
 	.sort((a, b) => b[1] - a[1]);
@@ -144,7 +143,6 @@ const filters = [...categoryCounts]
 </html>
 
 <script>
-  // Category filter: hides featured pieces and index rows outside the category.
   document.addEventListener("click", (e) => {
     const button = (e.target as Element | null)?.closest<HTMLButtonElement>(
       "[data-filter]",

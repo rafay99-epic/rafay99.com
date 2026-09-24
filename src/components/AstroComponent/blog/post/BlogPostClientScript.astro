@@ -391,7 +391,6 @@ const { postActionPayload } = Astro.props;
             railPanel.classList.add("is-open");
             railBackdrop?.removeAttribute("hidden");
             railFab.setAttribute("aria-expanded", "true");
-            // Lock the article behind the drawer, like the header menu does.
             document.body.style.overflow = "hidden";
             railClose?.focus();
           };

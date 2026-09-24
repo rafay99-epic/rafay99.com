@@ -6,10 +6,6 @@ import TopicList from "@astro/editorial/TopicList.astro";
 import { countTags, getPublishedPosts } from "@util/collections";
 import type { Post } from "types/articles";
 
-/**
- * Shared view for /tag, /tag/page/n, /tag/[tag] and /tag/[tag]/page/n:
- * the topic cloud on top, the matching posts as an index below.
- */
 interface Props {
 	paginatedPosts: Post[];
 	selectedTag: string | null;
