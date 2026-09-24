@@ -1,0 +1,28 @@
+src/components/AstroComponent/blog/post/post.css
+  s_c5b1332c7c5807::t_c2a6e84d0a4445 1-128,130-134,144-365,374-755
+  s_c5b1332c7c5807::t_800d9b85eb109b 366-373
+  s_c5b1332c7c5807::t_ea5bc3daa2a2d7 129,135-143
+src/layouts/BlogPost.astro
+  s_c5b1332c7c5807::t_041f2e7bceced7 11,88-89,99,101,166,171-202
+src/components/AstroComponent/blog/post/BlogPostBelowContent.astro
+  s_c5b1332c7c5807::t_2ac62176c6940e 13-15,19,24-29,31-33,36,38-41,44-57,60-64,67-122
+  s_c5b1332c7c5807::t_631dc970b7d66b 65-66
+src/components/AstroComponent/blog/post/BlogPostHeader.astro
+  s_c5b1332c7c5807::t_14935d6d9e1ba4 3,41-47,53,55,60,63,65,67,70-71,73-74,79,81-83,85
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "f72b55d7a94ba6afc44aab653e4bbe1a5223b7e8",
+  "prompts": {},
+  "sessions": {
+    "s_c5b1332c7c5807": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2b17688d-e3f5-4f75-aebb-971f5836abaa",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Abdul Rafay <99marafay@gmail.com>"
+    }
+  }
+}
