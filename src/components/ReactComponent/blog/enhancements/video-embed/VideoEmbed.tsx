@@ -51,6 +51,7 @@ const VideoEmbed: FunctionComponent<VideoEmbedProps> = ({
 						style={{ border: "none" }}
 						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
 						allowFullScreen
+						loading="lazy"
 						onLoad={() => setIsLoading(false)}
 					/>
 				)}

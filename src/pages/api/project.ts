@@ -26,7 +26,6 @@ export async function GET() {
 			(post: CollectionEntry<"projects">) => !post.data.draft,
 		);
 
-		// Validate projects with Zod before returning
 		const validatedProjects = filteredPosts.map(
 			(project: CollectionEntry<"projects">) => {
 				try {

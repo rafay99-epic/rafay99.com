@@ -1,6 +1,5 @@
 import type { SearchTipsProps } from "types/search";
 
-// Clickable example queries shown while the input is empty.
 function SearchTips({ examples, query, setQuery }: SearchTipsProps) {
 	if (query) return null;
 

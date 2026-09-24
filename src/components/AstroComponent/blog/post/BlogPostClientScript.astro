@@ -385,16 +385,22 @@ const { postActionPayload } = Astro.props;
             railPanel.classList.remove("is-open");
             railBackdrop?.setAttribute("hidden", "");
             railFab.setAttribute("aria-expanded", "false");
+            document.body.style.overflow = "";
           };
           const openRail = () => {
             railPanel.classList.add("is-open");
             railBackdrop?.removeAttribute("hidden");
             railFab.setAttribute("aria-expanded", "true");
+            document.body.style.overflow = "hidden";
+            railClose?.focus();
           };
           railFab.addEventListener("click", () =>
             railPanel.classList.contains("is-open") ? closeRail() : openRail(),
           );
-          railClose?.addEventListener("click", closeRail);
+          railClose?.addEventListener("click", () => {
+            closeRail();
+            railFab.focus();
+          });
           railBackdrop?.addEventListener("click", closeRail);
           railPanel.addEventListener("click", (event) => {
             if (event.target.closest(".toc-link")) closeRail();
@@ -412,9 +418,10 @@ const { postActionPayload } = Astro.props;
           document
             .querySelector("[data-rail-backdrop]")
             ?.setAttribute("hidden", "");
-          document
-            .querySelector("[data-rail-fab]")
-            ?.setAttribute("aria-expanded", "false");
+          document.body.style.overflow = "";
+          const fab = document.querySelector("[data-rail-fab]");
+          fab?.setAttribute("aria-expanded", "false");
+          fab?.focus();
         });
       }
 

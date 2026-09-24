@@ -67,7 +67,6 @@ const totalSeriesPosts = getSeriesPosts(allPosts).length;
 
     <main class="series-shell mx-auto w-full max-w-5xl flex-1 px-5 pb-24 pt-14 sm:px-6">
 
-      <!-- ─── Page Header ─── -->
       <header class="series-hero fade-up">
         <h1 class="series-title">Series</h1>
         <p class="series-subtitle">
@@ -116,7 +115,6 @@ const totalSeriesPosts = getSeriesPosts(allPosts).length;
         isolation: isolate;
       }
 
-      /* ─── Hero ─── */
       .series-hero {
         padding-bottom: 1.5rem;
         border-bottom: 1px solid rgba(86, 95, 137, 0.25);
@@ -163,14 +161,12 @@ const totalSeriesPosts = getSeriesPosts(allPosts).length;
 
       .series-link:hover { color: #bb9af7; }
 
-      /* ─── Grid ─── */
       .series-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
         gap: 1.5rem;
       }
 
-      /* ─── Empty ─── */
       .series-empty {
         margin-top: 3rem;
         padding: 2.5rem 2rem;
@@ -197,7 +193,6 @@ const totalSeriesPosts = getSeriesPosts(allPosts).length;
         max-width: 36ch;
       }
 
-      /* ─── Animations ─── */
       @keyframes fadeUp {
         from { opacity: 0; transform: translateY(12px); }
         to   { opacity: 1; transform: translateY(0); }

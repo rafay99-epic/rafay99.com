@@ -2,22 +2,17 @@ import { useEffect } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import { STYLES, TOAST_STYLES } from "./styles";
 
-// Inline icon markup (lucide copy/check) so buttons are plain DOM — no React
-// root per code block.
 const ICON_COPY =
 	'<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>';
 const ICON_CHECK =
 	'<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>';
 
-// Tailwind classes toggled while the "copied" state is showing.
 const COPIED_CLASSES = [
 	"bg-[#9ece6a]/20",
 	"border-[#9ece6a]/30",
 	"text-[#9ece6a]",
 ];
 
-// Marker classes used to find/remove what we inject (className strings from
-// STYLES contain spaces, so we add our own stable hooks).
 const BAR_CLASS = "code-copy-bar";
 const BTN_CLASS = "code-copy-btn";
 
@@ -28,7 +23,6 @@ function extractLanguage(codeElement: HTMLElement): string | undefined {
 	return match ? match[1] : undefined;
 }
 
-// Add the language badge + copy button to a single <pre>, once.
 function enhanceCodeBlock(preElement: HTMLElement): void {
 	if (preElement.hasAttribute("data-copy-enhanced")) return;
 
@@ -65,7 +59,6 @@ function enhanceCodeBlock(preElement: HTMLElement): void {
 	preElement.appendChild(bar);
 }
 
-// Show the "copied" confirmation on a button for 2s, then revert.
 function flashCopied(button: HTMLElement): void {
 	const existing = copyResetTimers.get(button);
 	if (existing) window.clearTimeout(existing);
@@ -81,7 +74,6 @@ function flashCopied(button: HTMLElement): void {
 	copyResetTimers.set(button, timer);
 }
 
-// One delegated handler for every copy button on the page.
 async function handleCopyClick(event: MouseEvent): Promise<void> {
 	const button = (event.target as HTMLElement | null)?.closest<HTMLElement>(
 		`.${BTN_CLASS}`,
@@ -110,7 +102,6 @@ const CodeCopySimple = function CodeCopySimple() {
 				.forEach(enhanceCodeBlock);
 		};
 
-		// Coalesce mutation bursts into one enhancement pass per frame.
 		let scheduled = false;
 		const schedule = () => {
 			if (scheduled) return;

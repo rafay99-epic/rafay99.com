@@ -28,9 +28,6 @@ export const useImageSlider = (imagesLength: number): UseImageSliderResult => {
 		setCurrent(index);
 	};
 
-	// Only request/exit fullscreen here; isFullScreen is driven by the
-	// fullscreenchange event below so it stays correct even when the user exits
-	// via Esc or the browser chrome.
 	const toggleFullScreen = () => {
 		if (document.fullscreenElement) {
 			document.exitFullscreen();

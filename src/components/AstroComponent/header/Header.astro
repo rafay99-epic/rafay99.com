@@ -27,7 +27,6 @@ const utility: NavItem[] = [
 ].filter((item): item is NavItem => Boolean(item));
 
 const path = Astro.url.pathname;
-// Tag pages count as "Writing".
 const isActive = (href: string) =>
 	path.startsWith(href) || (href === "/blog/" && path.startsWith("/tag/"));
 const external = { target: "_blank", rel: "noopener noreferrer" };
@@ -105,10 +104,7 @@ const external = { target: "_blank", rel: "noopener noreferrer" };
 </div>
 
 <script>
-  // Bound once; ClientRouter keeps this module alive across navigations,
-  // so everything is delegated or re-queried instead of re-bound.
   const root = document.documentElement;
-  // Element that opened the menu; focus returns here on close.
   let opener: HTMLElement | null = null;
 
   const menuEl = () => document.getElementById("site-menu");
@@ -136,7 +132,6 @@ const external = { target: "_blank", rel: "noopener noreferrer" };
     }
   }
 
-  // Keeps Tab / Shift+Tab cycling inside the open menu.
   function trapFocus(e: KeyboardEvent) {
     const menu = menuEl();
     if (!menu) return;
@@ -171,7 +166,6 @@ const external = { target: "_blank", rel: "noopener noreferrer" };
   });
   window.addEventListener("scroll", syncScrolled, { passive: true });
   document.addEventListener("astro:page-load", () => {
-    // New page: close without pulling focus back to a stale opener.
     setMenu(false, { restoreFocus: false });
     syncScrolled();
   });
@@ -282,6 +276,12 @@ const external = { target: "_blank", rel: "noopener noreferrer" };
     cursor: pointer;
   }
 
+  @media (pointer: coarse) {
+    .hdr__menu-btn {
+      min-height: 2.75rem;
+    }
+  }
+
   .hdr__link:focus-visible,
   .hdr__util-link:focus-visible,
   .hdr__name:focus-visible,
@@ -308,10 +308,8 @@ const external = { target: "_blank", rel: "noopener noreferrer" };
     }
   }
 
-  /* Full-screen menu (mobile / tablet) */
   .menu {
     position: fixed;
-    /* Scrolls when the links outgrow short viewports or high zoom. */
     overflow-y: auto;
     overscroll-behavior: contain;
     inset: 0;

@@ -1,13 +1,4 @@
-/**
- * Long-form MDX/Markdown (blog, project, legal).
- * Base palette: theme.css :root (--color-*).
- *
- * Reskin without editing every rule: in your CSS, set e.g.
- * `.content-prose { --prose-link: …; --prose-body: …; }` (all --prose-* are optional overrides).
- */
-
 .content-prose {
-	/* —— Prose tokens (swap these to refresh the whole document surface) —— */
 	--prose-body: var(--color-text-secondary);
 	--prose-heading: var(--color-text-primary);
 	--prose-bold: var(--color-text-primary);
@@ -41,7 +32,6 @@
 	--prose-mark-fg: var(--color-text-primary);
 	--prose-kbd-bg: var(--color-bg-secondary);
 	--prose-kbd-border: var(--color-border-secondary);
-	/* Legacy class-based highlighters (span.keyword, etc.) */
 	--prose-token-keyword: var(--color-primary);
 	--prose-token-string: var(--color-accent);
 	--prose-token-comment: var(--color-text-muted);
@@ -53,7 +43,6 @@
 	font-weight: 400;
 }
 
-/* -------- Headings -------- */
 .content-prose :where(h1, h2, h3, h4, h5, h6) {
 	font-family: var(--font-display);
 	font-weight: 600;
@@ -126,7 +115,6 @@
 	letter-spacing: 0.06em;
 }
 
-/* -------- Body copy & emphasis -------- */
 .content-prose :where(p) {
 	margin: 0 0 1.1em;
 	color: var(--prose-body);
@@ -137,7 +125,6 @@
 	font-weight: 600;
 }
 
-/* Links: clear but not heavy; stronger on hover */
 .content-prose :where(a) {
 	color: var(--prose-link);
 	text-decoration: underline;
@@ -162,7 +149,6 @@
 	border-radius: 2px;
 }
 
-/* -------- Lists (nested patterns from legacy global.css) -------- */
 .content-prose :where(ul, ol) {
 	margin: 1.05em 0;
 	padding-left: 1.35rem;
@@ -214,7 +200,6 @@
 	font-weight: 700;
 }
 
-/* GFM task lists */
 .content-prose li:has(> input[type="checkbox"]) {
 	list-style: none;
 	padding-left: 0.15em;
@@ -227,7 +212,6 @@
 	accent-color: var(--color-primary);
 }
 
-/* -------- Blockquote -------- */
 .content-prose :where(blockquote) {
 	margin: 1.25em 0;
 	padding: 0.85rem 1.1rem 0.85rem 1.15rem;
@@ -266,7 +250,6 @@
 	font-size: 0.96em;
 }
 
-/* -------- Horizontal rule -------- */
 .content-prose :where(hr) {
 	border: none;
 	border-top: 1px solid var(--prose-hr);
@@ -274,7 +257,6 @@
 	margin: 2em 0;
 }
 
-/* -------- Tables (full chrome + hover from legacy global) -------- */
 .content-prose :where(table) {
 	width: 100%;
 	margin: 2em 0;
@@ -341,7 +323,6 @@
 	background: color-mix(in srgb, var(--color-bg-secondary) 55%, transparent);
 }
 
-/* -------- Media & figures -------- */
 .content-prose :where(img, video) {
 	max-width: 100%;
 	height: auto;
@@ -371,7 +352,6 @@
 	box-shadow: var(--prose-pre-shadow);
 }
 
-/* -------- Inline code (not pre > code — higher specificity below) -------- */
 .content-prose :where(code) {
 	font-family: var(--font-mono);
 	font-size: 0.875em;
@@ -385,7 +365,6 @@
 	box-decoration-break: clone;
 }
 
-/* -------- Code blocks -------- */
 .content-prose :where(pre) {
 	position: relative;
 	margin: 1.75em 0;
@@ -399,9 +378,6 @@
 	tab-size: 2;
 }
 
-/* Blocks with a copy button get a header row: language on the left, copy on
-   the right, a hairline underneath. The hairline is a background layer so it
-   stays put while the code scrolls sideways. */
 .content-prose pre[data-copy-enhanced="true"] {
 	padding-top: 3.25rem;
 	background-image: linear-gradient(
@@ -432,8 +408,6 @@
 	content: none;
 }
 
-/* Touch devices get a 40px copy button, so the header row grows to fit.
-   Kept after the base rules above so it wins at equal specificity. */
 @media (max-width: 768px) {
 	.content-prose pre[data-copy-enhanced="true"] {
 		padding-top: 3.75rem;
@@ -465,7 +439,6 @@
 	background: var(--color-border-accent);
 }
 
-/* Block `code`: reset chip styling (works with global `pre > code { all: unset }`) */
 .content-prose pre > code {
 	all: unset;
 	display: block;
@@ -476,7 +449,6 @@
 	color: var(--prose-pre-fg);
 }
 
-/* Shiki / legacy spans inside pre (when classes are emitted) */
 .content-prose pre code :is(.keyword, .hljs-keyword) {
 	color: var(--prose-token-keyword);
 }
@@ -501,7 +473,6 @@
 	color: var(--color-text-secondary);
 }
 
-/* -------- Keyboard, sample, variable, mark, abbr -------- */
 .content-prose :where(kbd) {
 	font-family: var(--font-mono);
 	font-size: 0.85em;
@@ -537,7 +508,6 @@
 	cursor: help;
 }
 
-/* -------- Definition lists -------- */
 .content-prose :where(dl) {
 	margin: 1.1em 0;
 }
@@ -558,7 +528,6 @@
 	line-height: 1.65;
 }
 
-/* -------- Details / summary (GFM-style) -------- */
 .content-prose :where(details) {
 	margin: 1.1em 0;
 	padding: 0.65rem 1rem;

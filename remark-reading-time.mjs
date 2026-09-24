@@ -5,12 +5,10 @@ export function remarkReadingTime() {
 	let done = false;
 	return {
 		name: "reading-time",
-		// Sätteri calls this for every text node; climb to root once.
 		text(_node, ctx) {
 			if (done) return;
 			done = true;
 
-			// No root visitor exists, so climb to the document root.
 			let root = _node;
 			let parent = ctx.parent(root);
 			while (parent) {

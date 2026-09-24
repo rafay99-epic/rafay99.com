@@ -12,7 +12,6 @@ function SearchInput({
 		undefined,
 	);
 
-	// Delay blur so click events on result items fire before focus state clears
 	const handleBlur = () => {
 		clearTimeout(blurTimerRef.current);
 		blurTimerRef.current = setTimeout(() => setIsSearchFocused(false), 150);
@@ -39,6 +38,8 @@ function SearchInput({
 				placeholder="Type to search"
 				aria-label="Search articles"
 				autoComplete="off"
+				autoCapitalize="off"
+				enterKeyHint="search"
 				spellCheck={false}
 				className="search__input"
 			/>
@@ -55,7 +56,7 @@ function SearchInput({
 						clear
 					</button>
 				) : (
-					<span>
+					<span className="search__hint">
 						<kbd>/</kbd> to focus
 					</span>
 				)}

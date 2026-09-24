@@ -105,7 +105,6 @@ const formatDate = (date: Date) =>
 
     <main class="single-series mx-auto w-full max-w-3xl flex-1 px-5 pb-24 pt-14 sm:px-6">
 
-      <!-- ─── Header ─── -->
       <header class="ss-header fade-up">
         <a href="/blog/series" class="ss-back">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -127,7 +126,6 @@ const formatDate = (date: Date) =>
           <p class="ss-desc">{meta.description}</p>
         )}
 
-        <!-- Progress -->
         <div class="ss-progress">
           <div class="ss-progress-track">
             <div class="ss-progress-fill" style={`width: ${progressPercent}%`} />
@@ -146,7 +144,6 @@ const formatDate = (date: Date) =>
         )}
       </header>
 
-      <!-- ─── Parts List ─── -->
       <section class="ss-parts">
         {posts.map((post, index) => (
           <a
@@ -194,7 +191,6 @@ const formatDate = (date: Date) =>
           </a>
         ))}
 
-        {/* Placeholder rows for upcoming parts */}
         {totalParts > posts.length &&
           Array.from({ length: totalParts - posts.length }, (_, i) => (
             <div class="ss-part ss-part--upcoming fade-up">
@@ -217,7 +213,6 @@ const formatDate = (date: Date) =>
         isolation: isolate;
       }
 
-      /* ─── Header ─── */
       .ss-header {
         padding-bottom: 1.5rem;
         border-bottom: 1px solid rgba(86, 95, 137, 0.25);
@@ -266,7 +261,6 @@ const formatDate = (date: Date) =>
         line-height: 1.5;
       }
 
-      /* Progress */
       .ss-progress {
         display: flex;
         align-items: center;
@@ -312,7 +306,6 @@ const formatDate = (date: Date) =>
 
       .ss-tag:hover { color: #bb9af7; }
 
-      /* ─── Parts List ─── */
       .ss-parts {
         display: flex;
         flex-direction: column;
@@ -336,7 +329,6 @@ const formatDate = (date: Date) =>
         opacity: 0.4;
       }
 
-      /* Number column */
       .ss-part-num-col {
         display: flex;
         flex-direction: column;
@@ -372,7 +364,6 @@ const formatDate = (date: Date) =>
         margin-top: 0.25rem;
       }
 
-      /* Thumbnail */
       .ss-part-thumb {
         width: 72px;
         height: 72px;
@@ -399,7 +390,6 @@ const formatDate = (date: Date) =>
         background: linear-gradient(135deg, rgba(36, 40, 59, 0.9), rgba(122, 162, 247, 0.2));
       }
 
-      /* Body */
       .ss-part-body {
         display: flex;
         flex-direction: column;
@@ -451,7 +441,6 @@ const formatDate = (date: Date) =>
         color: #565f89;
       }
 
-      /* ─── Animations ─── */
       @keyframes fadeUp {
         from { opacity: 0; transform: translateY(12px); }
         to   { opacity: 1; transform: translateY(0); }
@@ -463,7 +452,6 @@ const formatDate = (date: Date) =>
       .delay-3 { animation-delay: 0.24s; }
       .delay-4 { animation-delay: 0.32s; }
 
-      /* ─── Responsive ─── */
       @media (max-width: 640px) {
         .ss-part {
           grid-template-columns: 2rem 56px 1fr;

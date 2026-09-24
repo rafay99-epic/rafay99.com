@@ -17,6 +17,5 @@ export const generateShareUrls = (url: string): ShareUrls => {
 		linkedin: `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(url)}`,
 	};
 
-	// Validate the generated URLs
 	return ShareUrlsSchema.parse(shareUrls);
 };

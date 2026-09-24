@@ -13,9 +13,6 @@ if (!featureFlags.showSearch) {
 	return Astro.redirect("/access-denied");
 }
 
-// Project only the fields search/display need before serializing to the client.
-// Full article body, rendered HTML, hero images, and other metadata are neither
-// searched nor shown, so shipping them as inline JSON wastes bandwidth.
 const posts = featureFlags.showBlog
 	? (await getCollection("blog"))
 			.filter(

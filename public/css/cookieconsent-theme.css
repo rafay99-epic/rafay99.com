@@ -1,4 +1,3 @@
-/* Cookie consent – Tokyo Night theme (matches app color scheme) */
 #cc-main {
 	--cc-font-family:
 		"Geist Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
@@ -6,12 +5,10 @@
 	--cc-modal-border-radius: 18px;
 	--cc-btn-border-radius: 999px;
 
-	/* Background & surfaces */
 	--cc-bg: #1a1b26;
 	--cc-primary-color: #c0caf5;
 	--cc-secondary-color: #a9b1d6;
 
-	/* Primary buttons (Accept all, Save preferences) */
 	--cc-btn-primary-bg: #7aa2f7;
 	--cc-btn-primary-color: #1a1b26;
 	--cc-btn-primary-border-color: rgba(122, 162, 247, 0.4);
@@ -19,7 +16,6 @@
 	--cc-btn-primary-hover-color: #1a1b26;
 	--cc-btn-primary-hover-border-color: rgba(122, 162, 247, 0.6);
 
-	/* Secondary buttons (Reject non-essential, Close) */
 	--cc-btn-secondary-bg: rgba(36, 40, 59, 0.6);
 	--cc-btn-secondary-color: #c0caf5;
 	--cc-btn-secondary-border-color: rgba(86, 95, 137, 0.4);
@@ -27,13 +23,10 @@
 	--cc-btn-secondary-hover-color: #7aa2f7;
 	--cc-btn-secondary-hover-border-color: rgba(122, 162, 247, 0.6);
 
-	/* Links */
 	--cc-link-color: #7aa2f7;
 
-	/* Separators & borders */
 	--cc-separator-border-color: rgba(86, 95, 137, 0.35);
 
-	/* Toggles */
 	--cc-toggle-on-bg: #7aa2f7;
 	--cc-toggle-off-bg: #565f89;
 	--cc-toggle-on-knob-bg: #1a1b26;
@@ -44,7 +37,6 @@
 	--cc-toggle-readonly-knob-bg: #565f89;
 	--cc-toggle-readonly-knob-icon-color: #1a1b26;
 
-	/* Category blocks (preferences modal) */
 	--cc-section-category-border: rgba(86, 95, 137, 0.35);
 	--cc-cookie-category-block-bg: rgba(36, 40, 59, 0.4);
 	--cc-cookie-category-block-border: rgba(86, 95, 137, 0.25);
@@ -53,27 +45,22 @@
 	--cc-cookie-category-expanded-block-bg: transparent;
 	--cc-cookie-category-expanded-block-hover-bg: rgba(86, 95, 137, 0.2);
 
-	/* Overlay */
 	--cc-overlay-bg: rgba(10, 12, 20, 0.65);
 
-	/* Footer (consent modal links) */
 	--cc-footer-bg: rgba(36, 40, 59, 0.5);
 	--cc-footer-color: #565f89;
 	--cc-footer-border-color: rgba(86, 95, 137, 0.35);
 
-	/* Scrollbar */
 	--cc-webkit-scrollbar-bg: rgba(86, 95, 137, 0.35);
 	--cc-webkit-scrollbar-hover-bg: #7aa2f7;
 }
 
-/* Slight shadow to match app cards */
 #cc-main .cm,
 #cc-main .pm {
 	box-shadow: 0 14px 40px rgba(10, 12, 20, 0.45);
 	border: 1px solid rgba(86, 95, 137, 0.25);
 }
 
-/* Spacing: preferences modal */
 #cc-main .pm__body,
 #cc-main .pm__footer,
 #cc-main .pm__header {
@@ -127,7 +114,6 @@
 	margin-left: 0.65rem;
 }
 
-/* Spacing: consent modal (first-time box) */
 #cc-main .cm__desc,
 #cc-main .cm__title {
 	padding: 0 1.4rem;

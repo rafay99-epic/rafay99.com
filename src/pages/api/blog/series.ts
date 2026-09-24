@@ -22,7 +22,6 @@ export async function GET() {
 		const allPosts = await getCollection("blog");
 		const metas = getAllSeriesMeta(allPosts);
 
-		// Validate each series meta with Zod
 		const validatedMetas = metas.map((meta) => {
 			try {
 				return SeriesMetaSchema.parse(meta);
@@ -32,7 +31,6 @@ export async function GET() {
 			}
 		});
 
-		// Build detailed response with post summaries per series
 		const seriesPosts = getSeriesPosts(allPosts);
 		const grouped = groupBySeries(seriesPosts);
 

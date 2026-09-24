@@ -1,46 +1,35 @@
-/* Global Theme CSS - Centralized Color Management */
-/* This file applies the color system from src/config/theme/colors.ts */
-
-/* Tokyo Night Theme Variables */
 :root {
-	/* Primary Colors */
 	--color-primary: #7aa2f7;
 	--color-secondary: #bb9af7;
 	--color-accent: #9ece6a;
 
-	/* Background Colors */
 	--color-bg-primary: #1a1b26;
 	--color-bg-secondary: #24283b;
 	--color-bg-tertiary: #2d3142;
 	--color-bg-card: #24283b40;
 	--color-bg-overlay: #24283b60;
 
-	/* Text Colors */
 	--color-text-primary: #c0caf5;
 	--color-text-secondary: #a9b1d6;
 	--color-text-muted: #565f89;
 	--color-text-accent: #7aa2f7;
 	--color-text-inverse: #1a1b26;
 
-	/* Border Colors */
 	--color-border-primary: #565f89;
 	--color-border-secondary: #565f8930;
 	--color-border-accent: #7aa2f7;
 	--color-border-hover: #7aa2f760;
 
-	/* Status Colors */
 	--color-success: #9ece6a;
 	--color-warning: #e0af68;
 	--color-error: #f7768e;
 	--color-info: #7aa2f7;
 
-	/* Interactive Colors */
 	--color-hover: #7aa2f720;
 	--color-focus: #7aa2f740;
 	--color-active: #7aa2f760;
 	--color-disabled: #565f8940;
 
-	/* Gradients */
 	--gradient-primary: linear-gradient(135deg, #7aa2f7, #bb9af7);
 	--gradient-secondary: linear-gradient(135deg, #bb9af7, #9ece6a);
 	--gradient-accent: linear-gradient(90deg, #7aa2f7, #bb9af7, #9ece6a);
@@ -53,7 +42,6 @@
 		#7aa2f7
 	);
 
-	/* Editorial tokens (redesign) */
 	--color-line: #3b4261;
 	--color-text-soft: #7b83ac;
 	--color-cyan: #7dcfff;
@@ -67,7 +55,6 @@
 	--dur-2: 320ms;
 	--dur-3: 700ms;
 
-	/* Social Colors */
 	--color-twitter: #1da1f2;
 	--color-facebook: #1877f2;
 	--color-linkedin: #0a66c2;
@@ -77,7 +64,6 @@
 	--color-upwork: #6fda44;
 }
 
-/* Global Base Styles */
 html {
 	background-color: var(--color-bg-primary);
 	color: var(--color-text-primary);
@@ -91,7 +77,6 @@ body {
 		color 0.3s ease;
 }
 
-/* Universal Color Classes */
 .bg-theme-primary {
 	background-color: var(--color-bg-primary);
 }
@@ -148,7 +133,6 @@ body {
 	border-color: var(--color-border-hover);
 }
 
-/* Status Color Classes */
 .text-success {
 	color: var(--color-success);
 }
@@ -181,7 +165,6 @@ body {
 	background-color: var(--color-info);
 }
 
-/* Gradient Classes */
 .bg-gradient-primary {
 	background: var(--gradient-primary);
 }
@@ -226,7 +209,6 @@ body {
 	background-clip: text;
 }
 
-/* Interactive State Classes */
 .hover-theme:hover {
 	background-color: var(--color-hover);
 }
@@ -246,7 +228,6 @@ body {
 	cursor: not-allowed;
 }
 
-/* Social Platform Classes */
 .text-twitter {
 	color: var(--color-twitter);
 }
@@ -275,10 +256,6 @@ body {
 	color: var(--color-upwork);
 }
 
-/* Component-Specific Global Styles */
-/* These replace hardcoded colors throughout the application */
-
-/* Card Components */
 .card-glassmorphism {
 	background: var(--color-bg-card);
 	backdrop-filter: blur(20px);
@@ -286,7 +263,6 @@ body {
 	border-radius: 16px;
 }
 
-/* Button Components */
 .btn-primary {
 	background: var(--gradient-primary);
 	color: white;
@@ -311,7 +287,6 @@ body {
 	border-color: var(--color-border-hover);
 }
 
-/* Link Components */
 .link-theme {
 	color: var(--color-text-accent);
 	text-decoration: underline;
@@ -324,7 +299,6 @@ body {
 	text-decoration-color: var(--color-border-hover);
 }
 
-/* Form Components */
 .input-theme {
 	background: var(--color-bg-secondary);
 	border: 1px solid var(--color-border-primary);
@@ -340,7 +314,6 @@ body {
 	box-shadow: 0 0 0 3px var(--color-focus);
 }
 
-/* Progress Bars */
 .progress-bar {
 	background: var(--color-bg-secondary);
 	border-radius: 4px;
@@ -353,7 +326,6 @@ body {
 	transition: width 0.3s ease;
 }
 
-/* Tag Components */
 .tag-theme {
 	background: var(--color-bg-card);
 	border: 1px solid var(--color-border-secondary);
@@ -370,7 +342,6 @@ body {
 	color: var(--color-text-primary);
 }
 
-/* Code Blocks */
 .code-theme {
 	background: var(--color-bg-secondary);
 	border: 1px solid var(--color-border-primary);
@@ -389,7 +360,6 @@ body {
 	overflow-x: auto;
 }
 
-/* Scroll Bars */
 .scrollbar-theme::-webkit-scrollbar {
 	width: 8px;
 	height: 8px;
@@ -408,12 +378,6 @@ body {
 
 .scrollbar-theme::-webkit-scrollbar-thumb:hover {
 	background: var(--color-border-accent);
-}
-
-/* Responsive Design Helpers */
-@media (prefers-color-scheme: light) {
-	/* Future: Light theme support */
-	/* Can be implemented by switching CSS variables */
 }
 
 @media (prefers-reduced-motion: reduce) {

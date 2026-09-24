@@ -807,7 +807,6 @@ const CodeCompareUI = function CodeCompareUI({
 
 	const content = (
 		<>
-			{/* Toolbar */}
 			<div
 				style={{
 					display: "flex",
@@ -869,7 +868,6 @@ const CodeCompareUI = function CodeCompareUI({
 				</div>
 			</div>
 
-			{/* Content */}
 			<div
 				style={{
 					flex: isFullScreen ? 1 : undefined,

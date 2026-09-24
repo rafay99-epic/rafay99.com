@@ -4,7 +4,6 @@ declare module "*.json" {
 	export const featureFlags: unknown;
 }
 
-// Mailchimp form integration types
 interface Window {
 	fnames?: string[];
 	ftypes?: string[];

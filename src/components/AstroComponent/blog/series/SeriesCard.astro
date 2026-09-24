@@ -1,11 +1,4 @@
 ---
-/**
- * SeriesCard — visual card used on the /blog/series listing page.
- *
- * Shows the series name, number of parts, latest date, hero image,
- * and tags.
- */
-
 import { Image } from "astro:assets";
 import type { SeriesMeta } from "types/series";
 
@@ -100,7 +93,6 @@ const formattedDate = meta.latestDate.toLocaleDateString("en-US", {
 		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 	}
 
-	/* ─── Image ─── */
 	.series-card-image {
 		position: relative;
 		aspect-ratio: 16 / 9;
@@ -114,6 +106,10 @@ const formattedDate = meta.latestDate.toLocaleDateString("en-US", {
 		);
 		background-size: 200% 100%;
 		animation: shimmer 1.8s ease-in-out infinite;
+	}
+
+	.series-card-image:has(.series-card-img.loaded, .series-card-fallback) {
+		animation: none;
 	}
 
 	@keyframes shimmer {
@@ -166,7 +162,6 @@ const formattedDate = meta.latestDate.toLocaleDateString("en-US", {
 		border: 1px solid rgba(187, 154, 247, 0.25);
 	}
 
-	/* ─── Body ─── */
 	.series-card-body {
 		display: flex;
 		flex-direction: column;
@@ -229,7 +224,6 @@ const formattedDate = meta.latestDate.toLocaleDateString("en-US", {
 		opacity: 0.7;
 	}
 
-	/* ─── Animations ─── */
 	@keyframes fadeUp {
 		from {
 			opacity: 0;

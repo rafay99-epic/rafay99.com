@@ -1,6 +1,7 @@
 ---
 import { featureFlags } from "@config/featureFlag/featureFlag.json";
 import authorConfig from "@config/siteConfig/info.json";
+import SpeedInsights from "@vercel/speed-insights/astro";
 import packageJson from "../../../../package.json";
 
 interface Props {
@@ -86,6 +87,8 @@ const more: Link[] = [
     </div>
   </div>
 </footer>
+
+<SpeedInsights />
 
 <style>
   .ftr {
@@ -204,6 +207,16 @@ const more: Link[] = [
 
     .ftr__id {
       grid-column: 1 / -1;
+    }
+  }
+
+  @media (pointer: coarse) {
+    .ftr__grid nav {
+      gap: 0;
+    }
+
+    .ftr__grid a {
+      padding-block: 0.6rem;
     }
   }
 </style>
