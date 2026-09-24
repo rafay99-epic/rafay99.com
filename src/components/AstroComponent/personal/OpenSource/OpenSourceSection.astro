@@ -3,7 +3,7 @@ import { accentAt } from "@astro/editorial/format";
 import PageHead from "@astro/editorial/PageHead.astro";
 import authorConfig from "@config/siteConfig/info.json";
 
-type Contribution = {
+type Entry = {
 	project: string;
 	context: string;
 	status: string;
@@ -12,7 +12,57 @@ type Contribution = {
 	links: { label: string; href: string }[];
 };
 
-const contributions: Contribution[] = [
+const tools: Entry[] = [
+	{
+		project: "cvx",
+		context: "Multi-account switcher for Convex · used daily by my team",
+		status: "Maintained",
+		body: [
+			"The Convex CLI remembers one logged-in account, stored in a single global file. With personal, work and client accounts, every project switch meant `convex logout` and `convex login`, and two accounts could never run side by side.",
+			"`cvx` keeps a vault of account tokens and a map of folders to accounts. A shell hook activates the right account when you `cd` in, scoped to that shell session, so six projects on six accounts can run `convex dev` at once. No deploy keys, no tokens in repos. Ships as a compiled Bun binary for macOS, Linux and Windows.",
+		],
+		tags: ["TypeScript", "Bun", "zsh / bash / PowerShell"],
+		links: [
+			{ label: "GitHub", href: "https://github.com/rafay99-epic/cvx" },
+			{ label: "npm", href: "https://www.npmjs.com/package/@rafay99/cvx" },
+		],
+	},
+	{
+		project: "fvx",
+		context: "Per-project Flutter SDK switching · used daily by my team",
+		status: "Maintained",
+		body: [
+			"Run `flutter` in any folder and get the SDK version that folder pins, from `.fvmrc`, `.tool-versions` or a `pubspec.yaml` range. Two terminals in two projects run two Flutter versions at the same time.",
+			"There is no cd hook. `fvx setup` puts `flutter` and `dart` shims first on PATH, and each call resolves the version in about 10 ms. That makes it work where shell hooks never run: scripts, Makefiles, CI and coding agents in non-interactive shells. It reads the same `.fvmrc` FVM writes, so teammates on FVM get the same pin.",
+		],
+		tags: ["TypeScript", "Bun", "Flutter"],
+		links: [
+			{ label: "fvx.rafay99.com", href: "https://fvx.rafay99.com" },
+			{ label: "GitHub", href: "https://github.com/rafay99-epic/fvx" },
+			{ label: "npm", href: "https://www.npmjs.com/package/@rafay99/fvx" },
+		],
+	},
+	{
+		project: "Coppice",
+		context: "macOS menu bar app for coding agent worktrees",
+		status: "Maintained",
+		body: [
+			"Coding agents create a git worktree for every task and never clean up. After a few weeks one laptop holds dozens of forgotten copies of the same repo, each with its own `node_modules`, and some still hold uncommitted edits, a local `.env` or a running agent.",
+			"Coppice finds worktrees from Claude Code, Codex, Cursor, T3 Code and others, and marks each one ready, has work, or in use. It sweeps rebuildable output, moves finished worktrees to the Trash, and refuses to touch one an agent or dev server is still running in. Every check runs again at the moment you click. Native Swift and SwiftUI, no third-party dependencies.",
+		],
+		tags: ["Swift", "SwiftUI", "git"],
+		links: [
+			{ label: "coppice.rafay99.com", href: "https://coppice.rafay99.com" },
+			{ label: "GitHub", href: "https://github.com/rafay99-epic/Coppice" },
+			{
+				label: "Download",
+				href: "https://github.com/rafay99-epic/Coppice/releases/latest",
+			},
+		],
+	},
+];
+
+const contributions: Entry[] = [
 	{
 		project: "Mole",
 		context: "macOS deep-clean utility by tw93 · 51k+ stars",
@@ -51,16 +101,22 @@ const contributions: Contribution[] = [
 	},
 ];
 
+const groups = [
+	{ title: "Tools I maintain", entries: tools },
+	{ title: "Contributions", entries: contributions },
+];
+
 const mergedPrs = contributions.reduce((n, c) => n + c.links.length, 0);
 const segments = (text: string) => text.split("`");
 ---
 
 <PageHead
-  lines={["I fix the tools", "I use."]}
+  lines={["I build and fix", "the tools I use."]}
   accent={1}
-  lede="I contribute to projects I rely on. The feedback-and-ship loop with maintainers, at small scale, is the real work of building software with other people."
+  lede="Some tools I built because nothing did the job, and my team now runs them every day. The rest are fixes to projects I rely on, shipped through the feedback loop with their maintainers."
 >
   <div slot="aside" class="ed-stats">
+    <span class="ed-stat"><b>{tools.length}</b>tools</span>
     <span class="ed-stat"><b>{mergedPrs}</b>merged PRs</span>
     <span class="ed-stat"><b>{contributions.length}</b>projects</span>
   </div>
@@ -68,34 +124,42 @@ const segments = (text: string) => text.split("`");
 
 <div class="ed-wrap oss">
   {
-    contributions.map((c, i) => (
-      <article class="oss__item" style={`--c:${accentAt(i)}`} data-rev>
-        <div class="oss__side">
-          <span class="ed-mono">{String(i + 1).padStart(2, "0")}</span>
-          <p class="ed-mono oss__status">{c.status}</p>
+    groups.map((g) => (
+      <section class="oss__group">
+        <div class="ed-section__head">
+          <h2 class="ed-h2">{g.title}</h2>
+          <span class="ed-mono">{g.entries.length}</span>
         </div>
-        <div>
-          <h2 class="oss__name">{c.project}</h2>
-          <p class="ed-mono oss__context">{c.context}</p>
-          {c.body.map((p) => (
-            <p class="oss__p">
-              {segments(p).map((part, j) => (j % 2 ? <code>{part}</code> : part))}
-            </p>
-          ))}
-          <div class="oss__foot">
-            <p class="ed-mono">{c.tags.join(" · ")}</p>
-            {c.links.length > 0 && (
-              <p class="ed-mono oss__links">
-                {c.links.map((l) => (
-                  <a class="ed-link" href={l.href} target="_blank" rel="noopener noreferrer">
-                    {l.label} ↗
-                  </a>
-                ))}
-              </p>
-            )}
-          </div>
-        </div>
-      </article>
+        {g.entries.map((c, i) => (
+          <article class="oss__item" style={`--c:${accentAt(i)}`} data-rev>
+            <div class="oss__side">
+              <span class="ed-mono">{String(i + 1).padStart(2, "0")}</span>
+              <p class="ed-mono oss__status">{c.status}</p>
+            </div>
+            <div>
+              <h3 class="oss__name">{c.project}</h3>
+              <p class="ed-mono oss__context">{c.context}</p>
+              {c.body.map((p) => (
+                <p class="oss__p">
+                  {segments(p).map((part, j) => (j % 2 ? <code>{part}</code> : part))}
+                </p>
+              ))}
+              <div class="oss__foot">
+                <p class="ed-mono">{c.tags.join(" · ")}</p>
+                {c.links.length > 0 && (
+                  <p class="ed-mono oss__links">
+                    {c.links.map((l) => (
+                      <a class="ed-link" href={l.href} target="_blank" rel="noopener noreferrer">
+                        {l.label} ↗
+                      </a>
+                    ))}
+                  </p>
+                )}
+              </div>
+            </div>
+          </article>
+        ))}
+      </section>
     ))
   }
 
@@ -123,7 +187,11 @@ const segments = (text: string) => text.split("`");
     border-top: 1px solid var(--color-line);
   }
 
-  .oss__item:first-child {
+  .oss__group + .oss__group {
+    margin-top: clamp(3rem, 6vw, 5rem);
+  }
+
+  .ed-section__head + .oss__item {
     border-top: 0;
   }
 
