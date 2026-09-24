@@ -1,0 +1,20 @@
+src/components/AstroComponent/footer/Footer.astro
+  s_cdb639886d6bf2::t_18502a9f11651d 4,91
+  s_cdb639886d6bf2::t_7c7991ee7c0d55 92
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "140004905dddc97ad830cc039e8b62088143c571",
+  "prompts": {},
+  "sessions": {
+    "s_cdb639886d6bf2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2f756af8-b8f1-4f6c-9267-614d7e5ab35a",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Abdul Rafay <99marafay@gmail.com>"
+    }
+  }
+}
