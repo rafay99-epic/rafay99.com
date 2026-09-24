@@ -1,0 +1,21 @@
+src/styles/content-prose.css
+  s_c5b1332c7c5807::t_d3ebb8b39391db 437-441
+  s_c5b1332c7c5807::t_7b98027a74a1ac 435-436,442-446
+  s_c5b1332c7c5807::t_61becba87043d4 447
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "7447bb1dcd0d0e11d77323e1bbd992304063160a",
+  "prompts": {},
+  "sessions": {
+    "s_c5b1332c7c5807": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2b17688d-e3f5-4f75-aebb-971f5836abaa",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Abdul Rafay <99marafay@gmail.com>"
+    }
+  }
+}
