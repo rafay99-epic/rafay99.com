@@ -1,0 +1,31 @@
+src/components/blog/CreditBurn.tsx
+  s_cdb639886d6bf2::t_026304bf71062e 20
+src/components/blog/SessionCalendar.tsx
+  s_cdb639886d6bf2::t_026304bf71062e 38-39
+src/components/blog/CapGauge.tsx
+  s_cdb639886d6bf2::t_026304bf71062e 38
+src/types/image_slider.ts
+  s_cdb639886d6bf2::t_026304bf71062e 40,48,60-69
+scripts/publish_posts.py
+  s_cdb639886d6bf2::t_8b7e47d7f6bf38 77-84
+src/hooks/useSearch.ts
+  s_cdb639886d6bf2::t_5ac6014344eb5a 135
+src/components/blog/RequestPath.tsx
+  s_cdb639886d6bf2::t_026304bf71062e 17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "b0046af2c28e9a86bc09610ba37bc66e0d81b713",
+  "prompts": {},
+  "sessions": {
+    "s_cdb639886d6bf2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2f756af8-b8f1-4f6c-9267-614d7e5ab35a",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Abdul Rafay <99marafay@gmail.com>"
+    }
+  }
+}
