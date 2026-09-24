@@ -1,6 +1,7 @@
 ---
 import { featureFlags } from "@config/featureFlag/featureFlag.json";
 import authorConfig from "@config/siteConfig/info.json";
+import SpeedInsights from "@vercel/speed-insights/astro";
 import packageJson from "../../../../package.json";
 
 interface Props {
@@ -86,6 +87,8 @@ const more: Link[] = [
     </div>
   </div>
 </footer>
+
+<SpeedInsights />
 
 <style>
   .ftr {

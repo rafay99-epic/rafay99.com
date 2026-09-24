@@ -219,9 +219,6 @@ export default defineConfig({
 		webAnalytics: {
 			enabled: true,
 		},
-		speedInsights: {
-			enabled: true,
-		},
 		maxDuration: 3,
 		imageService: false,
 		isr: true,
