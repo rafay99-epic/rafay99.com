@@ -413,18 +413,6 @@
 	background-size: 100% 1px;
 }
 
-/* Touch devices get a 40px copy button, so the header row grows to fit. */
-@media (max-width: 768px) {
-	.content-prose pre[data-copy-enhanced="true"] {
-		padding-top: 3.75rem;
-		background-position: 0 3rem;
-	}
-
-	.content-prose pre[data-language]::before {
-		height: 3rem;
-	}
-}
-
 .content-prose pre[data-language]::before {
 	content: attr(data-language);
 	position: absolute;
@@ -442,6 +430,19 @@
 .content-prose pre[data-language="plaintext"]::before,
 .content-prose pre:not([data-copy-enhanced="true"])::before {
 	content: none;
+}
+
+/* Touch devices get a 40px copy button, so the header row grows to fit.
+   Kept after the base rules above so it wins at equal specificity. */
+@media (max-width: 768px) {
+	.content-prose pre[data-copy-enhanced="true"] {
+		padding-top: 3.75rem;
+		background-position: 0 3rem;
+	}
+
+	.content-prose pre[data-language]::before {
+		height: 3rem;
+	}
 }
 
 .content-prose pre::-webkit-scrollbar {
