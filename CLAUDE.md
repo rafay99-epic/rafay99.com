@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Astro 5 portfolio and blog site (rafay99.com) with React 19 islands, Tailwind CSS styling, and Vercel deployment with ISR.
+Astro 7 portfolio and blog site (rafay99.com) with React 19 islands, Tailwind CSS styling, and Vercel deployment with ISR.
 
 **Important workflow guidelines for assistants:**
 
@@ -71,7 +71,8 @@ bun run check            # Astro diagnostics (template/component checks)
 - **Markdown**: Shiki syntax highlighting with Tokyo Night theme. Mermaid blocks excluded from syntax highlighting (rendered client-side). Reading time calculated via remark plugin (`remark-reading-time.mjs`).
 - **Tailwind theme**: Custom color system defined in `src/config/theme/colors.ts` (Tokyo Night inspired). Custom `mobile` breakpoint at max 767px.
 - **Typography**: Geist (body), Geist Mono (labels, metadata), Bricolage Grotesque (display headings) and Instrument Serif italic (accents), self-hosted via fontsource. Tokens live in `src/styles/theme.css` (`--font-sans`, `--font-mono`, `--font-display`, `--font-serif`); shared editorial styles in `src/styles/editorial.css`.
-- **Build optimization**: Default esbuild minification (no `console.*`/`debugger` stripping — `console.error` is intentionally kept so server API routes log to Vercel). Manual chunk splitting in `astro.config.mjs` for `vendor-d3`, `vendor-parser`, `vendor-graph`, `vendor-mermaid`, `vendor-katex`, `vendor-framer`, `vendor-lucide`, and `react-vendor`.
-- **React Compiler**: Enabled via babel plugin (`babel-plugin-react-compiler`).
+- **Build optimization**: Default esbuild minification (no `console.*`/`debugger` stripping — `console.error` is intentionally kept so server API routes log to Vercel). Manual chunk splitting in `astro.config.mjs` for `vendor-d3`, `vendor-parser`, `vendor-graph`, `vendor-mermaid`, `vendor-katex`, `vendor-framer`, and `react-vendor`.
+- **React Compiler**: Built into `@astrojs/react` 7 via Oxc (`react({ compiler: true })`, needs `oxc-transform-react`). The old `babel` option no longer exists.
+- **Tailwind 4**: Loaded through `@tailwindcss/vite` and `src/styles/tailwind.css`, which pulls in `tailwind.config.mjs` via `@config`. Utilities live in a cascade layer, so element-level CSS must stay inside `@layer base` (see `global.css`) or it will override utilities.
 - **Formatting**: Biome with tailwind plugin (class sorting). The codebase uses semicolons.
 - **Content drafts**: Both `draft` and `archived` boolean fields control content visibility. Filter these when querying collections.
