@@ -1,0 +1,139 @@
+src/pages/index.astro
+  s_c5b1332c7c5807::t_6b6885189c5b51 2,4-8,11-12,15-16,18-22,29-30,33,35-51,53,55-69,71-87,89-117,119-123,125-128,130-132,134-138,140-155
+  s_c5b1332c7c5807::t_971a0baa51b037 3
+astro.config.mjs
+  s_c5b1332c7c5807::t_be62d01f6aa049 136
+src/components/AstroComponent/editorial/EdFloat.astro
+  s_c5b1332c7c5807::t_abf9e79a8a57fd 1-18
+src/components/AstroComponent/personal/Experience/ExperienceSection.astro
+  s_c5b1332c7c5807::t_44940d3e99157d 22-26,28-29,46-47,50,52
+  s_c5b1332c7c5807::t_3cd0e69d8fb047 97-101,116-118
+  s_c5b1332c7c5807::t_bed5034ae9c813 2,4-6,20-21,27,30-31,33-45,48-49,51,53-68,70-73,75-76,78-82,84-90,92-93,96,102-103,105-110,114-115,119-120,122-124,126-129,131-138,140-143,145-151,153-156,158-163,165-167,169-172,174-178
+  s_c5b1332c7c5807::t_6d6be38af4001a 77,91,94-95
+  s_c5b1332c7c5807::t_971a0baa51b037 3,7-19
+src/components/AstroComponent/base/BaseHead.astro
+  s_c5b1332c7c5807::t_5049e29be0a007 5
+src/pages/search.astro
+  s_c5b1332c7c5807::t_5ad68480b91ef7 50,54,56,59
+  s_c5b1332c7c5807::t_00f744abbe8354 57
+src/pages/blog/index.astro
+  s_c5b1332c7c5807::t_c562fab5a796c0 2,7-8,12
+src/styles/content-prose.css
+  s_c5b1332c7c5807::t_be62d01f6aa049 67
+src/components/AstroComponent/editorial/PostIndex.astro
+  s_c5b1332c7c5807::t_6b4b9d9d4ac704 4
+  s_c5b1332c7c5807::t_abf9e79a8a57fd 1-3,5-75
+src/components/AstroComponent/header/Header.astro
+  s_c5b1332c7c5807::t_7471ae50ec234e 30
+  s_c5b1332c7c5807::t_4de9bb4478251a 8-11,16,25-26,32
+  s_c5b1332c7c5807::t_59aced20e86991 4-7,17-24,27-29,31,33,36-123,126-129,132-153,155-156,159-163,166-174,177-184,187-190,193-199,202-212,215-219,222-225,227-233,235-239,241-251,253-260,262-266,268-272,274-277,279-293,295-299,301-306,308-310,312-317,319-359
+  s_c5b1332c7c5807::t_56b6e2bc8d79c2 12-15
+src/components/AstroComponent/editorial/BlogPage.astro
+  s_c5b1332c7c5807::t_971a0baa51b037 4,6,31-34
+  s_c5b1332c7c5807::t_53c78e3735a6dd 20-23
+  s_c5b1332c7c5807::t_2da3830296fa37 1-3,5,7-12,18-19,24-30,35-239
+  s_c5b1332c7c5807::t_c562fab5a796c0 13-17
+src/pages/tag/[tag]/index.astro
+  s_c5b1332c7c5807::t_81a1f686e42915 97,105
+src/components/AstroComponent/editorial/Pager.astro
+  s_c5b1332c7c5807::t_abf9e79a8a57fd 1-43
+src/config/siteConfig/info.json
+  s_c5b1332c7c5807::t_4d6832f5dd056b 83
+  s_c5b1332c7c5807::t_fcaff179d6bdfb 67,69-70,73,85-105
+src/styles/theme.css
+  s_c5b1332c7c5807::t_be62d01f6aa049 56-69
+src/components/AstroComponent/editorial/TopicList.astro
+  s_c5b1332c7c5807::t_6d6be38af4001a 2-5,14-16,21,35-54,97,99-116
+  s_c5b1332c7c5807::t_376044a2b2c21d 1,6-13,17-20,22-34,55-96,98,117-118
+src/pages/tag/index.astro
+  s_c5b1332c7c5807::t_81a1f686e42915 61,69
+src/pages/tag/page/[page].astro
+  s_c5b1332c7c5807::t_81a1f686e42915 92,100
+src/types/search.ts
+  s_c5b1332c7c5807::t_374522125ba125 13
+src/styles/editorial.css
+  s_c5b1332c7c5807::t_c93f977590757e 1-225,228-252,254-430,432,434-436
+  s_c5b1332c7c5807::t_971a0baa51b037 226-227
+  s_c5b1332c7c5807::t_ef54145b806992 253
+  s_c5b1332c7c5807::t_53c78e3735a6dd 431,433
+  s_c5b1332c7c5807::t_6d6be38af4001a 439-442
+  s_c5b1332c7c5807::t_5ad68480b91ef7 437-438,443-469,475-529
+  s_c5b1332c7c5807::t_4de9bb4478251a 470-474
+src/components/AstroComponent/editorial/ProjectIndex.astro
+  s_c5b1332c7c5807::t_78fe4a3e21be0d 1-4,6-59
+  s_c5b1332c7c5807::t_6b4b9d9d4ac704 5
+src/components/AstroComponent/footer/Footer.astro
+  s_c5b1332c7c5807::t_971a0baa51b037 27-30
+  s_c5b1332c7c5807::t_367dc192dd4060 6-8,10-16,22-26,31-37,39,41-49,51-56,58-61,63-80,83-85,89-172,174-180,182-184,186-209
+  s_c5b1332c7c5807::t_4de9bb4478251a 17-21,38,40,50
+  s_c5b1332c7c5807::t_d62babeeb34631 173,181,185
+src/pages/blog/page/[page].astro
+  s_c5b1332c7c5807::t_c562fab5a796c0 2,4,9-10,15-16,19,22
+src/config/featureFlag/featureFlag.json
+  s_c5b1332c7c5807::t_abc698758ce110 16
+src/components/AstroComponent/editorial/PageHead.astro
+  s_c5b1332c7c5807::t_abf9e79a8a57fd 1-45
+src/components/AstroComponent/editorial/format.ts
+  s_c5b1332c7c5807::t_6b4b9d9d4ac704 1-23
+  s_c5b1332c7c5807::t_ae8a5d9f39f68b 24-27
+src/pages/experience.astro
+  s_c5b1332c7c5807::t_36175312869ff1 24,28,30
+src/util/collections.ts
+  s_c5b1332c7c5807::t_7640d305237f3f 3-6,11,13-16,20-21,24-25,29
+  s_c5b1332c7c5807::t_82c4926c1c1be9 1-2,10,12,17-19,22-23,26-28,30-37
+  s_c5b1332c7c5807::t_c562fab5a796c0 7-9
+src/components/ReactComponent/blog/metadata/SearchField/SearchField.tsx
+  s_c5b1332c7c5807::t_884faa4465e78c 8,114
+  s_c5b1332c7c5807::t_8bf19efb60fba1 3-5,15-30,35-39,82,108-113,115-122,124-134,140-141,148-163
+  s_c5b1332c7c5807::t_971a0baa51b037 135-139
+src/styles/global.css
+  s_c5b1332c7c5807::t_be62d01f6aa049 1-5,29,34,90,358
+src/components/AstroComponent/blog/comments/TagFilterDisplay.astro
+  s_c5b1332c7c5807::t_87c41ee27a204b 3-6,13-28,31-36,38-39,41-59,61-63,65-74
+  s_c5b1332c7c5807::t_971a0baa51b037 2
+  s_c5b1332c7c5807::t_53c78e3735a6dd 9-12
+src/pages/project/index.astro
+  s_c5b1332c7c5807::t_2f7a685f1daaf2 2,5-6,11,15-16,19-34,37,41-42,45,47-124,126-141,145-293
+  s_c5b1332c7c5807::t_971a0baa51b037 4
+tailwind.config.mjs
+  s_c5b1332c7c5807::t_be62d01f6aa049 9-10,16
+  s_c5b1332c7c5807::t_56b6e2bc8d79c2 11-15
+package.json
+  s_c5b1332c7c5807::t_012fdc712d3b8b 23-26
+src/components/ReactComponent/blog/metadata/SearchField/components/SearchTips.tsx
+  s_c5b1332c7c5807::t_884faa4465e78c 3-5,8-20,22
+src/components/ReactComponent/blog/metadata/SearchField/components/SearchInput.tsx
+  s_c5b1332c7c5807::t_884faa4465e78c 31,39,41-43,45-67
+src/pages/tag/[tag]/page/[page].astro
+  s_c5b1332c7c5807::t_81a1f686e42915 101,109
+src/components/ReactComponent/blog/metadata/SearchField/components/SearchStats.tsx
+  s_c5b1332c7c5807::t_884faa4465e78c 3,7-19,21
+src/pages/about.astro
+  s_c5b1332c7c5807::t_36175312869ff1 25,29,31
+src/components/ReactComponent/blog/metadata/SearchField/components/SearchResults.tsx
+  s_c5b1332c7c5807::t_971a0baa51b037 59-62
+  s_c5b1332c7c5807::t_884faa4465e78c 1-2,5,12,15-25,29-30,33-34,36,38-39,41,43-44,46-47,49-58,64
+public/css/cookieconsent-theme.css
+  s_c5b1332c7c5807::t_cf4e0913d3b69e 4
+src/components/AstroComponent/personal/AboutMe/AboutMe.astro
+  s_c5b1332c7c5807::t_36175312869ff1 157
+  s_c5b1332c7c5807::t_cfbbd9522712cd 2,4-20,23-129,131-156,158-193,195-260,264-268,270-282,284-304
+bun.lock
+  s_c5b1332c7c5807::t_469756b558133b 16-19,270-276
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "06b74065051dd7e98b2b112769c4316eb4c9e458",
+  "prompts": {},
+  "sessions": {
+    "s_c5b1332c7c5807": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2b17688d-e3f5-4f75-aebb-971f5836abaa",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Abdul Rafay <99marafay@gmail.com>"
+    }
+  }
+}
