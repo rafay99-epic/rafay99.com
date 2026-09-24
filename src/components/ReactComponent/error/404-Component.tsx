@@ -19,7 +19,7 @@ function NotFoundPage() {
 							className="mb-8"
 						>
 							<div className="relative">
-								<div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#7aa2f7]/20 to-[#bb9af7]/20 blur-2xl"></div>
+								<div className="absolute inset-0 rounded-2xl bg-linear-to-r from-[#7aa2f7]/20 to-[#bb9af7]/20 blur-2xl"></div>
 
 								<div className="relative rounded-2xl border border-[#565f89]/40 bg-[#1a1b26]/80 p-8 font-mono">
 									<div className="flex items-center justify-center gap-4 text-4xl font-bold md:text-5xl lg:text-6xl">
@@ -89,7 +89,7 @@ function NotFoundPage() {
 							transition={{ delay: 0.3, duration: 0.5 }}
 							className="mb-4 text-2xl font-bold md:text-3xl lg:text-4xl"
 						>
-							<span className="bg-gradient-to-r from-[#7aa2f7] via-[#bb9af7] to-[#9ece6a] bg-clip-text text-transparent">
+							<span className="bg-linear-to-r from-[#7aa2f7] via-[#bb9af7] to-[#9ece6a] bg-clip-text text-transparent">
 								Oops! You're Lost in Code
 							</span>
 						</m.h1>
@@ -114,7 +114,7 @@ function NotFoundPage() {
 								href="/"
 								whileHover={{ scale: 1.05, y: -2 }}
 								whileTap={{ scale: 0.95 }}
-								className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#7aa2f7] to-[#bb9af7] px-8 py-4 font-semibold text-white shadow-lg shadow-[#7aa2f7]/25 transition-shadow duration-300 hover:shadow-xl hover:shadow-[#7aa2f7]/30"
+								className="inline-flex items-center justify-center gap-2 rounded-xl bg-linear-to-r from-[#7aa2f7] to-[#bb9af7] px-8 py-4 font-semibold text-white shadow-lg shadow-[#7aa2f7]/25 transition-shadow duration-300 hover:shadow-xl hover:shadow-[#7aa2f7]/30"
 							>
 								<LuHouse className="h-5 w-5" />
 								<span>Return to Home</span>

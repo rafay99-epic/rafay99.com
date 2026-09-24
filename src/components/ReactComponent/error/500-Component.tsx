@@ -19,7 +19,7 @@ function ServerErrorPage() {
 							className="mb-8"
 						>
 							<div className="relative">
-								<div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#ff7a93]/20 to-[#e0af68]/20 blur-2xl"></div>
+								<div className="absolute inset-0 rounded-2xl bg-linear-to-r from-[#ff7a93]/20 to-[#e0af68]/20 blur-2xl"></div>
 
 								<div className="relative rounded-2xl border border-[#565f89]/40 bg-[#1a1b26]/80 p-8 font-mono">
 									<div className="flex items-center justify-center gap-4 text-4xl font-bold md:text-5xl lg:text-6xl">
@@ -92,7 +92,7 @@ function ServerErrorPage() {
 							transition={{ delay: 0.3, duration: 0.5 }}
 							className="mb-4 text-2xl font-bold md:text-3xl lg:text-4xl"
 						>
-							<span className="bg-gradient-to-r from-[#ff7a93] via-[#e0af68] to-[#ff7a93] bg-clip-text text-transparent">
+							<span className="bg-linear-to-r from-[#ff7a93] via-[#e0af68] to-[#ff7a93] bg-clip-text text-transparent">
 								Something Broke on Our End
 							</span>
 						</m.h1>
@@ -118,7 +118,7 @@ function ServerErrorPage() {
 								onClick={() => window.location.reload()}
 								whileHover={{ scale: 1.05, y: -2 }}
 								whileTap={{ scale: 0.95 }}
-								className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#ff7a93] to-[#e0af68] px-8 py-4 font-semibold text-white shadow-lg shadow-[#ff7a93]/25 transition-shadow duration-300 hover:shadow-xl hover:shadow-[#ff7a93]/30"
+								className="inline-flex items-center justify-center gap-2 rounded-xl bg-linear-to-r from-[#ff7a93] to-[#e0af68] px-8 py-4 font-semibold text-white shadow-lg shadow-[#ff7a93]/25 transition-shadow duration-300 hover:shadow-xl hover:shadow-[#ff7a93]/30"
 							>
 								<LuRefreshCw className="h-5 w-5" />
 								<span>Try Again</span>

@@ -17,10 +17,6 @@ export default {
 			},
 			colors: {
 				...generateTailwindColors(colors),
-				accent: {
-					DEFAULT: "#7aa2f7",
-					dark: "#1f2335",
-				},
 			},
 			animation: {
 				fadeSlideIn: "fadeSlideIn 0.8s ease-out forwards",

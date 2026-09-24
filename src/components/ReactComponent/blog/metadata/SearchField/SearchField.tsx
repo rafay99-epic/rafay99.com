@@ -140,7 +140,6 @@ function Search({ posts }: SearchProps) {
 
 				{query ? (
 					<SearchResults
-						query={query}
 						results={results}
 						selectedResultIndex={selectedResultIndex}
 						setSelectedResultIndex={setSelectedResultIndex}

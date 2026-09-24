@@ -4,14 +4,14 @@ import mdx from "@astrojs/mdx";
 import partytown from "@astrojs/partytown";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
-import tailwind from "@astrojs/tailwind";
 import vercel from "@astrojs/vercel";
 import playformCompress from "@playform/compress";
+import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
 import icon from "astro-icon";
 import mermaid from "astro-mermaid";
 import robotsTxt from "astro-robots-txt";
-import yaml from "js-yaml";
+import { load as loadYaml } from "js-yaml";
 import { remarkReadingTime } from "./remark-reading-time.mjs";
 
 // Map each published blog post's URL path -> last-modified ISO date, read
@@ -38,7 +38,7 @@ function buildBlogLastmod() {
 		if (!fm) continue;
 		let data;
 		try {
-			data = yaml.load(fm[1]) ?? {};
+			data = loadYaml(fm[1]) ?? {};
 		} catch {
 			continue;
 		}
@@ -53,6 +53,33 @@ function buildBlogLastmod() {
 	return map;
 }
 const blogLastmod = buildBlogLastmod();
+
+// Astro always asks the MDX renderer first whether it owns a component, and
+// its check() calls the component as a plain function, outside React. Every
+// hook-using island then logs "Invalid hook call" during SSR. Tagging each
+// React module's default export with Astro's renderer symbol skips that probe.
+function tagReactIslands() {
+	const reactModule = /\/src\/components\/.+\.(tsx|jsx)$/;
+	return {
+		name: "tag-react-islands",
+		enforce: "post",
+		transform(code, id) {
+			if (this.environment?.config.consumer !== "server") return;
+			if (!reactModule.test(id) || !/export default|as default/.test(code)) {
+				return;
+			}
+			return `${code}
+import * as __self from ${JSON.stringify(id)};
+{
+	const c = __self.default;
+	if (c && (typeof c === "function" || typeof c === "object")) {
+		c[Symbol.for("astro:renderer")] = "@astrojs/react";
+	}
+}
+`;
+		},
+	};
+}
 
 export default defineConfig({
 	site: "https://www.rafay99.com",
@@ -159,13 +186,11 @@ export default defineConfig({
 		}),
 		react({
 			experimentalDisableStreaming: true,
-
 			include: ["**/ReactComponent/**", "**/*.{jsx,tsx}"],
-			babel: {
-				plugins: [["babel-plugin-react-compiler", { target: "19" }]],
-			},
+			// React Compiler via Oxc (@astrojs/react 7). Memoizes client
+			// components automatically; server rendering is not compiled.
+			compiler: true,
 		}),
-		tailwind(),
 		robotsTxt({
 			sitemap: true,
 			host: "www.rafay99.com",
@@ -213,6 +238,7 @@ export default defineConfig({
 		isr: true,
 	}),
 	vite: {
+		plugins: [tailwindcss(), tagReactIslands()],
 		build: {
 			cssMinify: true,
 			chunkSizeWarningLimit: 2500,
@@ -240,7 +266,6 @@ export default defineConfig({
 							{ test: /mermaid/, name: "vendor-mermaid" },
 							{ test: /katex/, name: "vendor-katex" },
 							{ test: /framer-motion/, name: "vendor-framer" },
-							{ test: /lucide-react/, name: "vendor-lucide" },
 							{
 								test: /\/react\/|\/react-dom\/|\/scheduler\//,
 								name: "react-vendor",

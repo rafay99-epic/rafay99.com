@@ -1,60 +1,54 @@
-import { z } from "zod";
-import { PostSchema } from "./articles";
+import type { Post } from "./articles";
 
-const SearchInputPropsSchema = z.object({
-	query: z.string(),
-	setQuery: z.function().args(z.string()).returns(z.void()),
-	isSearchFocused: z.boolean(),
-	setIsSearchFocused: z.function().args(z.boolean()).returns(z.void()),
-	setSelectedResultIndex: z.function().args(z.number()).returns(z.void()),
-});
+// Plain types: none of these are validated at runtime, and Zod 4 no longer
+// models callbacks inside object schemas.
 
-const SearchTipsPropsSchema = z.object({
-	examples: z.array(z.string()),
-	query: z.string(),
-	setQuery: z.function().args(z.string()).returns(z.void()),
-});
+export type { Post };
 
-export const SearchStatsDataSchema = z.object({
-	totalResults: z.number(),
-	searchTime: z.number(),
-	relevanceScore: z.number(),
-	matchedFields: z.array(z.string()),
-});
+export type SearchStatsData = {
+	totalResults: number;
+	searchTime: number;
+	relevanceScore: number;
+	matchedFields: string[];
+};
 
-const SearchStatsPropsSchema = z.object({
-	query: z.string(),
-	results: z.array(PostSchema),
-	searchStats: SearchStatsDataSchema,
-});
+export type SearchInputProps = {
+	query: string;
+	setQuery: (query: string) => void;
+	isSearchFocused: boolean;
+	setIsSearchFocused: (focused: boolean) => void;
+	setSelectedResultIndex: (index: number) => void;
+};
 
-const SearchResultsPropsSchema = z.object({
-	query: z.string(),
-	results: z.array(PostSchema),
-	selectedResultIndex: z.number(),
-	setSelectedResultIndex: z.function().args(z.number()).returns(z.void()),
-});
+export type SearchTipsProps = {
+	examples: string[];
+	query: string;
+	setQuery: (query: string) => void;
+};
 
-const SearchStateSchema = z.object({
-	query: z.string(),
-	setQuery: z.function().args(z.string()).returns(z.void()),
-	results: z.array(PostSchema),
-	searchStats: SearchStatsDataSchema,
-	searchHistory: z.array(z.string()),
-	clearHistory: z.function().args().returns(z.void()),
-});
+export type SearchStatsProps = {
+	query: string;
+	results: Post[];
+	searchStats: SearchStatsData;
+};
 
-const SearchCacheSchema = z.object({
-	results: z.array(PostSchema),
-	stats: SearchStatsDataSchema,
-	timestamp: z.number(),
-});
+export type SearchResultsProps = {
+	results: Post[];
+	selectedResultIndex: number;
+	setSelectedResultIndex: (index: number) => void;
+};
 
-export type Post = z.infer<typeof PostSchema>;
-export type SearchInputProps = z.infer<typeof SearchInputPropsSchema>;
-export type SearchTipsProps = z.infer<typeof SearchTipsPropsSchema>;
-export type SearchStatsData = z.infer<typeof SearchStatsDataSchema>;
-export type SearchStatsProps = z.infer<typeof SearchStatsPropsSchema>;
-export type SearchResultsProps = z.infer<typeof SearchResultsPropsSchema>;
-export type SearchState = z.infer<typeof SearchStateSchema>;
-export type SearchCache = z.infer<typeof SearchCacheSchema>;
+export type SearchState = {
+	query: string;
+	setQuery: (query: string) => void;
+	results: Post[];
+	searchStats: SearchStatsData;
+	searchHistory: string[];
+	clearHistory: () => void;
+};
+
+export type SearchCache = {
+	results: Post[];
+	stats: SearchStatsData;
+	timestamp: number;
+};
