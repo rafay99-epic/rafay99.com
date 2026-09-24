@@ -1,11 +1,11 @@
 import type { SearchStatsProps } from "types/search";
 
+// The live region stays mounted (empty without a query) so screen readers
+// announce the first result count.
 function SearchStats({ query, results, searchStats }: SearchStatsProps) {
-	if (!query) return null;
-
 	return (
 		<p className="ed-mono search__stats" aria-live="polite">
-			{results.length > 0 ? (
+			{!query ? null : results.length > 0 ? (
 				<>
 					{searchStats.totalResults}{" "}
 					{searchStats.totalResults === 1 ? "result" : "results"} ·{" "}

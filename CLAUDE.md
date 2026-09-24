@@ -69,7 +69,8 @@ bun run check            # Astro diagnostics (template/component checks)
 ## Key Conventions
 
 - **Markdown**: Shiki syntax highlighting with Tokyo Night theme. Mermaid blocks excluded from syntax highlighting (rendered client-side). Reading time calculated via remark plugin (`remark-reading-time.mjs`).
-- **Tailwind theme**: Custom color system defined in `src/config/theme/colors.ts` (Tokyo Night inspired). Poppins font. Custom `mobile` breakpoint at max 767px.
+- **Tailwind theme**: Custom color system defined in `src/config/theme/colors.ts` (Tokyo Night inspired). Custom `mobile` breakpoint at max 767px.
+- **Typography**: Geist (body), Geist Mono (labels, metadata), Bricolage Grotesque (display headings) and Instrument Serif italic (accents), self-hosted via fontsource. Tokens live in `src/styles/theme.css` (`--font-sans`, `--font-mono`, `--font-display`, `--font-serif`); shared editorial styles in `src/styles/editorial.css`.
 - **Build optimization**: Default esbuild minification (no `console.*`/`debugger` stripping — `console.error` is intentionally kept so server API routes log to Vercel). Manual chunk splitting in `astro.config.mjs` for `vendor-d3`, `vendor-parser`, `vendor-graph`, `vendor-mermaid`, `vendor-katex`, `vendor-framer`, `vendor-lucide`, and `react-vendor`.
 - **React Compiler**: Enabled via babel plugin (`babel-plugin-react-compiler`).
 - **Formatting**: Biome with tailwind plugin (class sorting). The codebase uses semicolons.

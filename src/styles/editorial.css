@@ -499,6 +499,10 @@ main.ed {
 	padding-block: 1.25rem;
 }
 
+.search__stats:empty {
+	padding: 0;
+}
+
 .search__tips button {
 	color: var(--color-text-secondary);
 }

@@ -108,9 +108,14 @@ const external = { target: "_blank", rel: "noopener noreferrer" };
   // Bound once; ClientRouter keeps this module alive across navigations,
   // so everything is delegated or re-queried instead of re-bound.
   const root = document.documentElement;
+  // Element that opened the menu; focus returns here on close.
+  let opener: HTMLElement | null = null;
 
-  function setMenu(open: boolean) {
-    const menu = document.getElementById("site-menu");
+  const menuEl = () => document.getElementById("site-menu");
+  const isOpen = () => root.classList.contains("menu-open");
+
+  function setMenu(open: boolean, { restoreFocus = true } = {}) {
+    const menu = menuEl();
     if (!menu) return;
     root.classList.toggle("menu-open", open);
     menu.setAttribute("aria-hidden", String(!open));
@@ -121,6 +126,32 @@ const external = { target: "_blank", rel: "noopener noreferrer" };
       btn.setAttribute("aria-expanded", String(open));
     }
     document.body.style.overflow = open ? "hidden" : "";
+
+    if (open) {
+      opener = document.activeElement as HTMLElement | null;
+      menu.querySelector<HTMLElement>("[data-menu-toggle]")?.focus();
+    } else {
+      if (restoreFocus) opener?.focus();
+      opener = null;
+    }
+  }
+
+  // Keeps Tab / Shift+Tab cycling inside the open menu.
+  function trapFocus(e: KeyboardEvent) {
+    const menu = menuEl();
+    if (!menu) return;
+    const focusable = [...menu.querySelectorAll<HTMLElement>("a, button")];
+    const first = focusable[0];
+    const last = focusable.at(-1);
+    if (!first || !last) return;
+    const active = document.activeElement;
+    if (e.shiftKey && (active === first || !menu.contains(active))) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && (active === last || !menu.contains(active))) {
+      e.preventDefault();
+      first.focus();
+    }
   }
 
   function syncScrolled() {
@@ -131,16 +162,17 @@ const external = { target: "_blank", rel: "noopener noreferrer" };
 
   document.addEventListener("click", (e) => {
     const target = e.target as Element | null;
-    if (target?.closest("[data-menu-toggle]")) {
-      setMenu(!root.classList.contains("menu-open"));
-    }
+    if (target?.closest("[data-menu-toggle]")) setMenu(!isOpen());
   });
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && root.classList.contains("menu-open")) setMenu(false);
+    if (!isOpen()) return;
+    if (e.key === "Escape") setMenu(false);
+    if (e.key === "Tab") trapFocus(e);
   });
   window.addEventListener("scroll", syncScrolled, { passive: true });
   document.addEventListener("astro:page-load", () => {
-    setMenu(false);
+    // New page: close without pulling focus back to a stale opener.
+    setMenu(false, { restoreFocus: false });
     syncScrolled();
   });
 </script>
@@ -279,6 +311,9 @@ const external = { target: "_blank", rel: "noopener noreferrer" };
   /* Full-screen menu (mobile / tablet) */
   .menu {
     position: fixed;
+    /* Scrolls when the links outgrow short viewports or high zoom. */
+    overflow-y: auto;
+    overscroll-behavior: contain;
     inset: 0;
     z-index: 100;
     display: flex;

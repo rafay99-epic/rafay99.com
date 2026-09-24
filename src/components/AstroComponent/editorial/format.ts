@@ -11,11 +11,14 @@ export const ACCENTS = [
 
 export const accentAt = (i: number) => `var(${ACCENTS[i % ACCENTS.length]})`;
 
+// UTC so build-time HTML and hydrated React islands print the same day
+// (frontmatter dates are midnight UTC).
 export const formatDate = (date: Date) =>
 	date.toLocaleDateString("en-US", {
 		month: "short",
 		day: "numeric",
 		year: "numeric",
+		timeZone: "UTC",
 	});
 
 // "Env Pilot - Environment Variable Management" -> "Env Pilot"

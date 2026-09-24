@@ -111,10 +111,12 @@ const sectionId = (label: string) =>
         for (const entry of entries) {
           if (!entry.isIntersecting) continue;
           for (const link of links) {
-            link.toggleAttribute(
-              "aria-current",
-              link.dataset.spy === entry.target.id,
-            );
+            // An empty aria-current reads as "false"; use a real token.
+            if (link.dataset.spy === entry.target.id) {
+              link.setAttribute("aria-current", "location");
+            } else {
+              link.removeAttribute("aria-current");
+            }
           }
         }
       },
