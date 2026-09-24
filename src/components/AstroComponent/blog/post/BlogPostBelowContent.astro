@@ -3,110 +3,120 @@ import type { CollectionEntry } from "astro:content";
 import PostComment from "@astro/blog/comments/PostComment.astro";
 import CodeCopySimple from "@react/blog/enhancements/code-copy/CodeCopySimple";
 import EnhancedImageCaptionRenderer from "@react/blog/enhancements/image-caption-renderer/EnhancedImageCaptionRenderer";
-import BlogNavigation from "@react/blog/layout/BlogNavigation";
 
 interface Props {
 	isArchive: boolean;
-	currentSlug: string;
-	BlogPosts: CollectionEntry<"blog">[];
 	prevPost?: CollectionEntry<"blog">;
 	nextPost?: CollectionEntry<"blog">;
 }
 
-const { isArchive, currentSlug, BlogPosts, prevPost, nextPost } = Astro.props;
+const { isArchive, prevPost, nextPost } = Astro.props;
+// Posts are ordered oldest first: previous is older, next is newer.
+const base = isArchive ? "/blog/archive" : "/blog";
 ---
 
 {
-	!isArchive ? (
+	!isArchive && (
 		<>
 			<EnhancedImageCaptionRenderer client:load />
-
 			<CodeCopySimple client:idle />
-
-			<BlogNavigation
-				client:load
-				currentSlug={currentSlug || ""}
-				allPosts={BlogPosts}
-				basePath="/blog"
-			/>
-
-			<div class="comments-section">
-				<div class="border-t border-[#565f89]/10 pt-8">
-					<h2 class="mb-1 text-sm font-medium tracking-wide text-[#565f89] uppercase">
-						Discussion
-					</h2>
-					<p class="mb-6 text-xs text-[#414868]">
-						Share your thoughts and engage with the community
-					</p>
-					<div class="relative">
-						<PostComment />
-					</div>
-				</div>
-			</div>
 		</>
-	) : (
-		<div class="mx-auto mt-10 flex w-full max-w-4xl items-center justify-between border-t border-[#565f89]/20 px-6 py-8">
-			{prevPost ? (
-				<a
-					href={`/blog/archive/${prevPost.id}`}
-					class="group flex max-w-xs items-center gap-3 text-left"
-				>
-					<div class="flex flex-col">
-						<span class="text-xs font-medium uppercase tracking-wide text-[#565f89]">
-							Previous
-						</span>
-						<span class="line-clamp-2 text-sm text-[#a9b1d6] transition-colors duration-200 group-hover:text-[#7aa2f7]">
-							{prevPost.data.title}
-						</span>
-					</div>
-					<svg
-						class="h-4 w-4 flex-shrink-0 text-[#565f89] transition-colors duration-200 group-hover:text-[#7aa2f7]"
-						fill="none"
-						stroke="currentColor"
-						viewBox="0 0 24 24"
-					>
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M15 19l-7-7 7-7"
-						/>
-					</svg>
-				</a>
-			) : (
-				<div />
-			)}
-
-			{nextPost ? (
-				<a
-					href={`/blog/archive/${nextPost.id}`}
-					class="group flex max-w-xs items-center gap-3 text-right"
-				>
-					<svg
-						class="h-4 w-4 flex-shrink-0 text-[#565f89] transition-colors duration-200 group-hover:text-[#7aa2f7]"
-						fill="none"
-						stroke="currentColor"
-						viewBox="0 0 24 24"
-					>
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M9 5l7 7-7 7"
-						/>
-					</svg>
-					<div class="flex flex-col">
-						<span class="text-xs font-medium uppercase tracking-wide text-[#565f89]">
-							Next
-						</span>
-						<span class="line-clamp-2 text-sm text-[#a9b1d6] transition-colors duration-200 group-hover:text-[#7aa2f7]">
-							{nextPost.data.title}
-						</span>
-					</div>
-				</a>
-			) : (
-				<div />
-			)}
-		</div>
 	)
 }
+
+{
+	(prevPost || nextPost) && (
+		<nav class="post-next" aria-label="More writing">
+			{prevPost ? (
+				<a class="post-next__link" href={`${base}/${prevPost.id}/`}>
+					<span class="post-next__dir">← Previous</span>
+					<span class="post-next__title">{prevPost.data.title}</span>
+				</a>
+			) : (
+				<span />
+			)}
+			{nextPost && (
+				<a class="post-next__link is-next" href={`${base}/${nextPost.id}/`}>
+					<span class="post-next__dir">Next →</span>
+					<span class="post-next__title">{nextPost.data.title}</span>
+				</a>
+			)}
+		</nav>
+	)
+}
+
+{
+	!isArchive && (
+		<section class="comments-section" aria-labelledby="discussion-title">
+			<div class="comments-section__inner">
+				<h2 id="discussion-title" class="comments-section__title">
+					Discussion
+				</h2>
+				<PostComment />
+			</div>
+		</section>
+	)
+}
+
+<style>
+	.post-next {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 2rem;
+		width: 100%;
+		max-width: 1280px;
+		margin: 0 auto clamp(3rem, 6vw, 4.5rem);
+		padding-inline: clamp(1.25rem, 4vw, 3rem);
+	}
+
+	.post-next__link {
+		display: flex;
+		flex-direction: column;
+		gap: 0.6rem;
+		padding: 2rem 0;
+		border-top: 1px solid var(--color-line);
+		text-decoration: none;
+	}
+
+	.post-next__link.is-next {
+		align-items: flex-end;
+		text-align: right;
+	}
+
+	.post-next__dir {
+		font-family: var(--font-mono);
+		font-size: 0.8125rem;
+		color: var(--color-text-soft);
+	}
+
+	.post-next__title {
+		max-width: 24ch;
+		font-family: var(--font-display);
+		font-size: clamp(1.25rem, 2.2vw, 1.75rem);
+		font-weight: 600;
+		line-height: 1.12;
+		letter-spacing: -0.03em;
+		color: var(--color-text-primary);
+		transition: color var(--dur-2);
+	}
+
+	.post-next__link:hover .post-next__title {
+		color: var(--color-secondary);
+	}
+
+	.post-next__link:focus-visible {
+		outline: 2px solid var(--color-primary);
+		outline-offset: 4px;
+	}
+
+	@media (max-width: 767px) {
+		.post-next {
+			grid-template-columns: 1fr;
+		}
+
+		.post-next__link.is-next {
+			align-items: flex-start;
+			text-align: left;
+		}
+	}
+</style>

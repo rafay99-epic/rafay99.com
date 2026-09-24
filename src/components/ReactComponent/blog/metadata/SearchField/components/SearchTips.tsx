@@ -1,58 +1,24 @@
-import type { ComponentType } from "react";
-import { LuCalendar, LuSearch, LuUser } from "react-icons/lu";
 import type { SearchTipsProps } from "types/search";
 
-const searchTips: Array<{
-	Icon: ComponentType<{ className?: string }>;
-	tip: string;
-	description: string;
-}> = [
-	{
-		Icon: LuSearch,
-		tip: "your keywords",
-		description: "Type title or author",
-	},
-	{
-		Icon: LuUser,
-		tip: "author name",
-		description: "Search by author name",
-	},
-	{
-		Icon: LuCalendar,
-		tip: "2024-06",
-		description: "Search by year/month/day",
-	},
-];
-
-const SearchTips = function SearchTips({
-	showSearchTips,
-	query,
-	setQuery,
-}: SearchTipsProps) {
-	if (!(showSearchTips || query)) return null;
+// Clickable example queries shown while the input is empty.
+function SearchTips({ examples, query, setQuery }: SearchTipsProps) {
+	if (query) return null;
 
 	return (
-		<div className="mt-4 rounded-xl border border-[#565f89]/30 bg-[#1a1b26]/40 p-4">
-			<div className="grid grid-cols-2 gap-3 md:grid-cols-3">
-				{searchTips.map((tip) => (
-					<button
-						key={tip.tip}
-						type="button"
-						className="group flex cursor-pointer items-center gap-2 text-left transition-transform duration-150 hover:scale-[1.015]"
-						onClick={() => setQuery(tip.tip)}
-					>
-						<tip.Icon className="text-xl text-[#a9b1d6]" />
-						<div className="flex-1">
-							<code className="rounded bg-[#1a1b26] px-2 py-1 text-xs text-[#7aa2f7] transition-colors group-hover:text-[#bb9af7]">
-								{tip.tip}
-							</code>
-							<p className="mt-1 text-xs text-[#a9b1d6]">{tip.description}</p>
-						</div>
-					</button>
-				))}
-			</div>
-		</div>
+		<p className="ed-mono search__tips">
+			<span>try</span>
+			{examples.map((example) => (
+				<button
+					key={example}
+					type="button"
+					className="ed-link"
+					onClick={() => setQuery(example)}
+				>
+					{example}
+				</button>
+			))}
+		</p>
 	);
-};
+}
 
 export default SearchTips;

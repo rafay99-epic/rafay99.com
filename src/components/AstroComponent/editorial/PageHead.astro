@@ -1,0 +1,45 @@
+---
+/**
+ * Kinetic page headline: each line slides up out of a mask on load.
+ * `accent` renders one line in the italic serif. The default slot sits under
+ * the lede; the `aside` slot sits bottom-right (stats, links).
+ */
+interface Props {
+	lines: string[];
+	accent?: number;
+	size?: "lg" | "md";
+	lede?: string;
+}
+
+const { lines, accent, size = "lg", lede } = Astro.props;
+const hasFoot =
+	Boolean(lede) || Astro.slots.has("default") || Astro.slots.has("aside");
+---
+
+<header class="ed-head">
+  <div class="ed-wrap">
+    <h1
+      class:list={["ed-mega", { "is-md": size === "md" }]}
+      aria-label={lines.join(" ")}
+    >
+      {
+        lines.map((line, i) => (
+          <span class="ed-line" aria-hidden="true">
+            <span style={`--i:${i}`}>{i === accent ? <em>{line}</em> : line}</span>
+          </span>
+        ))
+      }
+    </h1>
+    {
+      hasFoot && (
+        <div class="ed-head__foot ed-after">
+          <div>
+            {lede && <p class="ed-lede">{lede}</p>}
+            <slot />
+          </div>
+          <slot name="aside" />
+        </div>
+      )
+    }
+  </div>
+</header>

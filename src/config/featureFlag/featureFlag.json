@@ -13,13 +13,7 @@
 		"showTrendingPosts": false,
 		"showWiki": false,
 		"showOpenSource": true,
-		"showSeries": true,
-		"enableCoreServices": true,
-		"enableProcessShowcase": true,
-		"enablePortfolioSection": true,
-		"enableTestimonialsSection": false,
-		"enableSkillsShowcase": true,
-		"enableContactMap": true
+		"showSeries": true
 	},
 	"FeatureFlagsApi": {
 		"enableauthorInfoAPI": true

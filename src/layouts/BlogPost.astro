@@ -8,6 +8,7 @@ import BlogPostClientScript from "@astro/blog/post/BlogPostClientScript.astro";
 import BlogPostHead from "@astro/blog/post/BlogPostHead.astro";
 import BlogPostHeader from "@astro/blog/post/BlogPostHeader.astro";
 import BlogPostRightRail from "@astro/blog/post/BlogPostRightRail.astro";
+import "@astro/blog/post/post.css";
 import Footer from "@astro/footer/Footer.astro";
 import Header from "@astro/header/Header.astro";
 import { featureFlags } from "@config/featureFlag/featureFlag.json";
@@ -84,7 +85,8 @@ const {
 } = Astro.props as Props;
 const lead = excerpt || description;
 
-let articleHeroBackgroundSrc: string | null = null;
+// Cover image, optimised once and shown under the masthead.
+let coverSrc: string | null = null;
 if (heroImage) {
 	try {
 		const optimized = await getImage({
@@ -94,9 +96,9 @@ if (heroImage) {
 			format: "webp",
 			quality: 72,
 		});
-		articleHeroBackgroundSrc = optimized.src;
+		coverSrc = optimized.src;
 	} catch {
-		articleHeroBackgroundSrc = heroImage;
+		coverSrc = heroImage;
 	}
 }
 const tocEntries = tocHeadings.filter(
@@ -161,56 +163,43 @@ const seriesContext =
     />
   </head>
   <body class="blog-container" style="overflow-x: hidden; overflow-y: auto;">
+    <div class="post-progress" aria-hidden="true"></div>
     <Header />
 
     <main class="main-content relative z-10 flex flex-1 flex-col">
       <section class="post-shell">
-        <div
-          class:list={[
-            "post-header-hero",
-            articleHeroBackgroundSrc
-              ? "post-header-hero--has-image"
-              : "post-header-hero--plain",
-          ]}
-        >
-          {
-            articleHeroBackgroundSrc && (
-              <>
-                <div class="post-header-hero__blur-wrap" aria-hidden="true">
-                  <img
-                    src={articleHeroBackgroundSrc}
-                    alt=""
-                    width={1600}
-                    height={900}
-                    loading="eager"
-                    fetchpriority="high"
-                    decoding="async"
-                    class="post-header-hero__blur-img"
-                  />
-                </div>
-                <div class="post-header-hero__scrim" aria-hidden="true" />
-              </>
-            )
-          }
-          <div class="post-header-hero__inner">
-            <BlogPostHeader
-              title={title}
-              lead={lead}
-              pubDate={pubDate}
-              isArchive={isArchive}
-              authorName={authorName}
-              authorAvatar={authorAvatar}
-              readTime={readTime}
-              wordCount={wordCount}
-              formattedWordCount={formattedWordCount}
-              tags={tags}
-              updatedDate={updatedDate}
-              series={currentBlog.data.series}
-              seriesPart={currentBlog.data.seriesPart}
-              seriesTotal={seriesContext?.totalParts}
-            />
-          </div>
-        </div>
+        <BlogPostHeader
+          title={title}
+          lead={lead}
+          pubDate={pubDate}
+          isArchive={isArchive}
+          authorName={authorName}
+          authorAvatar={authorAvatar}
+          readTime={readTime}
+          wordCount={wordCount}
+          formattedWordCount={formattedWordCount}
+          tags={tags}
+          updatedDate={updatedDate}
+          series={currentBlog.data.series}
+          seriesPart={currentBlog.data.seriesPart}
+          seriesTotal={seriesContext?.totalParts}
+        />
+
+        {
+          coverSrc && (
+            <figure class="post-cover">
+              <img
+                src={coverSrc}
+                alt=""
+                width={1600}
+                height={900}
+                loading="eager"
+                fetchpriority="high"
+                decoding="async"
+              />
+            </figure>
+          )
+        }
 
         {seriesContext && (
           <div class="series-mobile-bar">
@@ -240,8 +229,6 @@ const seriesContext =
 
       <BlogPostBelowContent
         isArchive={isArchive}
-        currentSlug={currentSlug || ""}
-        BlogPosts={BlogPosts}
         prevPost={prevPost}
         nextPost={nextPost}
       />

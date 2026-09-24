@@ -98,18 +98,14 @@ try {
 
   <body>
     <Header />
-    <main class="mx-auto w-full max-w-5xl">
-      <div>
+    <main class="ed">
         <TagFilterDisplay
-          allTags={allTags}
           paginatedPosts={paginatedPosts}
           selectedTag={tag}
           currentPage={currentPage}
           totalPages={totalPages}
-          currentUrl={new URL(Astro.url)}
         />
-      </div>
     </main>
-    <Footer class="mt-auto" />
+    <Footer />
   </body>
 </html>

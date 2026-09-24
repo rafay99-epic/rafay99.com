@@ -1,354 +1,306 @@
 ---
-import { Image } from "astro:assets";
+import PageHead from "@astro/editorial/PageHead.astro";
 import authorConfig from "@config/siteConfig/info.json";
-import { ArrowRight, Briefcase, MessageCircle, Send } from "lucide-react";
-import { FaGithub, FaLinkedin, FaYoutube } from "react-icons/fa6";
 
-const {
-	name,
-	jobTitle,
-	position,
-	picture,
-	tag_line,
-	socialLinks,
-	stats,
-	about,
-	coreStack,
-	services,
-} = authorConfig;
+const { about, techStack, picture, name, tag_line } = authorConfig;
+// whoAmI is one long paragraph: the first sentence becomes the serif lede,
+// the next two the body. The rest (AI opinions) lives in its own section.
+const [lede = "", ...rest] = about.whoAmI.split(/(?<=\.)\s+/);
+const whoBody = rest.slice(0, 2);
 
-const linkedinUrl = `https://www.linkedin.com/in/${socialLinks.linkedin}`;
-const whatsappUrl = `https://wa.me/${socialLinks.whatsNumber}?text=Hello%20there!`;
-
-const storySections = [
-	{
-		index: "01",
-		title: "The Engineer",
-		text: `${about.whoAmI.split(". ").slice(0, 2).join(". ")}.`,
-		color: "#7aa2f7",
-	},
-	{
-		index: "02",
-		title: "Beyond the Screen",
-		text: `${about.lifeBeyondCode.split(". ").slice(0, 2).join(". ")}.`,
-		color: "#bb9af7",
-	},
-	{
-		index: "03",
-		title: "Always Learning",
-		text: `${about.continuousLearning.split(". ").slice(0, 2).join(". ")}.`,
-		color: "#9ece6a",
-	},
-];
+const sections = [
+	"Who",
+	"Principles",
+	"On AI",
+	"Stack",
+	"Learning",
+	"Off hours",
+] as const;
+const sectionId = (label: string) =>
+	`about-${label.toLowerCase().replace(/\s+/g, "-")}`;
 ---
 
-<style>
-  .fade-up {
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeInUp 0.6s ease-out forwards;
-  }
-  @keyframes fadeInUp {
-    to {
-      opacity: 1;
-      transform: translateY(0);
+<PageHead lines={["I build", "complex things", "simply."]} accent={1} lede={tag_line} />
+
+<div class="ed-wrap about">
+  <nav class="about__spy" aria-label="About sections">
+    {
+      sections.map((label, i) => (
+        <a href={`#${sectionId(label)}`} data-spy={sectionId(label)}>
+          <span>{String(i + 1).padStart(2, "0")}</span> {label}
+        </a>
+      ))
     }
-  }
-  .delay-1 { animation-delay: 0.1s; }
-  .delay-2 { animation-delay: 0.2s; }
-  .delay-3 { animation-delay: 0.3s; }
-  .delay-4 { animation-delay: 0.4s; }
-</style>
+  </nav>
 
-<!-- ============================================================
-     Section 1: Hero — Split Layout
-     ============================================================ -->
-<section class="relative bg-[#1a1b26] px-4 pb-12 pt-24 sm:px-8 sm:pb-16 sm:pt-32 lg:px-12">
-  <div class="mx-auto max-w-6xl">
-    <div class="grid items-center gap-8 lg:grid-cols-2 lg:gap-16">
-      <!-- Left: Photo -->
-      <div class="fade-up flex justify-center lg:justify-start">
-        <Image
-          src={picture}
-          alt={name}
-          width={320}
-          height={320}
-          class="h-56 w-56 rounded-3xl object-cover ring-2 ring-[#7aa2f7]/20 sm:h-72 sm:w-72 lg:h-80 lg:w-80"
-          loading="eager"
-        />
-      </div>
+  <article class="about__essay">
+    <section id={sectionId("Who")} class="about__sec about__who">
+      <img
+        src={picture}
+        alt={`Portrait of ${name}`}
+        width="1080"
+        height="1080"
+        loading="eager"
+        decoding="async"
+        class="about__portrait"
+      />
+      <p class="about__lede">{lede}</p>
+      {whoBody.map((p) => <p class="about__p">{p}</p>)}
+    </section>
 
-      <!-- Right: Text -->
-      <div class="text-center lg:text-left">
-        <p class="fade-up delay-1 mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#7aa2f7]">
-          {jobTitle}
-        </p>
-        <h1
-          class="fade-up delay-1 mb-3 bg-gradient-to-r from-[#7aa2f7] via-[#bb9af7] to-[#7aa2f7] bg-clip-text font-black text-transparent"
-          style="font-size: clamp(2.5rem, 5vw, 4.5rem); line-height: 1.1;"
-        >
-          {name}
-        </h1>
-        <p class="fade-up delay-2 mb-2 text-lg font-medium text-[#a9b1d6] sm:text-xl">
-          {position}
-        </p>
-        <p class="fade-up delay-3 mx-auto mb-6 max-w-md text-[#565f89] lg:mx-0" style="font-size: clamp(0.875rem, 1.2vw, 1rem);">
-          {tag_line}
-        </p>
+    <section id={sectionId("Principles")} class="about__sec">
+      <h2 class="about__h">Principles</h2>
+      <ol class="about__princ">
+        {
+          about.principles.map((p, i) => (
+            <li data-rev>
+              <span class="ed-mono">{String(i + 1).padStart(2, "0")}</span>
+              <p>
+                <b>{p.title}</b> {p.body}
+              </p>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
 
-        <!-- Social icons -->
-        <div class="fade-up delay-3 mb-8 flex items-center justify-center gap-1 lg:justify-start">
-          <a href={socialLinks.github} target="_blank" rel="noopener noreferrer"
-            class="flex h-9 w-9 items-center justify-center rounded-lg text-[#565f89] transition-colors duration-200 hover:text-[#c0caf5]"
-            aria-label="GitHub">
-            <FaGithub className="h-[18px] w-[18px]" />
-          </a>
-          <a href={linkedinUrl} target="_blank" rel="noopener noreferrer"
-            class="flex h-9 w-9 items-center justify-center rounded-lg text-[#565f89] transition-colors duration-200 hover:text-[#7aa2f7]"
-            aria-label="LinkedIn">
-            <FaLinkedin className="h-[18px] w-[18px]" />
-          </a>
-          <a href={socialLinks.twitter} target="_blank" rel="noopener noreferrer"
-            class="flex h-9 w-9 items-center justify-center rounded-lg text-[#565f89] transition-colors duration-200 hover:text-[#bb9af7]"
-            aria-label="Twitter">
-            <Send className="h-[18px] w-[18px]" />
-          </a>
-          <a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer"
-            class="flex h-9 w-9 items-center justify-center rounded-lg text-[#565f89] transition-colors duration-200 hover:text-[#9ece6a]"
-            aria-label="YouTube">
-            <FaYoutube className="h-[18px] w-[18px]" />
-          </a>
-          <a href={socialLinks.upwork} target="_blank" rel="noopener noreferrer"
-            class="flex h-9 w-9 items-center justify-center rounded-lg text-[#565f89] transition-colors duration-200 hover:text-[#7aa2f7]"
-            aria-label="Upwork">
-            <Briefcase className="h-[18px] w-[18px]" />
-          </a>
-          <a href={whatsappUrl} target="_blank" rel="noopener noreferrer"
-            class="flex h-9 w-9 items-center justify-center rounded-lg text-[#565f89] transition-colors duration-200 hover:text-[#9ece6a]"
-            aria-label="WhatsApp">
-            <MessageCircle className="h-[18px] w-[18px]" />
-          </a>
-        </div>
+    <section id={sectionId("On AI")} class="about__sec">
+      <h2 class="about__h">On AI</h2>
+      <blockquote class="about__quote">
+        <mark>{about.quote}</mark>
+      </blockquote>
+      <p class="about__p">{about.onAI}</p>
+    </section>
 
-        <!-- CTAs -->
-        <div class="flex flex-wrap items-center justify-center gap-3 lg:justify-start">
-          <a
-            href="/contact-me"
-            class="group inline-flex items-center gap-2 rounded-full bg-[#7aa2f7] px-7 py-3 text-sm font-semibold text-[#1a1b26] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#89b4fa] active:translate-y-0"
-          >
-            Get in Touch
-            <Send className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
-          </a>
-          <a
-            href="/project"
-            class="inline-flex items-center gap-2 rounded-full border border-[#414868]/40 px-7 py-3 text-sm font-semibold text-[#a9b1d6] transition-colors duration-200 hover:border-[#565f89] hover:text-[#c0caf5]"
-          >
-            View My Work
-            <ArrowRight className="h-4 w-4" />
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+    <section id={sectionId("Stack")} class="about__sec">
+      <h2 class="about__h">Stack</h2>
+      <dl class="about__stack">
+        {
+          techStack.map((group) => (
+            <div data-rev>
+              <dt>{group.category}</dt>
+              <dd class="ed-mono">{group.tools.join(" · ")}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </section>
 
-<!-- ============================================================
-     Section 2: Stats Strip
-     ============================================================ -->
-<div class="border-y border-[#414868]/30 px-4 py-8 sm:px-8 sm:py-10">
-  <div class="mx-auto grid max-w-6xl grid-cols-3 gap-4 sm:gap-0">
-    {stats.map((stat) => (
-      <div class="flex flex-col items-center border-r border-[#414868]/30 px-2 text-center last:border-r-0 sm:px-4">
-        <div class="text-2xl font-black text-[#c0caf5] sm:text-4xl">
-          {stat.value}
-        </div>
-        <div class="mt-1 text-[10px] uppercase tracking-wider text-[#565f89] sm:text-xs">
-          {stat.label}
-        </div>
-      </div>
-    ))}
-  </div>
+    <section id={sectionId("Learning")} class="about__sec">
+      <h2 class="about__h">Learning</h2>
+      <p class="about__p">{about.continuousLearning}</p>
+    </section>
+
+    <section id={sectionId("Off hours")} class="about__sec">
+      <h2 class="about__h">Off hours</h2>
+      <p class="about__p">{about.lifeBeyondCode}</p>
+    </section>
+  </article>
 </div>
 
-<!-- ============================================================
-     Section 3: My Story — Numbered Editorial Sections
-     ============================================================ -->
-<section class="relative bg-[#1a1b26] px-4 py-14 sm:px-8 sm:py-20 lg:px-12">
-  <div class="mx-auto max-w-3xl">
-    <div class="mb-10 sm:mb-12">
-      <p class="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#7aa2f7]">
-        My Story
-      </p>
-      <h2
-        style="font-size: clamp(1.875rem, 3.5vw, 3rem); line-height: 1.2;"
-        class="font-bold text-[#c0caf5]"
-      >
-        The Person{" "}
-        <span class="bg-gradient-to-r from-[#7aa2f7] to-[#bb9af7] bg-clip-text text-transparent">
-          Behind the Code
-        </span>
-      </h2>
-    </div>
+<script>
+  // Highlights the section currently in view in the sticky index.
+  let observer: IntersectionObserver | undefined;
 
-    <div class="space-y-10">
-      {storySections.map((section, index) => (
-        <div
-          class="fade-up border-t border-[#414868]/40 pt-6"
-          style={`animation-delay: ${0.1 + index * 0.1}s;`}
-        >
-          <div class="mb-3 flex items-baseline gap-3">
-            <span class="text-xs font-bold tracking-widest" style={`color: ${section.color};`}>
-              {section.index}
-            </span>
-            <h3 class="text-lg font-bold text-[#c0caf5]">{section.title}</h3>
-          </div>
-          <p class="max-w-2xl text-sm leading-relaxed text-[#a9b1d6] sm:text-base">
-            {section.text}
-          </p>
-        </div>
-      ))}
-    </div>
-  </div>
-</section>
+  document.addEventListener("astro:page-load", () => {
+    observer?.disconnect();
+    const links = document.querySelectorAll<HTMLAnchorElement>("[data-spy]");
+    if (links.length === 0) return;
+    observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          for (const link of links) {
+            // An empty aria-current reads as "false"; use a real token.
+            if (link.dataset.spy === entry.target.id) {
+              link.setAttribute("aria-current", "location");
+            } else {
+              link.removeAttribute("aria-current");
+            }
+          }
+        }
+      },
+      { rootMargin: "-20% 0px -65% 0px" },
+    );
+    for (const link of links) {
+      const target = link.dataset.spy && document.getElementById(link.dataset.spy);
+      if (target) observer.observe(target);
+    }
+  });
+</script>
 
-<!-- ============================================================
-     Section 4: Core Stack — Row Index
-     ============================================================ -->
-<section class="relative bg-[#1a1b26] px-4 py-14 sm:px-8 sm:py-20 lg:px-12">
-  <div class="mx-auto max-w-5xl">
-    <div class="mb-10 sm:mb-12">
-      <p class="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#7aa2f7]">
-        Tech Stack
-      </p>
-      <h2
-        style="font-size: clamp(1.875rem, 3.5vw, 3rem); line-height: 1.2;"
-        class="font-bold text-[#c0caf5]"
-      >
-        Core{" "}
-        <span class="bg-gradient-to-r from-[#7aa2f7] to-[#bb9af7] bg-clip-text text-transparent">
-          Technologies
-        </span>
-      </h2>
-    </div>
+<style>
+  .about {
+    display: grid;
+    grid-template-columns: 12rem minmax(0, 1fr);
+    gap: clamp(2rem, 5vw, 5rem);
+    padding-block: clamp(3rem, 6vw, 5rem) clamp(4rem, 10vw, 8rem);
+  }
 
-    <div class="fade-up delay-1 grid grid-cols-1 gap-x-16 lg:grid-cols-2">
-      {coreStack.map((tech) => (
-        <div class="flex items-center justify-between gap-4 border-b border-[#414868]/40 py-3.5">
-          <span class="flex items-center gap-3">
-            <i
-              class={`devicon-${tech.icon}-plain text-xl`}
-              style={`color: ${tech.color};`}
-            />
-            <span class="text-sm font-medium text-[#c0caf5]">{tech.name}</span>
-          </span>
-          <span class="text-right text-xs text-[#565f89]">{tech.context}</span>
-        </div>
-      ))}
-    </div>
+  .about__spy {
+    position: sticky;
+    top: 6rem;
+    align-self: start;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+  }
 
-    <div class="mt-10">
-      <a
-        href="/experience"
-        class="inline-flex items-center gap-2 text-sm font-medium text-[#565f89] transition-colors duration-200 hover:text-[#7aa2f7]"
-      >
-        View full experience
-        <ArrowRight className="h-4 w-4" />
-      </a>
-    </div>
-  </div>
-</section>
+  .about__spy a {
+    color: var(--color-text-soft);
+    transition:
+      color var(--dur-1),
+      transform var(--dur-2) var(--ease-out);
+  }
 
-<!-- ============================================================
-     Section 5: Services — Numbered Editorial Sections
-     ============================================================ -->
-<section class="relative bg-[#1a1b26] px-4 py-14 sm:px-8 sm:py-20 lg:px-12">
-  <div class="mx-auto max-w-5xl">
-    <div class="mb-10 sm:mb-12">
-      <p class="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#7aa2f7]">
-        What I Do
-      </p>
-      <h2
-        style="font-size: clamp(1.875rem, 3.5vw, 3rem); line-height: 1.2;"
-        class="font-bold text-[#c0caf5]"
-      >
-        Services I{" "}
-        <span class="bg-gradient-to-r from-[#7aa2f7] to-[#bb9af7] bg-clip-text text-transparent">
-          Offer
-        </span>
-      </h2>
-    </div>
+  .about__spy a span {
+    color: var(--color-text-muted);
+  }
 
-    <div class="grid grid-cols-1 gap-x-16 gap-y-10 md:grid-cols-2">
-      {services.map((service, index) => {
-        const color = ["#7aa2f7", "#bb9af7", "#9ece6a", "#7aa2f7"][index]!;
-        return (
-          <div
-            class="fade-up border-t border-[#414868]/40 pt-6"
-            style={`animation-delay: ${index * 0.1}s;`}
-          >
-            <div class="mb-3 flex items-baseline gap-3">
-              <span class="text-xs font-bold tracking-widest" style={`color: ${color};`}>
-                0{index + 1}
-              </span>
-              <h3 class="text-lg font-bold text-[#c0caf5]">{service.title}</h3>
-            </div>
+  .about__spy a:hover,
+  .about__spy a[aria-current] {
+    color: var(--color-text-primary);
+    transform: translateX(0.4rem);
+  }
 
-            <p class="mb-4 text-sm leading-relaxed text-[#a9b1d6]">
-              {service.description}
-            </p>
+  .about__essay {
+    max-width: 42rem;
+  }
 
-            <ul class="mb-4 space-y-1.5">
-              {service.features.slice(0, 4).map((feature: string) => (
-                <li class="flex items-start gap-2 text-xs text-[#565f89]">
-                  <span class="mt-0.5 text-[#9ece6a]">&#9657;</span>
-                  <span>{feature}</span>
-                </li>
-              ))}
-            </ul>
+  .about__sec {
+    padding-bottom: clamp(3rem, 6vw, 4.5rem);
+    scroll-margin-top: 6rem;
+  }
 
-            <p class="text-xs leading-relaxed text-[#565f89]">
-              {service.technologies.join(" &middot; ")}
-            </p>
-          </div>
-        );
-      })}
-    </div>
-  </div>
-</section>
+  .about__who::after {
+    content: "";
+    display: block;
+    clear: both;
+  }
 
-<!-- ============================================================
-     Section 6: CTA — Full Width Closer
-     ============================================================ -->
-<section class="relative bg-[#1a1b26] px-4 py-16 sm:px-8 sm:py-24 lg:px-12">
-  <div class="mx-auto max-w-3xl text-center">
-    <p class="fade-up mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#7aa2f7]">
-      Open to Opportunities
-    </p>
-    <h2
-      style="font-size: clamp(1.875rem, 3.5vw, 2.5rem); line-height: 1.2;"
-      class="fade-up delay-1 mb-8 font-bold text-[#c0caf5]"
-    >
-      Let's build something{" "}
-      <span class="bg-gradient-to-r from-[#7aa2f7] to-[#bb9af7] bg-clip-text text-transparent">
-        together
-      </span>
-    </h2>
+  .about__portrait {
+    float: right;
+    width: min(13rem, 40%);
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: cover;
+    margin: 0.35rem 0 1rem 1.75rem;
+    filter: grayscale(1) contrast(1.05);
+    transition: filter 0.6s var(--ease-out);
+  }
 
-    <div class="flex flex-wrap items-center justify-center gap-4">
-      <a
-        href="/contact-me"
-        class="group inline-flex items-center gap-2 rounded-full bg-[#7aa2f7] px-7 py-3 text-sm font-semibold text-[#1a1b26] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#89b4fa] active:translate-y-0"
-      >
-        Get in Touch
-        <Send className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
-      </a>
-      <a
-        href="/project"
-        class="inline-flex items-center gap-2 rounded-full border border-[#414868]/40 px-7 py-3 text-sm font-semibold text-[#a9b1d6] transition-colors duration-200 hover:border-[#565f89] hover:text-[#c0caf5]"
-      >
-        View My Work
-        <ArrowRight className="h-4 w-4" />
-      </a>
-    </div>
-  </div>
-</section>
+  .about__portrait:hover {
+    filter: none;
+  }
+
+  .about__lede {
+    font-family: var(--font-serif);
+    font-size: clamp(1.6rem, 2.6vw, 2.1rem);
+    line-height: 1.2;
+    color: var(--color-text-primary);
+  }
+
+  .about__p {
+    margin-top: 1.1rem;
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    color: var(--color-text-secondary);
+  }
+
+  .about__h {
+    margin-bottom: 1.25rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 2.4vw, 2rem);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    color: var(--color-text-primary);
+  }
+
+  .about__princ li {
+    display: grid;
+    grid-template-columns: 2.75rem 1fr;
+    padding-block: 0.9rem;
+    border-top: 1px solid var(--color-line);
+    color: var(--color-text-secondary);
+  }
+
+  .about__princ li .ed-mono {
+    padding-top: 0.2rem;
+  }
+
+  .about__princ b {
+    font-weight: 600;
+    color: var(--color-text-primary);
+  }
+
+  .about__quote {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: clamp(1.75rem, 3.2vw, 2.5rem);
+    line-height: 1.18;
+    color: var(--color-text-primary);
+  }
+
+  .about__quote mark {
+    color: inherit;
+    background: linear-gradient(
+        transparent 60%,
+        color-mix(in srgb, var(--color-secondary) 42%, transparent) 60%
+      )
+      no-repeat left / 100% 100%;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+
+  /* The marker sweeps across as the quote scrolls into view. */
+  @supports (animation-timeline: view()) {
+    .about__quote mark {
+      animation: about-mark linear both;
+      animation-timeline: view();
+      animation-range: entry 40% cover 45%;
+    }
+  }
+
+  @keyframes about-mark {
+    from {
+      background-size: 0% 100%;
+    }
+  }
+
+  .about__stack div {
+    display: grid;
+    grid-template-columns: 11rem 1fr;
+    gap: 1rem;
+    padding-block: 0.9rem;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .about__stack dt {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--color-text-primary);
+  }
+
+  .about__stack dd {
+    margin: 0;
+    padding-top: 0.15rem;
+    color: var(--color-text-secondary);
+  }
+
+  @media (max-width: 767px) {
+    .about {
+      grid-template-columns: 1fr;
+    }
+
+    .about__spy {
+      display: none;
+    }
+
+    .about__stack div {
+      grid-template-columns: 1fr;
+      gap: 0.25rem;
+    }
+  }
+</style>

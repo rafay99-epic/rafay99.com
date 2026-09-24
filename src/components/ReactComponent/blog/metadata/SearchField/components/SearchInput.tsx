@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-import { LuSearch, LuX } from "react-icons/lu";
 import type { SearchInputProps } from "types/search";
 
 function SearchInput({
@@ -7,10 +6,7 @@ function SearchInput({
 	setQuery,
 	isSearchFocused,
 	setIsSearchFocused,
-	setShowSearchTips,
 	setSelectedResultIndex,
-	isMobile,
-	resultsLength,
 }: SearchInputProps) {
 	const blurTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(
 		undefined,
@@ -25,22 +21,14 @@ function SearchInput({
 	const handleFocus = () => {
 		clearTimeout(blurTimerRef.current);
 		setIsSearchFocused(true);
-		setShowSearchTips(true);
 	};
 
-	// Clean up blur timer on unmount
 	useEffect(() => {
 		return () => clearTimeout(blurTimerRef.current);
 	}, []);
 
 	return (
-		<div className="relative mb-4 flex items-center">
-			<div
-				className="absolute left-4 flex h-full items-center text-xl text-[#a9b1d6] transition-transform duration-200"
-				aria-hidden="true"
-			>
-				<LuSearch />
-			</div>
+		<div className="search__field">
 			<input
 				id="search-input"
 				type="text"
@@ -48,80 +36,37 @@ function SearchInput({
 				onChange={(e) => setQuery(e.target.value)}
 				onFocus={handleFocus}
 				onBlur={handleBlur}
-				placeholder="Type title or author"
+				placeholder="Type to search"
 				aria-label="Search articles"
-				className={`w-full rounded-xl border border-[#565f89]/40 bg-[#1a1b26]/60 text-[#c0caf5] placeholder-[#a9b1d6] transition-all duration-300 focus:border-[#7aa2f7] focus:shadow-lg focus:shadow-[#7aa2f7]/20 focus:outline-none ${
-					isMobile ? "py-3 pl-12 pr-10 text-base" : "py-4 pl-14 pr-12 text-lg"
-				}`}
+				autoComplete="off"
+				spellCheck={false}
+				className="search__input"
 			/>
-
-			<KeyboardShortcuts
-				isMobile={isMobile}
-				query={query}
-				isSearchFocused={isSearchFocused}
-				resultsLength={resultsLength}
-			/>
-
-			{query && (
-				<ClearButton
-					onClick={() => {
-						setQuery("");
-						setSelectedResultIndex(-1);
-					}}
-				/>
-			)}
+			<div className="ed-mono search__keys">
+				{query ? (
+					<button
+						type="button"
+						className="ed-link"
+						onClick={() => {
+							setQuery("");
+							setSelectedResultIndex(-1);
+						}}
+					>
+						clear
+					</button>
+				) : (
+					<span>
+						<kbd>/</kbd> to focus
+					</span>
+				)}
+				{isSearchFocused && (
+					<span className="search__nav-keys">
+						<kbd>↑↓</kbd> move <kbd>↵</kbd> open <kbd>esc</kbd> clear
+					</span>
+				)}
+			</div>
 		</div>
 	);
 }
-
-const KeyboardShortcuts = function KeyboardShortcuts({
-	isMobile,
-	query,
-	isSearchFocused,
-	resultsLength,
-}: {
-	isMobile: boolean;
-	query: string;
-	isSearchFocused: boolean;
-	resultsLength: number;
-}) {
-	return (
-		<div className="absolute right-14 top-1/2 flex -translate-y-1/2 items-center gap-2 text-sm text-[#565f89]">
-			{!isMobile && !query && (
-				<span className="hidden items-center gap-1 md:flex">
-					<kbd className="rounded bg-[#1a1b26] px-2 py-1 text-xs text-[#565f89]">
-						/
-					</kbd>
-					<span>to focus</span>
-				</span>
-			)}
-			{isSearchFocused && resultsLength > 0 && (
-				<span className="hidden items-center gap-1 md:flex">
-					<kbd className="rounded bg-[#1a1b26] px-2 py-1 text-xs text-[#565f89]">
-						↑↓
-					</kbd>
-					<span>to navigate</span>
-					<kbd className="rounded bg-[#1a1b26] px-2 py-1 text-xs text-[#565f89]">
-						↵
-					</kbd>
-					<span>to select</span>
-				</span>
-			)}
-		</div>
-	);
-};
-
-const ClearButton = function ClearButton({ onClick }: { onClick: () => void }) {
-	return (
-		<button
-			type="button"
-			className="absolute right-4 flex h-full items-center text-[#a9b1d6] transition-colors duration-200 hover:text-[#c0caf5] active:scale-95"
-			onClick={onClick}
-			aria-label="Clear search"
-		>
-			<LuX className="h-4 w-4" />
-		</button>
-	);
-};
 
 export default SearchInput;

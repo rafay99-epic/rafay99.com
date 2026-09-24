@@ -19,11 +19,10 @@
 		transparent
 	);
 	--prose-link-underline-hover: var(--color-border-accent);
-	--prose-code-bg: var(--color-hover);
-	--prose-code-fg: var(--color-text-accent);
-	--prose-code-border: var(--color-border-secondary);
-	--prose-pre-bg: var(--color-bg-tertiary);
-	--prose-pre-border: var(--color-border-primary);
+	--prose-code-bg: color-mix(in srgb, var(--color-primary) 13%, transparent);
+	--prose-code-fg: var(--color-text-primary);
+	--prose-pre-bg: #16161e;
+	--prose-pre-border: var(--color-line);
 	--prose-pre-fg: var(--color-text-primary);
 	--prose-pre-shadow:
 		0 2px 6px color-mix(in srgb, var(--color-bg-primary) 55%, transparent),
@@ -31,14 +30,6 @@
 	--prose-table-border: var(--color-border-secondary);
 	--prose-table-head-bg: var(--color-bg-tertiary);
 	--prose-table-cell-border: var(--color-border-secondary);
-	--prose-table-row-alt: color-mix(
-		in srgb,
-		var(--color-bg-tertiary) 38%,
-		transparent
-	);
-	--prose-table-row-hover: var(--color-hover);
-	--prose-table-shadow: 0 2px 14px
-		color-mix(in srgb, var(--color-bg-primary) 65%, transparent);
 	--prose-blockquote-border: var(--color-border-accent);
 	--prose-blockquote-bg: color-mix(
 		in srgb,
@@ -64,7 +55,7 @@
 
 /* -------- Headings -------- */
 .content-prose :where(h1, h2, h3, h4, h5, h6) {
-	font-family: "Poppins", sans-serif;
+	font-family: var(--font-display);
 	font-weight: 600;
 	line-height: 1.28;
 	scroll-margin-top: 7.5rem;
@@ -286,29 +277,23 @@
 /* -------- Tables (full chrome + hover from legacy global) -------- */
 .content-prose :where(table) {
 	width: 100%;
+	margin: 2em 0;
 	border-collapse: collapse;
-	margin: 1.35em 0;
 	font-size: 0.94em;
-	border: 1px solid var(--prose-table-border);
-	border-radius: 10px;
-	overflow: hidden;
-	background: var(--color-bg-secondary);
-	box-shadow: var(--prose-table-shadow);
+	line-height: 1.55;
 }
 
 .content-prose :where(caption) {
 	caption-side: top;
-	padding: 0.5rem 0.85rem 0.35rem;
+	padding-bottom: 0.75rem;
+	font-family: var(--font-mono);
 	font-size: 0.8rem;
-	font-weight: 600;
-	letter-spacing: 0.06em;
-	text-transform: uppercase;
-	color: var(--color-text-muted);
+	color: var(--color-text-soft);
 	text-align: left;
 }
 
 .content-prose :where(thead) {
-	background: var(--prose-table-head-bg);
+	background: none;
 }
 
 .content-prose :where(tfoot) {
@@ -319,22 +304,25 @@
 }
 
 .content-prose :where(th) {
-	padding: 0.65rem 0.85rem;
-	text-align: left;
-	font-size: 0.72rem;
-	font-weight: 600;
-	letter-spacing: 0.08em;
-	text-transform: uppercase;
+	padding: 0 1.25rem 0.75rem 0;
+	border-bottom: 1px solid var(--color-text-muted);
+	font-family: var(--font-mono);
+	font-size: 0.8rem;
+	font-weight: 500;
 	color: var(--prose-heading);
-	border-bottom: 2px solid var(--color-border-accent);
+	text-align: left;
 	vertical-align: bottom;
 }
 
 .content-prose :where(td) {
-	padding: 0.65rem 0.85rem;
-	border-bottom: 1px solid var(--prose-table-cell-border);
+	padding: 0.85rem 1.25rem 0.85rem 0;
+	border-bottom: 1px solid var(--color-line);
 	color: var(--prose-body);
 	vertical-align: top;
+}
+
+.content-prose :where(th, td):last-child {
+	padding-right: 0;
 }
 
 .content-prose :where(tr:last-child td) {
@@ -342,7 +330,7 @@
 }
 
 .content-prose :where(tbody tr:nth-child(even)) {
-	background: var(--prose-table-row-alt);
+	background: none;
 }
 
 .content-prose :where(tbody tr) {
@@ -350,7 +338,7 @@
 }
 
 .content-prose :where(tbody tr:hover) {
-	background: var(--prose-table-row-hover);
+	background: color-mix(in srgb, var(--color-bg-secondary) 55%, transparent);
 }
 
 /* -------- Media & figures -------- */
@@ -385,29 +373,76 @@
 
 /* -------- Inline code (not pre > code — higher specificity below) -------- */
 .content-prose :where(code) {
-	font-family: "Fira Code", ui-monospace, "Cascadia Code", monospace;
-	font-size: 0.88em;
-	font-weight: 500;
-	padding: 0.12em 0.38em;
-	border-radius: 5px;
-	border: 1px solid var(--prose-code-border);
+	font-family: var(--font-mono);
+	font-size: 0.875em;
+	font-weight: 400;
+	padding: 0.15em 0.4em;
+	border: 0;
+	border-radius: 4px;
 	background: var(--prose-code-bg);
 	color: var(--prose-code-fg);
+	-webkit-box-decoration-break: clone;
+	box-decoration-break: clone;
 }
 
 /* -------- Code blocks -------- */
 .content-prose :where(pre) {
 	position: relative;
-	margin: 1.35em 0;
-	padding: 1rem 1.15rem;
-	border-radius: 12px;
+	margin: 1.75em 0;
+	padding: 1.1rem 1.25rem;
 	border: 1px solid var(--prose-pre-border);
-	background: var(--prose-pre-bg);
-	box-shadow: var(--prose-pre-shadow);
+	border-radius: 6px;
+	background-color: var(--prose-pre-bg);
 	overflow-x: auto;
-	font-size: 0.86em;
-	line-height: 1.55;
+	font-size: 0.875em;
+	line-height: 1.65;
 	tab-size: 2;
+}
+
+/* Blocks with a copy button get a header row: language on the left, copy on
+   the right, a hairline underneath. The hairline is a background layer so it
+   stays put while the code scrolls sideways. */
+.content-prose pre[data-copy-enhanced="true"] {
+	padding-top: 3.25rem;
+	background-image: linear-gradient(
+		var(--prose-pre-border),
+		var(--prose-pre-border)
+	);
+	background-repeat: no-repeat;
+	background-position: 0 2.5rem;
+	background-size: 100% 1px;
+}
+
+.content-prose pre[data-language]::before {
+	content: attr(data-language);
+	position: absolute;
+	top: 0;
+	left: 1.25rem;
+	height: 2.5rem;
+	display: flex;
+	align-items: center;
+	font-family: var(--font-mono);
+	font-size: 0.75rem;
+	line-height: 1;
+	color: var(--color-text-soft);
+}
+
+.content-prose pre[data-language="plaintext"]::before,
+.content-prose pre:not([data-copy-enhanced="true"])::before {
+	content: none;
+}
+
+/* Touch devices get a 40px copy button, so the header row grows to fit.
+   Kept after the base rules above so it wins at equal specificity. */
+@media (max-width: 768px) {
+	.content-prose pre[data-copy-enhanced="true"] {
+		padding-top: 3.75rem;
+		background-position: 0 3rem;
+	}
+
+	.content-prose pre[data-language]::before {
+		height: 3rem;
+	}
 }
 
 .content-prose pre::-webkit-scrollbar {
@@ -435,7 +470,7 @@
 	all: unset;
 	display: block;
 	white-space: pre;
-	font-family: "Fira Code", ui-monospace, "Cascadia Code", monospace;
+	font-family: var(--font-mono);
 	font-size: 1em;
 	line-height: 1.55;
 	color: var(--prose-pre-fg);
@@ -468,7 +503,7 @@
 
 /* -------- Keyboard, sample, variable, mark, abbr -------- */
 .content-prose :where(kbd) {
-	font-family: "Fira Code", ui-monospace, monospace;
+	font-family: var(--font-mono);
 	font-size: 0.85em;
 	padding: 0.12em 0.45em;
 	border-radius: 5px;
@@ -479,7 +514,7 @@
 }
 
 .content-prose :where(samp) {
-	font-family: "Fira Code", ui-monospace, monospace;
+	font-family: var(--font-mono);
 	font-size: 0.9em;
 	color: var(--prose-code-fg);
 }

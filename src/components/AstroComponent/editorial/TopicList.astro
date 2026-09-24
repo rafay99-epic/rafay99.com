@@ -1,0 +1,118 @@
+---
+/**
+ * Tags as a typographic cloud; size steps with usage. One-off tags fold into
+ * a disclosure so recurring topics stay readable.
+ */
+interface Props {
+	tags: [tag: string, count: number][];
+	selected?: string | null;
+}
+
+const { tags, selected = null } = Astro.props;
+const max = Math.max(1, ...tags.map(([, n]) => n));
+const step = (n: number) => Math.min(4, Math.ceil((n / max) * 4));
+const recurring = tags.filter(([, n]) => n > 1);
+const oneOff = tags.filter(([, n]) => n === 1);
+const selectedIsOneOff = oneOff.some(([tag]) => tag === selected);
+---
+
+<ul class="topics">
+  {
+    recurring.map(([tag, n]) => (
+      <li>
+        <a
+          href={`/tag/${tag}/`}
+          class:list={["topics__tag", `s${step(n)}`, { "is-on": tag === selected }]}
+          aria-current={tag === selected ? "page" : undefined}
+        >
+          {tag}
+          <sup class="ed-mono">{n}</sup>
+        </a>
+      </li>
+    ))
+  }
+</ul>
+{
+  oneOff.length > 0 && (
+    <details class="topics__more" open={selectedIsOneOff}>
+      <summary class="ed-mono">+ {oneOff.length} one-off topics</summary>
+      <ul class="topics__small ed-mono">
+        {oneOff.map(([tag]) => (
+          <li>
+            <a
+              href={`/tag/${tag}/`}
+              class:list={["ed-link", { "is-on": tag === selected }]}
+              aria-current={tag === selected ? "page" : undefined}
+            >
+              {tag}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </details>
+  )
+}
+
+<style>
+  .topics {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.35rem 1.4rem;
+    padding-top: 1.5rem;
+  }
+
+  .topics__tag {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    color: var(--color-text-secondary);
+    transition: color var(--dur-1);
+  }
+
+  .topics__tag sup {
+    margin-left: 0.15rem;
+    font-size: 0.75rem;
+    letter-spacing: 0;
+    vertical-align: super;
+  }
+
+  .s1 {
+    font-size: 1.15rem;
+  }
+  .s2 {
+    font-size: 1.5rem;
+  }
+  .s3 {
+    font-size: 2rem;
+  }
+  .s4 {
+    font-size: 2.6rem;
+  }
+
+  .topics__tag:hover {
+    color: var(--color-text-primary);
+  }
+
+  .is-on {
+    color: var(--color-secondary);
+  }
+
+  .topics__more {
+    margin-top: 1.5rem;
+  }
+
+  .topics__more summary {
+    width: fit-content;
+    cursor: pointer;
+    color: var(--color-text-secondary);
+  }
+
+  .topics__small {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 1rem;
+    margin-top: 1rem;
+    color: var(--color-text-soft);
+  }
+</style>

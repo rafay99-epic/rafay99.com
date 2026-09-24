@@ -2,10 +2,10 @@ import type { Styles } from "types/codeblock";
 
 export const STYLES: Styles = {
 	buttonContainer:
-		"absolute top-3 right-3 flex items-center gap-2 z-10 touch-manipulation",
+		"absolute top-1 right-1.5 flex items-center gap-2 z-10 touch-manipulation",
 	languageLabel: "text-xs font-medium px-2 py-1 rounded select-none",
 	copyButton:
-		"flex items-center justify-center w-8 h-8 rounded-md transition-all duration-200 touch-manipulation bg-[#24283b]/50 hover:bg-[#414868]/50",
+		"flex items-center justify-center w-8 h-8 rounded-md transition-colors duration-200 touch-manipulation text-[#7b83ac] hover:text-[#c0caf5] hover:bg-[#24283b] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#7aa2f7]",
 	mobileButton: "w-10 h-10",
 
 	default: {

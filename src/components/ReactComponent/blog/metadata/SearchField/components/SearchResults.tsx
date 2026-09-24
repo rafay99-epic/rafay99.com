@@ -1,103 +1,67 @@
-import { AnimatePresence, m } from "framer-motion";
+import { accentAt, formatDate } from "@astro/editorial/format";
+import type { CSSProperties } from "react";
 import type { SearchResultsProps } from "types/search";
 
-const containerVariants = {
-	hidden: { opacity: 0 },
-	visible: {
-		opacity: 1,
-		transition: {
-			delayChildren: 0.04,
-			staggerChildren: 0.02,
-		},
-	},
-};
-
-const itemVariants = {
-	hidden: { y: 20, opacity: 0 },
-	visible: {
-		y: 0,
-		opacity: 1,
-		transition: {
-			duration: 0.5,
-			ease: "easeOut",
-		},
-	},
-};
+type ResultPost = SearchResultsProps["results"][number];
 
 function SearchResults({
-	query,
 	results,
 	selectedResultIndex,
 	setSelectedResultIndex,
 }: SearchResultsProps) {
-	if (!query || results.length === 0) return null;
+	if (results.length === 0) return null;
 
 	return (
-		<AnimatePresence mode="wait">
-			<m.div
-				variants={containerVariants}
-				initial="hidden"
-				animate="visible"
-				exit="hidden"
-				className="space-y-4"
-			>
-				{results.map((post, index) => (
-					<SearchResultItem
-						key={post.id}
-						post={post}
-						index={index}
-						isSelected={selectedResultIndex === index}
-						setSelectedResultIndex={setSelectedResultIndex}
-					/>
-				))}
-			</m.div>
-		</AnimatePresence>
+		<ol className="ed-index">
+			{results.map((post, index) => (
+				<ResultRow
+					key={post.id}
+					post={post}
+					index={index}
+					isSelected={selectedResultIndex === index}
+					onHover={() => setSelectedResultIndex(index)}
+				/>
+			))}
+		</ol>
 	);
 }
 
-function SearchResultItem({
+// One post in the editorial index style; also used for "Recent posts".
+export function ResultRow({
 	post,
 	index,
-	isSelected,
-	setSelectedResultIndex,
+	isSelected = false,
+	onHover,
 }: {
-	post: SearchResultsProps["results"][0];
+	post: ResultPost;
 	index: number;
-	isSelected: boolean;
-	setSelectedResultIndex: (index: number) => void;
+	isSelected?: boolean;
+	onHover?: () => void;
 }) {
+	const date = new Date(post.data.pubDate);
 	return (
-		<m.a
+		<li
+			className={`ed-row search__row${isSelected ? " is-selected" : ""}`}
 			data-result-index={index}
-			href={`/blog/${post.id}`}
-			variants={itemVariants}
-			className={`group block rounded-2xl border bg-[#24283b]/60 p-6 shadow-xl backdrop-blur-xl transition-all duration-300 hover:border-[#7aa2f7]/40 hover:bg-[#24283b]/80 hover:shadow-2xl hover:shadow-[#7aa2f7]/10 ${
-				isSelected
-					? "border-[#7aa2f7]/50 shadow-lg shadow-[#7aa2f7]/10"
-					: "border-[#565f89]/30"
-			}`}
-			whileHover={{ scale: 1.01 }}
-			onMouseEnter={() => setSelectedResultIndex(index)}
+			style={{ "--c": accentAt(index), "--i": index } as CSSProperties}
+			onMouseEnter={onHover}
 		>
-			<h3 className="mb-2 text-xl font-bold text-[#c0caf5] transition-colors group-hover:text-[#7aa2f7]">
-				{post.data.title}
-			</h3>
-			<p className="mb-4 text-sm leading-relaxed text-[#a9b1d6]">
-				{post.data.description}
+			<time className="ed-row__meta" dateTime={date.toISOString()}>
+				{formatDate(date)}
+			</time>
+			<div>
+				<a className="ed-row__hit" href={`/blog/${post.id}/`}>
+					<h3 className="ed-row__title">{post.data.title}</h3>
+				</a>
+				<p className="ed-row__desc">{post.data.description}</p>
+			</div>
+			<p className="ed-row__meta is-end">
+				{post.data.tags
+					?.slice(0, 2)
+					.map((tag) => `#${tag}`)
+					.join(" ")}
 			</p>
-			{post.data.tags && (
-				<div className="flex flex-wrap gap-2">
-					{post.data.tags.map((tag) => (
-						<span
-							key={tag}
-							className="rounded-lg bg-[#1a1b26]/80 px-2.5 py-1 text-xs text-[#7aa2f7] transition-colors group-hover:bg-[#1a1b26] group-hover:text-[#bb9af7]"
-						>
-							#{tag}
-						</span>
-					))}
-				</div>
-			)}
-		</m.a>
+		</li>
 	);
 }
 

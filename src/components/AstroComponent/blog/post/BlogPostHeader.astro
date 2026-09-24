@@ -1,5 +1,6 @@
 ---
 import SeriesBadge from "@astro/blog/series/SeriesBadge.astro";
+import { formatDate } from "@astro/editorial/format";
 
 interface Props {
 	title: string;
@@ -37,84 +38,51 @@ const {
 ---
 
 <header class="post-header">
-	<div class="post-eyebrow">
-		<time datetime={pubDate.toISOString()}>
-			{
-				new Date(pubDate).toLocaleDateString("en-US", {
-					year: "numeric",
-					month: "long",
-					day: "numeric",
-				})
-			}
-		</time>
-		{
-			isArchive && (
-				<span class="post-badge">
-					Archived article &middot; may be outdated
-				</span>
-			)
-		}
+	<p class="post-eyebrow">
+		<a class="post-back" href={isArchive ? "/blog/archive/" : "/blog/"}>
+			← {isArchive ? "Archive" : "Writing"}
+		</a>
+		<span class="post-dot" aria-hidden="true">·</span>
+		<time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
+		{isArchive && <span class="post-badge">Archived · may be outdated</span>}
 		{
 			series && seriesPart && (
 				<SeriesBadge series={series} part={seriesPart} total={seriesTotal} />
 			)
 		}
-	</div>
+	</p>
 
-	<h1
-		class="post-title bg-gradient-to-r from-[#7aa2f7] via-[#bb9af7] to-[#9ece6a] bg-clip-text text-transparent"
-	>
-		{title}
-	</h1>
+	<h1 class="post-title">{title}</h1>
 
 	{lead && <p class="post-lead">{lead}</p>}
 
 	<div class="post-byline">
-		<div class="post-author">
+		<span class="post-author">
 			{
 				authorAvatar ? (
-					<img
-						src={authorAvatar}
-						alt=""
-						aria-hidden="true"
-						class="inline-block h-8 w-8 rounded-full border border-[#565f89]/30 object-cover"
-						loading="eager"
-					/>
+					<img src={authorAvatar} alt="" aria-hidden="true" loading="eager" />
 				) : (
-					<div class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#24283b] text-xs font-medium text-[#7aa2f7] ring-1 ring-[#565f89]/30">
+					<span class="post-avatar-fallback" aria-hidden="true">
 						{authorName?.charAt(0)?.toUpperCase()}
-					</div>
+					</span>
 				)
 			}
-			<span>{authorName}</span>
-		</div>
+			{authorName}
+		</span>
 		{readTime && <span>{readTime}</span>}
-		{
-			wordCount > 0 && formattedWordCount && (
-				<span class="post-wordcount">{formattedWordCount} words</span>
-			)
-		}
-		{
-			updatedDate && (
-				<span>
-					Updated{" "}
-					{updatedDate.toLocaleDateString("en-US", {
-						year: "numeric",
-						month: "long",
-						day: "numeric",
-					})}
-				</span>
-			)
-		}
+		{wordCount > 0 && formattedWordCount && <span>{formattedWordCount} words</span>}
+		{updatedDate && <span>Updated {formatDate(updatedDate)}</span>}
 	</div>
 
 	{
 		tags && tags.length > 0 && (
-			<div class="post-tags">
+			<p class="post-tags">
 				{tags.map((tag: string) => (
-					<span class="post-tag">{tag}</span>
+					<a class="post-tag" href={`/tag/${tag}/`}>
+						#{tag}
+					</a>
 				))}
-			</div>
+			</p>
 		)
 	}
 </header>

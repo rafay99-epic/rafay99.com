@@ -1,552 +1,394 @@
 ---
-import { Image } from "astro:assets";
-import NavLink from "@astro/header/NavLink.astro";
 import { featureFlags } from "@config/featureFlag/featureFlag.json";
 import authorConfig from "@config/siteConfig/info.json";
-import {
-	BookOpen,
-	Briefcase,
-	ChevronDown,
-	ExternalLink,
-	GitPullRequest,
-	Globe,
-	Home,
-	Menu,
-	Rocket,
-	Search,
-	Tag,
-	TrendingUp,
-	User,
-	X,
-} from "lucide-react";
+
+type NavItem = { href: string; label: string; external?: boolean };
+
+const primary: NavItem[] = [
+	featureFlags.showProjects && { href: "/project/", label: "Work" },
+	featureFlags.showBlog && { href: "/blog/", label: "Writing" },
+	featureFlags.showAbout && { href: "/about/", label: "About" },
+	featureFlags.showExperience && { href: "/experience/", label: "Experience" },
+	featureFlags.showOpenSource && {
+		href: "/open-source/",
+		label: "Open Source",
+	},
+	featureFlags.showTrendingPosts && { href: "/trending/", label: "Trending" },
+	featureFlags.showWiki && {
+		href: "https://rafay99-docs.vercel.app/",
+		label: "Wiki",
+		external: true,
+	},
+].filter((item): item is NavItem => Boolean(item));
+
+const utility: NavItem[] = [
+	featureFlags.showTags && { href: "/tag/", label: "Tags" },
+	featureFlags.showSearch && { href: "/search/", label: "Search" },
+].filter((item): item is NavItem => Boolean(item));
+
+const path = Astro.url.pathname;
+// Tag pages count as "Writing".
+const isActive = (href: string) =>
+	path.startsWith(href) || (href === "/blog/" && path.startsWith("/tag/"));
+const external = { target: "_blank", rel: "noopener noreferrer" };
 ---
 
-<style is:global>
-  header {
-    background-color: transparent !important;
-    transition: none !important;
-  }
+<header id="site-header" class="hdr" style={{ viewTransitionName: "header" }}>
+  <div class="hdr__bar">
+    <a href="/" class="hdr__name" aria-label={`${authorConfig.SiteName}, home`}>
+      {authorConfig.SiteName}
+    </a>
 
-  ::view-transition-old(header),
-  ::view-transition-new(header) {
-    background-color: transparent !important;
-    animation: none !important;
-  }
-
-  /* Floating nav bar */
-  .nav-float {
-    background: rgba(26, 27, 38, 0.82);
-    backdrop-filter: blur(20px) saturate(1.5);
-    -webkit-backdrop-filter: blur(20px) saturate(1.5);
-    border: 1px solid rgba(86, 95, 137, 0.2);
-    box-shadow:
-      0 2px 12px rgba(0, 0, 0, 0.2),
-      inset 0 1px 0 rgba(192, 202, 245, 0.03);
-    transition:
-      background 0.2s ease,
-      border-color 0.2s ease,
-      box-shadow 0.2s ease;
-  }
-
-  .nav-float.is-scrolled {
-    background: rgba(26, 27, 38, 0.94);
-    border-color: rgba(86, 95, 137, 0.25);
-    box-shadow:
-      0 4px 20px rgba(0, 0, 0, 0.3),
-      inset 0 1px 0 rgba(192, 202, 245, 0.04);
-  }
-
-  /* Mobile menu */
-  .mobile-menu-overlay {
-    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    transform: translateX(100%);
-  }
-
-  .mobile-menu-overlay.is-open {
-    transform: translateX(0);
-  }
-
-  .mobile-menu-backdrop {
-    transition: opacity 0.25s ease;
-    opacity: 0;
-  }
-
-  .mobile-menu-backdrop.is-open {
-    opacity: 1;
-  }
-
-  /* More dropdown */
-  .more-dropdown {
-    opacity: 0;
-    transform: translateY(-4px);
-    transition:
-      opacity 0.15s ease,
-      transform 0.15s ease;
-    pointer-events: none;
-  }
-
-  .more-dropdown.is-open {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-  }
-</style>
-
-<header
-  class="fixed left-0 right-0 top-0 z-50"
-  style={{ viewTransitionName: "header" }}
->
-  <div class="mx-auto max-w-5xl px-3 pt-3 sm:px-4 sm:pt-4">
-    <nav
-      class="nav-float relative flex h-11 items-center justify-center rounded-2xl px-4 sm:px-5"
-      id="nav-float"
-    >
-      <!-- Site name (left side) — desktop -->
-      <a
-        href="/"
-        class="absolute left-4 hidden items-center gap-2 text-[13px] font-medium text-[#a9b1d6] sm:left-5 lg:flex"
-      >
-        <Image
-          src={authorConfig.avator}
-          alt={authorConfig.name}
-          width={24}
-          height={24}
-          class="h-6 w-6 translate-y-[3px] rounded-full ring-1 ring-[#7aa2f7]/30 shadow-[0_0_6px_rgba(122,162,247,0.25)]"
-        />
-        {authorConfig.SiteName}
-      </a>
-
-      <!-- Site name (left side) — mobile/tablet -->
-      <a
-        href="/"
-        class="absolute left-4 flex items-center gap-2 text-[13px] font-medium text-[#a9b1d6] lg:hidden"
-      >
-        <Image
-          src={authorConfig.avator}
-          alt={authorConfig.name}
-          width={24}
-          height={24}
-          class="h-6 w-6 translate-y-[3px] rounded-full ring-1 ring-[#7aa2f7]/30 shadow-[0_0_6px_rgba(122,162,247,0.25)]"
-        />
-        {authorConfig.SiteName}
-      </a>
-
-      <!-- Desktop nav links (centered) -->
-      <div class="hidden items-center gap-0.5 lg:flex">
-        <NavLink href="/">Home</NavLink>
-
-        {featureFlags.showBlog && <NavLink href="/blog">Articles</NavLink>}
-
-        {featureFlags.showAbout && <NavLink href="/about">About</NavLink>}
-
-        {
-          featureFlags.showExperience && (
-            <NavLink href="/experience">Experience</NavLink>
-          )
-        }
-
-        {
-          featureFlags.showProjects && (
-            <NavLink href="/project">Projects</NavLink>
-          )
-        }
-
-        {
-          featureFlags.showOpenSource && (
-            <NavLink href="/open-source">Open Source</NavLink>
-          )
-        }
-
-        {
-          (featureFlags.showTrendingPosts || featureFlags.showWiki) && (
-            <div class="relative" id="more-dropdown-container">
-              <button
-                aria-haspopup="true"
-                id="more-dropdown-button"
-                class="flex h-8 items-center gap-0.5 px-3 text-[13px] text-[#565f89] transition-colors duration-150 hover:text-[#c0caf5]"
-                aria-expanded="false"
-              >
-                More
-                <ChevronDown
-                  id="more-dropdown-chevron"
-                  className="h-3 w-3 transition-transform duration-200"
-                />
-              </button>
-
-              <div
-                id="more-dropdown-menu"
-                class="more-dropdown absolute right-0 z-50 mt-2 w-48 rounded-lg border border-[#565f89]/15 bg-[#1a1b26]/95 py-1 shadow-lg backdrop-blur-md"
-              >
-                {featureFlags.showTrendingPosts && (
-                  <a
-                    role="menuitem"
-                    href="/trending"
-                    class="flex items-center gap-2.5 px-3 py-2 text-[13px] text-[#a9b1d6] transition-colors duration-150 hover:bg-[#24283b]/50 hover:text-[#c0caf5]"
-                  >
-                    <TrendingUp className="w-3.5 h-3.5 text-[#565f89]" />
-                    Trending
-                  </a>
-                )}
-                {featureFlags.showWiki && (
-                  <a
-                    role="menuitem"
-                    href="https://rafay99-docs.vercel.app/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="flex items-center gap-2.5 px-3 py-2 text-[13px] text-[#a9b1d6] transition-colors duration-150 hover:bg-[#24283b]/50 hover:text-[#c0caf5]"
-                  >
-                    <Globe className="w-3.5 h-3.5 text-[#565f89]" />
-                    Wiki
-                    <ExternalLink className="ml-auto w-3 h-3 text-[#414868]" />
-                  </a>
-                )}
-              </div>
-            </div>
-          )
-        }
-      </div>
-
-      <!-- Right side: utility icons + mobile toggle -->
-      <div class="absolute right-3 flex items-center gap-0.5 sm:right-4">
-        {
-          featureFlags.showTags && (
-            <NavLink
-              href="/tag"
-              icon={Tag}
-              aria-label="Tags"
-              className="hidden lg:flex"
-            />
-          )
-        }
-        {
-          featureFlags.showSearch && (
-            <NavLink
-              href="/search"
-              icon={Search}
-              aria-label="Search"
-              className="hidden lg:flex"
-            />
-          )
-        }
-
-        <button
-          aria-label="Toggle menu"
-          aria-haspopup="menu"
-          id="mobile-menu-button"
-          aria-expanded="false"
-          class="flex h-8 w-8 items-center justify-center rounded-md text-[#565f89] transition-colors duration-150 hover:text-[#a9b1d6] lg:hidden"
-        >
-          <Menu id="menu-icon" className="h-5 w-5" />
-          <X id="close-icon" className="hidden h-5 w-5" />
-        </button>
-      </div>
+    <nav class="hdr__nav" aria-label="Primary">
+      {
+        primary.map((item) => (
+          <a
+            href={item.href}
+            class:list={["hdr__link", { "is-active": isActive(item.href) }]}
+            aria-current={isActive(item.href) ? "page" : undefined}
+            {...(item.external ? external : {})}
+          >
+            {item.label}
+          </a>
+        ))
+      }
     </nav>
+
+    <div class="hdr__util">
+      {
+        utility.map((item) => (
+          <a
+            href={item.href}
+            class:list={["hdr__util-link", { "is-active": path.startsWith(item.href) }]}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+      <button
+        type="button"
+        class="hdr__menu-btn"
+        data-menu-toggle
+        aria-controls="site-menu"
+        aria-expanded="false"
+      >
+        Menu
+      </button>
+    </div>
   </div>
 </header>
 
-<!-- Mobile backdrop -->
-<div
-  id="mobile-menu-backdrop"
-  class="mobile-menu-backdrop fixed inset-0 z-[90] hidden bg-black/40 backdrop-blur-sm lg:hidden"
->
-</div>
-
-<!-- Mobile slide-out menu -->
-<nav
-  id="mobile-menu"
-  class="mobile-menu-overlay fixed right-0 top-0 z-[100] flex h-full w-72 max-w-[80vw] flex-col bg-[#1a1b26] lg:hidden"
->
-  <!-- Mobile menu header -->
-  <div
-    class="flex items-center justify-between px-4 py-3.5 border-b border-[#565f89]/10"
-  >
-    <a href="/" class="flex items-center gap-2.5">
-      <Image
-        src={authorConfig.avator}
-        alt={authorConfig.name}
-        width={28}
-        height={28}
-        class="h-7 w-7 shrink-0 rounded-full ring-1 ring-[#7aa2f7]/30 shadow-[0_0_6px_rgba(122,162,247,0.25)]"
-      />
-      <span class="text-[13px] leading-none font-medium text-[#a9b1d6]">
-        {authorConfig.SiteName}
-      </span>
-    </a>
-    <button
-      id="close-mobile-menu"
-      class="rounded-md p-1.5 text-[#565f89] transition-colors duration-150 hover:text-[#a9b1d6]"
-      aria-label="Close menu"
-    >
-      <X className="h-4 w-4" />
+<div id="site-menu" class="menu" aria-hidden="true">
+  <div class="menu__top">
+    <a href="/" class="hdr__name">{authorConfig.SiteName}</a>
+    <button type="button" class="hdr__menu-btn is-close" data-menu-toggle>
+      Close
     </button>
   </div>
-
-  <!-- Mobile nav links -->
-  <div class="flex-1 overflow-y-auto px-3 py-3">
-    <div class="space-y-0.5">
-      <NavLink href="/" icon={Home} mobile>Home</NavLink>
-
-      {
-        featureFlags.showBlog && (
-          <NavLink href="/blog" icon={BookOpen} mobile>
-            Articles
-          </NavLink>
-        )
-      }
-
-      {
-        featureFlags.showAbout && (
-          <NavLink href="/about" icon={User} mobile>
-            About
-          </NavLink>
-        )
-      }
-
-      {
-        featureFlags.showExperience && (
-          <NavLink href="/experience" icon={Briefcase} mobile>
-            Experience
-          </NavLink>
-        )
-      }
-
-      {
-        featureFlags.showProjects && (
-          <NavLink href="/project" icon={Rocket} mobile>
-            Projects
-          </NavLink>
-        )
-      }
-
-      {
-        featureFlags.showOpenSource && (
-          <NavLink href="/open-source" icon={GitPullRequest} mobile>
-            Open Source
-          </NavLink>
-        )
-      }
-
-      {
-        featureFlags.showTags && (
-          <NavLink href="/tag" icon={Tag} mobile>
-            Tags
-          </NavLink>
-        )
-      }
-
-      {
-        featureFlags.showSearch && (
-          <NavLink href="/search" icon={Search} mobile>
-            Search
-          </NavLink>
-        )
-      }
-    </div>
-
+  <nav class="menu__nav" aria-label="Mobile">
+    <a href="/" class="menu__link" style="--i:0" tabindex="-1">Home</a>
     {
-      (featureFlags.showTrendingPosts || featureFlags.showWiki) && (
-        <div class="mt-4 border-t border-[#565f89]/10 pt-4">
-          <p class="mb-2 px-3 text-[11px] font-medium uppercase tracking-wider text-[#414868]">
-            More
-          </p>
-          <div class="space-y-0.5">
-            {featureFlags.showTrendingPosts && (
-              <NavLink href="/trending" icon={TrendingUp} mobile>
-                Trending
-              </NavLink>
-            )}
-            {featureFlags.showWiki && (
-              <NavLink
-                href="https://rafay99-docs.vercel.app/"
-                icon={Globe}
-                target="_blank"
-                rel="noopener noreferrer"
-                mobile
-              >
-                Wiki
-              </NavLink>
-            )}
-          </div>
-        </div>
-      )
+      [...primary, ...utility].map((item, i) => (
+        <a
+          href={item.href}
+          class:list={["menu__link", { "is-active": isActive(item.href) }]}
+          style={`--i:${i + 1}`}
+          tabindex="-1"
+          {...(item.external ? external : {})}
+        >
+          {item.label}
+        </a>
+      ))
     }
-  </div>
-</nav>
+  </nav>
+  <p class="menu__foot">{authorConfig.jobTitle}</p>
+</div>
 
-<script is:inline>
-  (function () {
-    // Track current cleanup functions so we don't leak listeners
-    let cleanup = null;
+<script>
+  // Bound once; ClientRouter keeps this module alive across navigations,
+  // so everything is delegated or re-queried instead of re-bound.
+  const root = document.documentElement;
+  // Element that opened the menu; focus returns here on close.
+  let opener: HTMLElement | null = null;
 
-    function initHeader() {
-      // Clean up previous listeners if re-initializing after navigation
-      if (cleanup) cleanup();
+  const menuEl = () => document.getElementById("site-menu");
+  const isOpen = () => root.classList.contains("menu-open");
 
-      const mobileMenuButton = document.getElementById("mobile-menu-button");
-      const mobileMenu = document.getElementById("mobile-menu");
-      const mobileMenuBackdrop = document.getElementById(
-        "mobile-menu-backdrop",
-      );
-      const closeMobileMenuButton =
-        document.getElementById("close-mobile-menu");
-      const menuIcon = document.getElementById("menu-icon");
-      const closeIcon = document.getElementById("close-icon");
-      const navFloat = document.getElementById("nav-float");
-      const moreDropdownButton = document.getElementById(
-        "more-dropdown-button",
-      );
-      const moreDropdownMenu = document.getElementById("more-dropdown-menu");
-      const moreDropdownChevron = document.getElementById(
-        "more-dropdown-chevron",
-      );
-      const moreDropdownContainer = document.getElementById(
-        "more-dropdown-container",
-      );
-
-      let isMobileMenuOpen = false;
-      let isMoreDropdownOpen = false;
-
-      // Scroll state for nav background
-      const updateNavScroll = () => {
-        if (!navFloat) return;
-        if (window.scrollY > 8) {
-          navFloat.classList.add("is-scrolled");
-        } else {
-          navFloat.classList.remove("is-scrolled");
-        }
-      };
-      updateNavScroll();
-
-      const toggleMobileMenu = () => {
-        isMobileMenuOpen = !isMobileMenuOpen;
-        if (mobileMenuButton)
-          mobileMenuButton.setAttribute(
-            "aria-expanded",
-            isMobileMenuOpen.toString(),
-          );
-
-        if (isMobileMenuOpen) {
-          if (mobileMenu) mobileMenu.classList.add("is-open");
-          if (mobileMenuBackdrop) {
-            mobileMenuBackdrop.classList.add("is-open");
-            mobileMenuBackdrop.classList.remove("hidden");
-          }
-          if (menuIcon) menuIcon.classList.add("hidden");
-          if (closeIcon) closeIcon.classList.remove("hidden");
-          document.body.style.overflow = "hidden";
-        } else {
-          if (mobileMenu) mobileMenu.classList.remove("is-open");
-          if (mobileMenuBackdrop) {
-            mobileMenuBackdrop.classList.remove("is-open");
-            setTimeout(() => {
-              if (mobileMenuBackdrop)
-                mobileMenuBackdrop.classList.add("hidden");
-            }, 250);
-          }
-          if (menuIcon) menuIcon.classList.remove("hidden");
-          if (closeIcon) closeIcon.classList.add("hidden");
-          document.body.style.overflow = "";
-        }
-      };
-
-      const closeMobileMenu = () => {
-        if (isMobileMenuOpen) toggleMobileMenu();
-      };
-
-      const toggleMoreDropdown = () => {
-        isMoreDropdownOpen = !isMoreDropdownOpen;
-        if (moreDropdownButton)
-          moreDropdownButton.setAttribute(
-            "aria-expanded",
-            isMoreDropdownOpen.toString(),
-          );
-
-        if (isMoreDropdownOpen) {
-          if (moreDropdownMenu) moreDropdownMenu.classList.add("is-open");
-          if (moreDropdownChevron)
-            moreDropdownChevron.style.transform = "rotate(180deg)";
-        } else {
-          if (moreDropdownMenu) moreDropdownMenu.classList.remove("is-open");
-          if (moreDropdownChevron)
-            moreDropdownChevron.style.transform = "rotate(0deg)";
-        }
-      };
-
-      const closeMoreDropdown = () => {
-        if (isMoreDropdownOpen) {
-          isMoreDropdownOpen = false;
-          if (moreDropdownButton)
-            moreDropdownButton.setAttribute("aria-expanded", "false");
-          if (moreDropdownMenu) moreDropdownMenu.classList.remove("is-open");
-          if (moreDropdownChevron)
-            moreDropdownChevron.style.transform = "rotate(0deg)";
-        }
-      };
-
-      // Attach element-level listeners
-      const onMobileMenuClick = () => toggleMobileMenu();
-      const onCloseMenuClick = () => closeMobileMenu();
-      const onBackdropClick = () => closeMobileMenu();
-      const onMoreClick = (e) => {
-        e.stopPropagation();
-        toggleMoreDropdown();
-      };
-
-      if (mobileMenuButton)
-        mobileMenuButton.addEventListener("click", onMobileMenuClick);
-      if (closeMobileMenuButton)
-        closeMobileMenuButton.addEventListener("click", onCloseMenuClick);
-      if (mobileMenuBackdrop)
-        mobileMenuBackdrop.addEventListener("click", onBackdropClick);
-      if (moreDropdownButton)
-        moreDropdownButton.addEventListener("click", onMoreClick);
-
-      // Window-level listeners (use named functions for cleanup)
-      const onScroll = () => updateNavScroll();
-      const onPopstate = () => closeMobileMenu();
-      const onResize = () => {
-        if (window.innerWidth >= 1024 && isMobileMenuOpen) closeMobileMenu();
-      };
-      const onDocClick = (e) => {
-        if (moreDropdownContainer && !moreDropdownContainer.contains(e.target))
-          closeMoreDropdown();
-      };
-      const onKeydown = (e) => {
-        if (e.key === "Escape" && isMoreDropdownOpen) closeMoreDropdown();
-      };
-
-      window.addEventListener("scroll", onScroll, { passive: true });
-      window.addEventListener("popstate", onPopstate);
-      window.addEventListener("resize", onResize);
-      document.addEventListener("click", onDocClick);
-      document.addEventListener("keydown", onKeydown);
-
-      // Store cleanup function to remove listeners on next init
-      cleanup = () => {
-        if (mobileMenuButton)
-          mobileMenuButton.removeEventListener("click", onMobileMenuClick);
-        if (closeMobileMenuButton)
-          closeMobileMenuButton.removeEventListener("click", onCloseMenuClick);
-        if (mobileMenuBackdrop)
-          mobileMenuBackdrop.removeEventListener("click", onBackdropClick);
-        if (moreDropdownButton)
-          moreDropdownButton.removeEventListener("click", onMoreClick);
-        window.removeEventListener("scroll", onScroll);
-        window.removeEventListener("popstate", onPopstate);
-        window.removeEventListener("resize", onResize);
-        document.removeEventListener("click", onDocClick);
-        document.removeEventListener("keydown", onKeydown);
-        // Ensure menu is closed and body scroll is restored
-        document.body.style.overflow = "";
-      };
+  function setMenu(open: boolean, { restoreFocus = true } = {}) {
+    const menu = menuEl();
+    if (!menu) return;
+    root.classList.toggle("menu-open", open);
+    menu.setAttribute("aria-hidden", String(!open));
+    for (const link of menu.querySelectorAll("a")) {
+      link.tabIndex = open ? 0 : -1;
     }
+    for (const btn of document.querySelectorAll("[data-menu-toggle]")) {
+      btn.setAttribute("aria-expanded", String(open));
+    }
+    document.body.style.overflow = open ? "hidden" : "";
 
-    // Run on initial page load
-    initHeader();
+    if (open) {
+      opener = document.activeElement as HTMLElement | null;
+      menu.querySelector<HTMLElement>("[data-menu-toggle]")?.focus();
+    } else {
+      if (restoreFocus) opener?.focus();
+      opener = null;
+    }
+  }
 
-    // Re-run after view transition navigation (DOM is swapped, need fresh references)
-    document.addEventListener("astro:after-swap", () => {
-      initHeader();
-    });
-  })();
+  // Keeps Tab / Shift+Tab cycling inside the open menu.
+  function trapFocus(e: KeyboardEvent) {
+    const menu = menuEl();
+    if (!menu) return;
+    const focusable = [...menu.querySelectorAll<HTMLElement>("a, button")];
+    const first = focusable[0];
+    const last = focusable.at(-1);
+    if (!first || !last) return;
+    const active = document.activeElement;
+    if (e.shiftKey && (active === first || !menu.contains(active))) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && (active === last || !menu.contains(active))) {
+      e.preventDefault();
+      first.focus();
+    }
+  }
+
+  function syncScrolled() {
+    document
+      .getElementById("site-header")
+      ?.classList.toggle("is-scrolled", window.scrollY > 8);
+  }
+
+  document.addEventListener("click", (e) => {
+    const target = e.target as Element | null;
+    if (target?.closest("[data-menu-toggle]")) setMenu(!isOpen());
+  });
+  document.addEventListener("keydown", (e) => {
+    if (!isOpen()) return;
+    if (e.key === "Escape") setMenu(false);
+    if (e.key === "Tab") trapFocus(e);
+  });
+  window.addEventListener("scroll", syncScrolled, { passive: true });
+  document.addEventListener("astro:page-load", () => {
+    // New page: close without pulling focus back to a stale opener.
+    setMenu(false, { restoreFocus: false });
+    syncScrolled();
+  });
 </script>
+
+<style>
+  .hdr {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 50;
+    border-bottom: 1px solid transparent;
+    transition:
+      background-color var(--dur-2),
+      border-color var(--dur-2);
+  }
+
+  .hdr.is-scrolled {
+    background-color: rgb(26 27 38 / 0.86);
+    border-bottom-color: var(--color-line);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+  }
+
+  .hdr__bar {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    height: 4rem;
+    max-width: 1280px;
+    margin-inline: auto;
+    padding-inline: clamp(1.25rem, 4vw, 3rem);
+    font-family: var(--font-sans);
+  }
+
+  .hdr__name {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--color-text-primary);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .hdr__nav {
+    display: flex;
+    gap: 1.75rem;
+    margin-left: auto;
+  }
+
+  .hdr__link,
+  .hdr__util-link {
+    position: relative;
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: color var(--dur-1);
+  }
+
+  .hdr__link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.35rem;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--dur-2) var(--ease-out);
+  }
+
+  .hdr__link:hover,
+  .hdr__util-link:hover,
+  .hdr__link.is-active,
+  .hdr__util-link.is-active {
+    color: var(--color-text-primary);
+  }
+
+  .hdr__link:hover::after,
+  .hdr__link.is-active::after {
+    transform: scaleX(1);
+  }
+
+  .hdr__util {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding-left: 1.75rem;
+    border-left: 1px solid var(--color-line);
+  }
+
+  .hdr__util-link {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--color-text-soft);
+  }
+
+  .hdr__menu-btn {
+    display: none;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--color-text-primary);
+    background: none;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    padding: 0.35rem 0.9rem;
+    cursor: pointer;
+  }
+
+  .hdr__link:focus-visible,
+  .hdr__util-link:focus-visible,
+  .hdr__name:focus-visible,
+  .hdr__menu-btn:focus-visible,
+  .menu__link:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 4px;
+  }
+
+  @media (max-width: 1023px) {
+    .hdr__nav,
+    .hdr__util-link {
+      display: none;
+    }
+
+    .hdr__util {
+      margin-left: auto;
+      border-left: 0;
+      padding-left: 0;
+    }
+
+    .hdr__menu-btn {
+      display: inline-flex;
+    }
+  }
+
+  /* Full-screen menu (mobile / tablet) */
+  .menu {
+    position: fixed;
+    /* Scrolls when the links outgrow short viewports or high zoom. */
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    padding: 0 clamp(1.25rem, 4vw, 3rem) 2rem;
+    background-color: var(--color-bg-primary);
+    visibility: hidden;
+    opacity: 0;
+    transition:
+      opacity var(--dur-2),
+      visibility 0s linear var(--dur-2);
+  }
+
+  :global(.menu-open) .menu {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity var(--dur-2);
+  }
+
+  .menu__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 4rem;
+  }
+
+  .menu__top .is-close {
+    display: inline-flex;
+  }
+
+  .menu__nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-top: 2rem;
+  }
+
+  .menu__link {
+    font-family: var(--font-display);
+    font-size: clamp(2.25rem, 9vw, 3.75rem);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.045em;
+    color: var(--color-text-primary);
+    text-decoration: none;
+    opacity: 0;
+    transform: translateY(1.25rem);
+    transition:
+      opacity 0.4s,
+      transform 0.6s var(--ease-out),
+      color var(--dur-1);
+  }
+
+  :global(.menu-open) .menu__link {
+    opacity: 1;
+    transform: none;
+    transition-delay: calc(var(--i) * 45ms);
+  }
+
+  .menu__link.is-active,
+  .menu__link:hover {
+    color: var(--color-secondary);
+  }
+
+  .menu__foot {
+    margin: auto 0 0;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--color-text-soft);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .menu,
+    .menu__link {
+      transition: none;
+    }
+  }
+</style>

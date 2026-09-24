@@ -1,0 +1,59 @@
+---
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import EdFloat from "./EdFloat.astro";
+import { accentAt, shortTitle } from "./format";
+
+interface Props {
+	projects: CollectionEntry<"projects">[];
+	/** Number of the first row (e.g. 4 when the top three are featured). */
+	start?: number;
+	level?: 2 | 3;
+}
+
+const { projects, start = 1, level = 3 } = Astro.props;
+const Heading = level === 2 ? "h2" : "h3";
+---
+
+<ol class="ed-index" data-float>
+  {
+    projects.map((project, i) => {
+      const { Projecttitle, ProjectDescription, ProjectImage, ProjectCategory } =
+        project.data;
+      return (
+        <li
+          class="ed-row"
+          style={`--c:${accentAt(start - 1 + i)}`}
+          data-cats={(ProjectCategory ?? []).join("|")}
+          data-rev
+        >
+          <span class="ed-row__meta">{String(start + i).padStart(2, "0")}</span>
+          <div>
+            <a class="ed-row__hit" href={`/project/${project.id}/`}>
+              <Heading class="ed-row__title">{shortTitle(Projecttitle)}</Heading>
+            </a>
+            <p class="ed-row__desc">{ProjectDescription}</p>
+          </div>
+          <span class="ed-row__meta is-end">
+            {(ProjectCategory ?? []).slice(0, 2).join(" · ")}
+          </span>
+          <div class="ed-preview" aria-hidden="true">
+            {ProjectImage ? (
+              <Image
+                src={ProjectImage}
+                alt=""
+                width={480}
+                height={300}
+                loading="lazy"
+                decoding="async"
+              />
+            ) : (
+              <span class="ed-preview__fallback">{shortTitle(Projecttitle)}</span>
+            )}
+          </div>
+        </li>
+      );
+    })
+  }
+</ol>
+<EdFloat />

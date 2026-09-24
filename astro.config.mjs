@@ -133,7 +133,7 @@ export default defineConfig({
 					noteTextColor: "#c0caf5",
 					noteBorderColor: "#7aa2f7",
 					darkMode: "true",
-					fontFamily: "Poppins",
+					fontFamily: "Geist Variable, system-ui, sans-serif",
 					fontSize: "16px",
 				},
 				flowchart: { htmlLabels: true, curve: "basis", useMaxWidth: true },

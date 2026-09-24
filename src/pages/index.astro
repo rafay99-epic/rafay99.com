@@ -1,118 +1,155 @@
 ---
-import BaseHead from "@components/AstroComponent/base/BaseHead.astro";
-import Footer from "@components/AstroComponent/footer/Footer.astro";
-import Header from "@components/AstroComponent/header/Header.astro";
-import ContactMap from "@components/AstroComponent/home/ContactMap/ContactMap.astro";
-import CoreService from "@components/AstroComponent/home/core-service/CoreService.astro";
-import HeroSection from "@components/AstroComponent/home/Hero/HeroSection.astro";
-import PortfolioSection from "@components/AstroComponent/home/portfolio/Portfolio.astro";
-import TestimonialsSection from "@components/AstroComponent/home/testimonials/Testimonials.astro";
-import ProcessShowcase from "@components/AstroComponent/personal/Process/ProcessShowcase.astro";
-import SkillsShowcase from "@components/AstroComponent/personal/SkillsShowcase/SkillsShowcase.astro";
+import BaseHead from "@astro/base/BaseHead.astro";
+import { accentAt } from "@astro/editorial/format";
+import PageHead from "@astro/editorial/PageHead.astro";
+import PostIndex from "@astro/editorial/PostIndex.astro";
+import ProjectIndex from "@astro/editorial/ProjectIndex.astro";
+import Footer from "@astro/footer/Footer.astro";
+import Header from "@astro/header/Header.astro";
 import { featureFlags } from "@config/featureFlag/featureFlag.json";
 import authorConfig from "@config/siteConfig/info.json";
+import { getPublishedPosts, getRankedProjects } from "@util/collections";
+
 export const prerender = true;
 
-const { name, jobTitle, position, picture, socialLinks } = authorConfig;
-try {
-	if (!featureFlags.showIndex) {
-		return Astro.redirect("/access-denied");
-	}
-} catch (_error) {
-	return Astro.redirect("/404");
+if (!featureFlags.showIndex) {
+	return Astro.redirect("/access-denied");
 }
+
+const { stats, workExperience } = authorConfig;
+const projects = featureFlags.showProjects ? await getRankedProjects() : [];
+const posts = featureFlags.showBlog ? await getPublishedPosts() : [];
+const [current] = workExperience;
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <BaseHead
-      title={authorConfig?.SiteName ?? ""}
-      description={authorConfig?.SiteDescription ?? ""}
+      title={`${authorConfig.SiteName} | ${authorConfig.jobTitle}`}
+      description={authorConfig.SiteDescription}
     />
-    <style>
-      /* Override global main styles for homepage */
-      main[data-page="home"] {
-        max-width: 100%;
-        margin: 0;
-        padding: 0;
-        width: 100%;
-      }
-      .reveal-section {
-        opacity: 0;
-        transform: translateY(16px);
-        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-      }
-      .reveal-section.is-visible {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    </style>
   </head>
-  <body class="bg-[#1a1b26]">
+  <body>
     <Header />
-    <main data-page="home">
-      <HeroSection
-        name={name}
-        jobTitle={jobTitle}
-        position={position}
-        picture={picture}
-        socialLinks={socialLinks}
-      />
-
-      {featureFlags.enableCoreServices && (
-        <div class="reveal-section">
-          <CoreService />
+    <main class="ed home">
+      <PageHead
+        lines={["I ship", "AI products", "end to end."]}
+        accent={1}
+        lede="AI engineer and full stack developer. From Django payment rails in three countries to Whisper running on a Mac."
+      >
+        {
+          current && (
+            <p class="ed-mono home__now">
+              Now: {current.position} at {current.companyName}
+            </p>
+          )
+        }
+        <div slot="aside" class="ed-stats">
+          <span class="ed-stat"><b>{stats[0]?.value}</b>years</span>
+          <span class="ed-stat"><b>{stats[2]?.value}</b>products</span>
+          <span class="ed-stat"><b>{workExperience.length}</b>companies</span>
         </div>
-      )}
+      </PageHead>
 
-      {featureFlags.enableProcessShowcase && (
-        <div class="reveal-section">
-          <ProcessShowcase />
-        </div>
-      )}
+      {
+        projects.length > 0 && (
+          <section class="ed-section">
+            <div class="ed-wrap">
+              <div class="ed-section__head">
+                <h2 class="ed-h2">Selected work</h2>
+                <a href="/project/" class="ed-mono ed-link">
+                  all {projects.length} projects →
+                </a>
+              </div>
+              <ProjectIndex projects={projects.slice(0, 6)} />
+            </div>
+          </section>
+        )
+      }
 
-      {featureFlags.enablePortfolioSection && (
-        <div class="reveal-section">
-          <PortfolioSection />
-        </div>
-      )}
+      {
+        posts.length > 0 && (
+          <section class="ed-section">
+            <div class="ed-wrap">
+              <div class="ed-section__head">
+                <h2 class="ed-h2">
+                  Latest <em>writing</em>
+                </h2>
+                <a href="/blog/" class="ed-mono ed-link">
+                  all {posts.length} posts →
+                </a>
+              </div>
+              <PostIndex posts={posts.slice(0, 5)} level={3} />
+            </div>
+          </section>
+        )
+      }
 
-      {featureFlags.enableTestimonialsSection && (
-        <div class="reveal-section">
-          <TestimonialsSection />
-        </div>
-      )}
-
-      {featureFlags.enableSkillsShowcase && (
-        <div class="reveal-section">
-          <SkillsShowcase />
-        </div>
-      )}
-
-      <div id="contact-section" class="reveal-section">
-        {featureFlags.enableContactMap && <ContactMap />}
-      </div>
-
-      <Footer class="mt-auto" />
+      {
+        featureFlags.showExperience && (
+          <section class="ed-section">
+            <div class="ed-wrap">
+              <div class="ed-section__head">
+                <h2 class="ed-h2">Where I've worked</h2>
+                <a href="/experience/" class="ed-mono ed-link">
+                  full story →
+                </a>
+              </div>
+              <ol class="ed-index">
+                {workExperience.map((job, i) => (
+                  <li class="ed-row home__job" style={`--c:${accentAt(i)}`} data-rev>
+                    <span class="ed-row__meta">{job.employmentTime}</span>
+                    <a class="ed-row__hit" href="/experience/">
+                      <h3 class="ed-row__title">{job.companyName}</h3>
+                    </a>
+                    <span class="ed-row__meta is-end">{job.position}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </section>
+        )
+      }
     </main>
-
-    <script>
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add("is-visible");
-              observer.unobserve(entry.target);
-            }
-          });
-        },
-        { threshold: 0.08, rootMargin: "0px 0px -40px 0px" },
-      );
-
-      document.querySelectorAll(".reveal-section").forEach((el) => {
-        observer.observe(el);
-      });
-    </script>
+    <Footer />
   </body>
 </html>
+
+<style>
+  .home__now {
+    margin-top: 1rem;
+    color: var(--color-accent);
+  }
+
+  .home__job {
+    grid-template-columns: 11rem minmax(0, 1fr) minmax(0, 18rem);
+    padding-block: 1.1rem;
+  }
+
+  .home__job .ed-row__title {
+    font-size: clamp(1.2rem, 1.8vw, 1.5rem);
+  }
+
+  @media (max-width: 767px) {
+    .home__job {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  /* The hero headline drifts up and fades as the page scrolls. */
+  @supports (animation-timeline: scroll()) {
+    .home :global(.ed-mega) {
+      animation: home-drift linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 90vh;
+    }
+  }
+
+  @keyframes home-drift {
+    to {
+      transform: translateY(-3rem);
+      opacity: 0.35;
+    }
+  }
+</style>

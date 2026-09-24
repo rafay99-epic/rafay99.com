@@ -1,0 +1,43 @@
+---
+/** Numbered pager. `base` is page 1; later pages live at `${pageBase}${n}/`. */
+interface Props {
+	current: number;
+	total: number;
+	base: string;
+	pageBase: string;
+}
+
+const { current, total, base, pageBase } = Astro.props;
+const href = (n: number) => (n === 1 ? base : `${pageBase}${n}/`);
+const pages = Array.from({ length: total }, (_, i) => i + 1);
+---
+
+{
+  total > 1 && (
+    <nav class="ed-pager" aria-label="Pagination">
+      <a
+        href={current > 1 ? href(current - 1) : undefined}
+        class:list={["ed-link", { "is-disabled": current <= 1 }]}
+        aria-disabled={current <= 1 ? "true" : undefined}
+      >
+        ← Newer
+      </a>
+      <div class="ed-pager__pages">
+        {pages.map((n) =>
+          n === current ? (
+            <span aria-current="page">{String(n).padStart(2, "0")}</span>
+          ) : (
+            <a href={href(n)}>{String(n).padStart(2, "0")}</a>
+          ),
+        )}
+      </div>
+      <a
+        href={current < total ? href(current + 1) : undefined}
+        class:list={["ed-link", { "is-disabled": current >= total }]}
+        aria-disabled={current >= total ? "true" : undefined}
+      >
+        Older →
+      </a>
+    </nav>
+  )
+}

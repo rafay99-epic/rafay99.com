@@ -47,22 +47,15 @@ const posts = featureFlags.showBlog
   <head>
     <BaseHead
       title={`Search | ${authorConfig.SiteName}`}
-      description={`Search for articles on ${authorConfig.SiteName} and explore categorized content.`}
+      description={`Search every article on ${authorConfig.SiteName} by title, tag, author or date.`}
     />
-    <style>
-      main {
-        inline-size: 960px;
-      }
-    </style>
   </head>
 
-  <body class="flex min-h-screen flex-col">
+  <body>
     <Header />
-    <main class="mx-auto flex-grow">
-      <div>
-        <SearchReactComponent client:idle posts={posts} />
-      </div>
+    <main class="ed">
+      <SearchReactComponent client:idle posts={posts} />
     </main>
-    <Footer class="mt-auto" />
+    <Footer />
   </body>
 </html>
