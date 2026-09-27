@@ -135,4 +135,20 @@ import "@styles/cookieconsent-theme.css";
 			applyConsentState(cookie);
 		},
 	});
+
+	const consentRootClasses = [
+		"cc--darkmode",
+		"show--consent",
+		"show--preferences",
+		"disable--interaction",
+	];
+
+	document.addEventListener("astro:before-swap", ({ newDocument }) => {
+		const consentRoot = document.getElementById("cc-main");
+		if (consentRoot) newDocument.body.append(consentRoot);
+		const active = consentRootClasses.filter((name) =>
+			document.documentElement.classList.contains(name),
+		);
+		newDocument.documentElement.classList.add(...active);
+	});
 </script>
