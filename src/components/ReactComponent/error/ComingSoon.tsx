@@ -45,7 +45,10 @@ function ComingSoon({ featureName }: ComingSoonProps) {
 
 						<div className="space-y-4">
 							<h1 className="text-4xl font-bold md:text-6xl">
-								<span className="bg-linear-to-r from-[#7aa2f7] via-[#bb9af7] to-[#9ece6a] bg-clip-text text-transparent">
+								<span
+									id="feature-name"
+									className="bg-linear-to-r from-[#7aa2f7] via-[#bb9af7] to-[#9ece6a] bg-clip-text text-transparent"
+								>
 									{featureName}
 								</span>
 							</h1>

@@ -10,7 +10,7 @@ import SearchReactComponent from "@react/blog/metadata/SearchField/SearchField";
 export const prerender = true;
 
 if (!featureFlags.showSearch) {
-	return Astro.redirect("/access-denied");
+	return Astro.redirect("/access-denied?feature=search");
 }
 
 const posts = featureFlags.showBlog

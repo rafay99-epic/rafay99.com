@@ -7,7 +7,7 @@ export const prerender = true;
 
 try {
 	if (!featureFlags.showTermsOfService) {
-		return Astro.redirect("/access-denied");
+		return Astro.redirect("/access-denied?feature=terms");
 	}
 } catch (_error) {
 	return Astro.redirect("/404");

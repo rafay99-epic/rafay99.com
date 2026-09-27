@@ -9,7 +9,7 @@ import authorConfig from "@config/siteConfig/info.json";
 export const prerender = true;
 try {
 	if (!featureFlags.showExperience) {
-		return Astro.redirect("/access-denied");
+		return Astro.redirect("/access-denied?feature=experience");
 	}
 } catch (_error) {
 	return Astro.redirect("/500");

@@ -10,7 +10,7 @@ export const prerender = true;
 
 try {
 	if (!featureFlags.showAbout) {
-		return Astro.redirect("/access-denied");
+		return Astro.redirect("/access-denied?feature=about");
 	}
 } catch (_error) {
 	return Astro.redirect("/500");

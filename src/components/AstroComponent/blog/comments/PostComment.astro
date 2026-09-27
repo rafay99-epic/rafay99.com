@@ -3,7 +3,7 @@ import { featureFlags } from "@config/featureFlag/featureFlag.json";
 
 try {
 	if (!featureFlags.showBlog) {
-		return Astro.redirect("/access-denied");
+		return Astro.redirect("/access-denied?feature=blog");
 	}
 } catch (_error) {
 	return Astro.redirect("/404");

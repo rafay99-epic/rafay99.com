@@ -3,8 +3,22 @@ import BaseHead from "@components/AstroComponent/base/BaseHead.astro";
 import ComingSoon from "@components/ReactComponent/error/ComingSoon";
 import authorConfig from "@config/siteConfig/info.json";
 
-const featureName = Astro.url.searchParams.get("feature") ?? "Exciting Feature";
 export const prerender = true;
+
+const features = {
+	home: "Home",
+	about: "About",
+	blog: "Blog",
+	series: "Series",
+	tags: "Tags",
+	projects: "Projects",
+	"open-source": "Open Source",
+	experience: "Experience",
+	contact: "Contact",
+	search: "Search",
+	privacy: "Privacy Policy",
+	terms: "Terms and Conditions",
+} satisfies Record<string, string>;
 ---
 
 <!doctype html>
@@ -12,12 +26,19 @@ export const prerender = true;
   <head>
     <BaseHead
       title={`Access Denied | ${authorConfig.SiteName}`}
-      description={`Sorry, you don't have access to this ${featureName}.`}
+      description="Sorry, you don't have access to this feature."
+      noindex
     />
   </head>
   <body>
     <main class="pt-15 mt-0">
-      <ComingSoon featureName={featureName} />
+      <ComingSoon featureName="Exciting Feature" />
     </main>
+    <script is:inline define:vars={{ features }}>
+      const key = new URLSearchParams(location.search).get("feature");
+      const name = key && Object.hasOwn(features, key) ? features[key] : null;
+      const target = document.getElementById("feature-name");
+      if (name && target) target.textContent = name;
+    </script>
   </body>
 </html>

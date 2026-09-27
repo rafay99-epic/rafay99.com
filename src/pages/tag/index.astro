@@ -41,7 +41,7 @@ const paginatedPosts = filteredPosts.slice(
 
 try {
 	if (!featureFlags.showTags) {
-		return Astro.redirect("/access-denied");
+		return Astro.redirect("/access-denied?feature=tags");
 	}
 } catch (_error) {
 	return Astro.redirect("/404");
