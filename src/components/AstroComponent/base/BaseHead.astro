@@ -5,6 +5,7 @@ import "@styles/theme.css";
 import "@styles/content-prose.css";
 import "@styles/editorial.css";
 import { ClientRouter } from "astro:transitions";
+import CookieConsent from "./CookieConsent.astro";
 
 interface Props {
 	title: string;
@@ -128,10 +129,8 @@ declare global {
   gtag("config", "AW-17413331660");
 </script>
 
-<link rel="stylesheet" href="/css/cookieconsent.css" />
-<link rel="stylesheet" href="/css/cookieconsent-theme.css" />
 <script is:inline>
   document.documentElement.classList.add("cc--darkmode");
 </script>
-<script is:inline type="module" src="/js/cookieconsent-config.js"></script>
+<CookieConsent />
 

@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useOnScreen } from "@hooks/useOnScreen";
+import { useEffect, useRef, useState } from "react";
 
 const c = {
 	bg: "#1a1b26",
@@ -12,27 +13,32 @@ const c = {
 };
 
 export default function ChangelogLoop() {
+	const ref = useRef<HTMLDivElement>(null);
+	const onScreen = useOnScreen(ref);
 	const [mode, setMode] = useState<"before" | "after">("before");
 	const [tick, setTick] = useState(0);
 
 	useEffect(() => {
+		if (!onScreen) return;
 		const id = setInterval(() => setTick((t) => t + 1), 1400);
 		return () => clearInterval(id);
-	}, []);
+	}, [onScreen]);
 
 	useEffect(() => {
+		if (!onScreen) return;
 		const id = setInterval(() => {
 			setMode((m) => (m === "before" ? "after" : "before"));
 			setTick(0);
 		}, 6000);
 		return () => clearInterval(id);
-	}, []);
+	}, [onScreen]);
 
 	const isBefore = mode === "before";
 	const regens = isBefore ? (tick % 5) + 1 : 0;
 
 	return (
 		<div
+			ref={ref}
 			style={{
 				background: c.bg,
 				border: `1px solid ${c.line}`,

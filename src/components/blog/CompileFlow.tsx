@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useOnScreen } from "@hooks/useOnScreen";
+import { useEffect, useRef, useState } from "react";
 
 const stages = [
 	{ key: "paste", label: "Paste TSX", note: "your source" },
@@ -19,18 +20,22 @@ const c = {
 };
 
 export default function CompileFlow() {
+	const ref = useRef<HTMLDivElement>(null);
+	const onScreen = useOnScreen(ref);
 	const [active, setActive] = useState(0);
 
 	useEffect(() => {
+		if (!onScreen) return;
 		const id = setInterval(
 			() => setActive((a) => (a + 1) % stages.length),
 			1100,
 		);
 		return () => clearInterval(id);
-	}, []);
+	}, [onScreen]);
 
 	return (
 		<div
+			ref={ref}
 			style={{
 				background: c.bg,
 				border: `1px solid ${c.line}`,

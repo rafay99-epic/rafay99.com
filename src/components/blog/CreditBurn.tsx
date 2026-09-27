@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useOnScreen } from "@hooks/useOnScreen";
+import { useEffect, useRef, useState } from "react";
 
 const c = {
 	bg: "#1a1b26",
@@ -37,16 +38,20 @@ const models = [
 ];
 
 export default function CreditBurn() {
+	const ref = useRef<HTMLDivElement>(null);
+	const onScreen = useOnScreen(ref);
 	const [tick, setTick] = useState(0);
 
 	const maxTicks = 120;
 	useEffect(() => {
+		if (!onScreen) return;
 		const id = setInterval(() => setTick((t) => (t + 1) % maxTicks), 80);
 		return () => clearInterval(id);
-	}, []);
+	}, [onScreen]);
 
 	return (
 		<div
+			ref={ref}
 			style={{
 				background: c.bg,
 				border: `1px solid ${c.line}`,

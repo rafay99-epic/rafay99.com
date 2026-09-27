@@ -1,3 +1,4 @@
+import { useOnScreen } from "@hooks/useOnScreen";
 import { useEffect, useRef, useState } from "react";
 
 const STYLE_ID = "hx-anatomy-styles";
@@ -90,6 +91,7 @@ const CSS = `
   background: var(--hx-signal); box-shadow: 0 0 12px 3px var(--hx-glow);
   animation: hx-anat-fall 2.6s cubic-bezier(.6,0,.4,1) infinite; z-index: 1;
 }
+.hx-off .hx-pulse, .hx-off .hx-star-zone::after { animation-play-state: paused; }
 @keyframes hx-anat-fall { 0% { top: 2%; opacity: 0; } 12% { opacity: 1; }
   88% { opacity: 1; } 100% { top: 98%; opacity: 0; } }
 @keyframes hx-anat-breathe { 0%,100% { opacity: .5; } 50% { opacity: 1; } }
@@ -150,8 +152,12 @@ const HARNESS_LAYERS = [
 export default function HarnessAnatomy() {
 	useStyles();
 	const { ref, inView } = useInView<HTMLDivElement>();
+	const onScreen = useOnScreen(ref);
 	return (
-		<div ref={ref} className={`hx-anat-wrap ${inView ? "hx-in" : ""}`}>
+		<div
+			ref={ref}
+			className={`hx-anat-wrap ${inView ? "hx-in" : ""} ${onScreen ? "" : "hx-off"}`}
+		>
 			<p className="hx-cap">Anatomy of a harness</p>
 			<div className="hx-anat">
 				<div className="hx-spine" aria-hidden />

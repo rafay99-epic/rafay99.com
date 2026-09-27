@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useOnScreen } from "@hooks/useOnScreen";
+import { useEffect, useRef, useState } from "react";
 
 const steps = [
 	{ label: "Write", detail: "paste a React component in the editor" },
@@ -26,12 +27,15 @@ const c = {
 };
 
 export default function JourneySteps() {
+	const ref = useRef<HTMLDivElement>(null);
+	const onScreen = useOnScreen(ref);
 	const [step, setStep] = useState(0);
 
 	useEffect(() => {
+		if (!onScreen) return;
 		const id = setInterval(() => setStep((s) => (s + 1) % steps.length), 1500);
 		return () => clearInterval(id);
-	}, []);
+	}, [onScreen]);
 
 	const currentStep = steps[step];
 	if (!currentStep) return null;
@@ -40,6 +44,7 @@ export default function JourneySteps() {
 
 	return (
 		<div
+			ref={ref}
 			style={{
 				background: c.bg,
 				border: `1px solid ${c.line}`,

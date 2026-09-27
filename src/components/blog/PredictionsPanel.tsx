@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useOnScreen } from "@hooks/useOnScreen";
+import { useEffect, useRef, useState } from "react";
 
 const predictions = [
 	{
@@ -53,21 +54,25 @@ const c = {
 };
 
 export default function PredictionsPanel() {
+	const ref = useRef<HTMLDivElement>(null);
+	const onScreen = useOnScreen(ref);
 	const [prediction, setPrediction] = useState(0);
 
 	useEffect(() => {
+		if (!onScreen) return;
 		const id = setInterval(
 			() => setPrediction((p) => (p + 1) % predictions.length),
 			2600,
 		);
 		return () => clearInterval(id);
-	}, []);
+	}, [onScreen]);
 
 	const current = predictions[prediction];
 	if (!current) return null;
 
 	return (
 		<div
+			ref={ref}
 			style={{
 				background: c.bg,
 				border: `1px solid ${c.line}`,

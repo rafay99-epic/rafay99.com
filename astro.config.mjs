@@ -1,7 +1,6 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { unified } from "@astrojs/markdown-remark";
 import mdx from "@astrojs/mdx";
-import partytown from "@astrojs/partytown";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import vercel from "@astrojs/vercel";
@@ -128,11 +127,6 @@ export default defineConfig({
 		checkOrigin: true,
 	},
 	integrations: [
-		partytown({
-			config: {
-				forward: ["dataLayer.push"],
-			},
-		}),
 		mermaid({
 			theme: "base",
 			autoTheme: false,

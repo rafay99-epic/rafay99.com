@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useOnScreen } from "@hooks/useOnScreen";
+import { useEffect, useRef, useState } from "react";
 
 const c = {
 	bg: "#1a1b26",
@@ -59,15 +60,19 @@ const home = (label: string, sub: string, accent: string, active: boolean) => (
 );
 
 export default function TwoHomes() {
+	const ref = useRef<HTMLDivElement>(null);
+	const onScreen = useOnScreen(ref);
 	const [beat, setBeat] = useState(0);
 
 	useEffect(() => {
+		if (!onScreen) return;
 		const id = setInterval(() => setBeat((b) => (b + 1) % 2), 1600);
 		return () => clearInterval(id);
-	}, []);
+	}, [onScreen]);
 
 	return (
 		<div
+			ref={ref}
 			style={{
 				background: c.bg,
 				border: `1px solid ${c.line}`,

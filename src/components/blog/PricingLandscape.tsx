@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useOnScreen } from "@hooks/useOnScreen";
+import { useEffect, useRef, useState } from "react";
 
 const tools = [
 	{
@@ -86,17 +87,21 @@ const c = {
 const markers = [0, 20, 50, 100, 200];
 
 export default function PricingLandscape() {
+	const ref = useRef<HTMLDivElement>(null);
+	const onScreen = useOnScreen(ref);
 	const [focus, setFocus] = useState(0);
 
 	const maxPrice = 200;
 
 	useEffect(() => {
+		if (!onScreen) return;
 		const id = setInterval(() => setFocus((f) => (f + 1) % tools.length), 2200);
 		return () => clearInterval(id);
-	}, []);
+	}, [onScreen]);
 
 	return (
 		<div
+			ref={ref}
 			style={{
 				background: c.bg,
 				border: `1px solid ${c.line}`,

@@ -1,4 +1,5 @@
-import { type ReactNode, useEffect, useState } from "react";
+import { useOnScreen } from "@hooks/useOnScreen";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 
 const c = {
 	bg: "#1a1b26",
@@ -13,12 +14,15 @@ const c = {
 };
 
 export default function PublishTransform() {
+	const ref = useRef<HTMLDivElement>(null);
+	const onScreen = useOnScreen(ref);
 	const [shipped, setShipped] = useState(false);
 
 	useEffect(() => {
+		if (!onScreen) return;
 		const id = setInterval(() => setShipped((s) => !s), 2200);
 		return () => clearInterval(id);
-	}, []);
+	}, [onScreen]);
 
 	const mono = "ui-monospace, Menlo, monospace";
 
@@ -42,6 +46,7 @@ export default function PublishTransform() {
 
 	return (
 		<div
+			ref={ref}
 			style={{
 				background: c.bg,
 				border: `1px solid ${c.line}`,
