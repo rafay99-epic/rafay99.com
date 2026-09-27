@@ -1,0 +1,63 @@
+src/pages/tag/[tag]/index.astro
+  s_2c43260b30854a::t_575d5b18cecfcd 80
+src/pages/access-denied.astro
+  s_2c43260b30854a::t_abcc60e6cd74b5 7-21,29-30,35,37-42
+src/pages/terms-and-conditions.astro
+  s_2c43260b30854a::t_575d5b18cecfcd 10
+src/pages/blog/page/[page].astro
+  s_2c43260b30854a::t_575d5b18cecfcd 16
+src/components/ReactComponent/error/ComingSoon.tsx
+  s_2c43260b30854a::t_bb888279b0e5c6 48-51
+src/pages/index.astro
+  s_2c43260b30854a::t_575d5b18cecfcd 16
+src/pages/blog/series/[series].astro
+  s_2c43260b30854a::t_575d5b18cecfcd 38
+src/layouts/Project.astro
+  s_2c43260b30854a::t_575d5b18cecfcd 42
+src/pages/about.astro
+  s_2c43260b30854a::t_575d5b18cecfcd 13
+src/pages/blog/index.astro
+  s_2c43260b30854a::t_575d5b18cecfcd 8
+src/pages/blog/series/index.astro
+  s_2c43260b30854a::t_575d5b18cecfcd 16
+src/layouts/BlogPost.astro
+  s_2c43260b30854a::t_575d5b18cecfcd 32,57
+src/pages/search.astro
+  s_2c43260b30854a::t_575d5b18cecfcd 13
+src/pages/tag/[tag]/page/[page].astro
+  s_2c43260b30854a::t_575d5b18cecfcd 83
+src/pages/tag/index.astro
+  s_2c43260b30854a::t_575d5b18cecfcd 44
+src/pages/tag/page/[page].astro
+  s_2c43260b30854a::t_575d5b18cecfcd 74
+src/pages/privacy-policy.astro
+  s_2c43260b30854a::t_575d5b18cecfcd 10
+src/pages/experience.astro
+  s_2c43260b30854a::t_575d5b18cecfcd 12
+src/pages/contact-me.astro
+  s_2c43260b30854a::t_575d5b18cecfcd 12
+src/pages/blog/archive/index.astro
+  s_2c43260b30854a::t_575d5b18cecfcd 25
+src/pages/open-source.astro
+  s_2c43260b30854a::t_575d5b18cecfcd 12
+src/components/AstroComponent/blog/comments/PostComment.astro
+  s_2c43260b30854a::t_575d5b18cecfcd 6
+src/pages/project/index.astro
+  s_2c43260b30854a::t_575d5b18cecfcd 16
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "1203a5c7fd5cc8a908a63e8fc17fe3e29c37fd40",
+  "prompts": {},
+  "sessions": {
+    "s_2c43260b30854a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c08b7dea-14de-42d1-bb5e-50f541a92f22",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Abdul Rafay <99marafay@gmail.com>"
+    }
+  }
+}
