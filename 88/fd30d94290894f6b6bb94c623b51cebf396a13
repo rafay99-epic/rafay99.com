@@ -1,0 +1,19 @@
+src/components/AstroComponent/base/CookieConsent.astro
+  s_2c43260b30854a::t_6c95ba3d42676e 138-153
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "88fd30d94290894f6b6bb94c623b51cebf396a13",
+  "prompts": {},
+  "sessions": {
+    "s_2c43260b30854a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c08b7dea-14de-42d1-bb5e-50f541a92f22",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Abdul Rafay <99marafay@gmail.com>"
+    }
+  }
+}
