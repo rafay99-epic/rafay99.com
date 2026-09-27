@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useOnScreen } from "@hooks/useOnScreen";
+import { useEffect, useRef, useState } from "react";
 
 const stages = [
 	{
@@ -44,15 +45,19 @@ const c = {
 };
 
 export default function KillChain() {
+	const ref = useRef<HTMLDivElement>(null);
+	const onScreen = useOnScreen(ref);
 	const [step, setStep] = useState(0);
 
 	useEffect(() => {
+		if (!onScreen) return;
 		const id = setInterval(() => setStep((s) => (s + 1) % stages.length), 1800);
 		return () => clearInterval(id);
-	}, []);
+	}, [onScreen]);
 
 	return (
 		<div
+			ref={ref}
 			style={{
 				background: c.bg,
 				border: `1px solid ${c.line}`,

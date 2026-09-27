@@ -98,23 +98,6 @@ const formattedDate = meta.latestDate.toLocaleDateString("en-US", {
 		aspect-ratio: 16 / 9;
 		overflow: hidden;
 		background: rgba(36, 40, 59, 0.6);
-		background-image: linear-gradient(
-			90deg,
-			rgba(36, 40, 59, 0.7) 0%,
-			rgba(65, 72, 104, 0.3) 50%,
-			rgba(36, 40, 59, 0.7) 100%
-		);
-		background-size: 200% 100%;
-		animation: shimmer 1.8s ease-in-out infinite;
-	}
-
-	.series-card-image:has(.series-card-img.loaded, .series-card-fallback) {
-		animation: none;
-	}
-
-	@keyframes shimmer {
-		0% { background-position: 200% 0; }
-		100% { background-position: -200% 0; }
 	}
 
 	.series-card-img {

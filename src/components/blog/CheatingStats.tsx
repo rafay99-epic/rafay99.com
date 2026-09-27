@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useOnScreen } from "@hooks/useOnScreen";
+import { useEffect, useRef, useState } from "react";
 
 const models = [
 	{
@@ -27,18 +28,22 @@ const c = {
 };
 
 export default function CheatingStats() {
+	const ref = useRef<HTMLDivElement>(null);
+	const onScreen = useOnScreen(ref);
 	const [model, setModel] = useState(0);
 
 	useEffect(() => {
+		if (!onScreen) return;
 		const id = setInterval(
 			() => setModel((m) => (m + 1) % models.length),
 			2200,
 		);
 		return () => clearInterval(id);
-	}, []);
+	}, [onScreen]);
 
 	return (
 		<div
+			ref={ref}
 			style={{
 				background: c.bg,
 				border: `1px solid ${c.line}`,

@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useOnScreen } from "@hooks/useOnScreen";
+import { useEffect, useRef, useState } from "react";
 
 const c = {
 	bg: "#1a1b26",
@@ -34,12 +35,15 @@ const afterNodes: Node[] = [
 ];
 
 export default function RequestPath() {
+	const ref = useRef<HTMLDivElement>(null);
+	const onScreen = useOnScreen(ref);
 	const [mode, setMode] = useState<"before" | "after">("before");
 	const [active, setActive] = useState(0);
 
 	const nodes = mode === "before" ? beforeNodes : afterNodes;
 
 	useEffect(() => {
+		if (!onScreen) return;
 		const id = setInterval(
 			() => {
 				setActive((a) => (a + 1) % nodes.length);
@@ -47,20 +51,22 @@ export default function RequestPath() {
 			mode === "before" ? 700 : 900,
 		);
 		return () => clearInterval(id);
-	}, [mode, nodes.length]);
+	}, [mode, nodes.length, onScreen]);
 
 	useEffect(() => {
+		if (!onScreen) return;
 		const id = setInterval(() => {
 			setMode((m) => (m === "before" ? "after" : "before"));
 			setActive(0);
 		}, 6500);
 		return () => clearInterval(id);
-	}, []);
+	}, [onScreen]);
 
 	const billed = nodes[active]?.hot ? 1 : 0;
 
 	return (
 		<div
+			ref={ref}
 			style={{
 				background: c.bg,
 				border: `1px solid ${c.line}`,

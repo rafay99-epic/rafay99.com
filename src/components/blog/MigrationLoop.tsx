@@ -1,3 +1,4 @@
+import { useOnScreen } from "@hooks/useOnScreen";
 import { type RefObject, useEffect, useRef, useState } from "react";
 
 type Verdict = "pass" | "fail" | null;
@@ -118,16 +119,17 @@ const LOOP_FRAMES: readonly LoopFrame[] = [
 export default function MigrationLoop() {
 	useStyles();
 	const { ref, inView } = useInView<HTMLDivElement>();
+	const onScreen = useOnScreen(ref);
 	const [f, setF] = useState(0);
 
 	useEffect(() => {
-		if (!inView) return;
+		if (!inView || !onScreen) return;
 		const id = setInterval(
 			() => setF((x) => (x + 1) % LOOP_FRAMES.length),
 			1300,
 		);
 		return () => clearInterval(id);
-	}, [inView]);
+	}, [inView, onScreen]);
 
 	const frame: LoopFrame = LOOP_FRAMES[f] ?? IDLE;
 

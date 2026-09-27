@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useOnScreen } from "@hooks/useOnScreen";
+import { useEffect, useRef, useState } from "react";
 
 const c = {
 	bg: "#1a1b26",
@@ -38,15 +39,18 @@ const stages = [
 const capMinutesPerDay = 240 / 30;
 
 export default function CapGauge() {
+	const ref = useRef<HTMLDivElement>(null);
+	const onScreen = useOnScreen(ref);
 	const [stage, setStage] = useState(0);
 
 	useEffect(() => {
+		if (!onScreen) return;
 		const id = setInterval(
 			() => setStage((s) => (s + 1) % stages.length),
 			2600,
 		);
 		return () => clearInterval(id);
-	}, []);
+	}, [onScreen]);
 
 	const current = stages[stage] ?? stages[0];
 	const pctOfCap = Math.min(
@@ -57,6 +61,7 @@ export default function CapGauge() {
 
 	return (
 		<div
+			ref={ref}
 			style={{
 				background: c.bg,
 				border: `1px solid ${c.line}`,

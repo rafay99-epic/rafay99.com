@@ -1,3 +1,4 @@
+import { useOnScreen } from "@hooks/useOnScreen";
 import { useEffect, useRef, useState } from "react";
 
 const STYLE_ID = "hx-loop-styles";
@@ -147,10 +148,11 @@ const NODE_POS: Record<NodeKey, { x: number; y: number; label: string }> = {
 export default function HarnessLoop() {
 	useStyles();
 	const { ref, inView } = useInView<HTMLDivElement>();
+	const onScreen = useOnScreen(ref);
 	const [step, setStep] = useState(0);
 
 	useEffect(() => {
-		if (!inView) return;
+		if (!inView || !onScreen) return;
 		const reduce =
 			typeof window !== "undefined" &&
 			window.matchMedia &&
@@ -161,7 +163,7 @@ export default function HarnessLoop() {
 			1500,
 		);
 		return () => clearInterval(id);
-	}, [inView]);
+	}, [inView, onScreen]);
 
 	const s = LOOP_STEPS[step] ?? LOOP_STEPS[0];
 	if (!s) return null;

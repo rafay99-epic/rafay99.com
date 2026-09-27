@@ -1,0 +1,138 @@
+---
+import "vanilla-cookieconsent/dist/cookieconsent.css";
+import "@styles/cookieconsent-theme.css";
+---
+
+<script>
+	import * as CookieConsent from "vanilla-cookieconsent";
+
+	declare const gtag: ((...args: unknown[]) => void) | undefined;
+
+	const updateGtagConsent = ({
+		analytics,
+		ads,
+	}: {
+		analytics: boolean;
+		ads: boolean;
+	}) => {
+		if (typeof gtag !== "function") return;
+		gtag("consent", "update", {
+			analytics_storage: analytics ? "granted" : "denied",
+			ad_storage: ads ? "granted" : "denied",
+		});
+	};
+
+	const applyConsentState = (cookie: CookieConsent.CookieValue) => {
+		const categories = cookie?.categories ?? [];
+		updateGtagConsent({
+			analytics: categories.includes("analytics"),
+			ads: categories.includes("ads"),
+		});
+	};
+
+	CookieConsent.run({
+		guiOptions: {
+			consentModal: {
+				layout: "box",
+				position: "bottom right",
+				equalWeightButtons: true,
+				flipButtons: true,
+			},
+			preferencesModal: {
+				layout: "box",
+				position: "right",
+				equalWeightButtons: true,
+				flipButtons: false,
+			},
+		},
+		categories: {
+			necessary: {
+				readOnly: true,
+			},
+			analytics: {
+				enabled: true,
+			},
+			ads: {
+				enabled: true,
+			},
+		},
+		language: {
+			default: "en",
+			autoDetect: "browser",
+			translations: {
+				en: {
+					consentModal: {
+						title: "Cookie preferences",
+						description:
+							"This site uses cookies for analytics (Google Analytics, Vercel Analytics) and to show ads (Google AdSense). You can accept all, reject non-essential cookies, or manage your choices below.",
+						acceptAllBtn: "Accept all",
+						acceptNecessaryBtn: "Reject non-essential",
+						showPreferencesBtn: "Manage preferences",
+						footer:
+							'<a href="/privacy-policy">Privacy Policy</a> <a href="/terms-and-conditions">Terms and Conditions</a>',
+					},
+					preferencesModal: {
+						title: "Cookie preferences",
+						acceptAllBtn: "Accept all",
+						acceptNecessaryBtn: "Reject non-essential",
+						savePreferencesBtn: "Save preferences",
+						closeIconLabel: "Close",
+						serviceCounterLabel: "Service|Services",
+						sections: [
+							{
+								title: "How we use cookies",
+								description:
+									"We use cookies only for site analytics and advertising. You can enable or disable each category below. Necessary cookies are required for the site to function and cannot be turned off.",
+							},
+							{
+								title:
+									'Strictly necessary <span class="pm__badge">Always on</span>',
+								description:
+									"Essential for the site to work (e.g. security, basic layout). These cannot be disabled.",
+								linkedCategory: "necessary",
+							},
+							{
+								title: "Analytics",
+								description:
+									"We use Google Analytics and Vercel Analytics to understand how visitors use the site (e.g. page views, traffic). Data is anonymized where possible.",
+								linkedCategory: "analytics",
+							},
+							{
+								title: "Advertising",
+								description:
+									"We use Google AdSense to show ads. These cookies help deliver relevant ads and measure ad performance.",
+								linkedCategory: "ads",
+							},
+							{
+								title: "Legal & contact",
+								description:
+									'Read our <a class="cc__link" href="/privacy-policy">Privacy Policy</a> and <a class="cc__link" href="/terms-and-conditions">Terms and Conditions</a>. For questions about cookies or your data, use the <a class="cc__link" href="/contact-me">contact</a> page.',
+							},
+						],
+					},
+				},
+			},
+		},
+		onConsent: ({ cookie }) => {
+			applyConsentState(cookie);
+		},
+		onChange: ({ cookie, changedCategories }) => {
+			const relevantChanges = changedCategories.filter((category) =>
+				["analytics", "ads"].includes(category),
+			);
+
+			if (relevantChanges.length === 0) return;
+
+			const shouldReload = relevantChanges.some(
+				(category) => !CookieConsent.acceptedCategory(category),
+			);
+
+			if (shouldReload) {
+				window.location.reload();
+				return;
+			}
+
+			applyConsentState(cookie);
+		},
+	});
+</script>

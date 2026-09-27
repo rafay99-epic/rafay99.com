@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useOnScreen } from "@hooks/useOnScreen";
+import { useEffect, useRef, useState } from "react";
 
 const c = {
 	bg: "#1a1b26",
@@ -33,6 +34,8 @@ const sessions = [
 ];
 
 export default function SessionCalendar() {
+	const ref = useRef<HTMLDivElement>(null);
+	const onScreen = useOnScreen(ref);
 	const [day, setDay] = useState(0);
 
 	const windowLength = 5;
@@ -44,12 +47,14 @@ export default function SessionCalendar() {
 	const pct = Math.min((consumed / windowLength) * 100, 100);
 
 	useEffect(() => {
+		if (!onScreen) return;
 		const id = setInterval(() => setDay((d) => (d + 1) % 10), 1600);
 		return () => clearInterval(id);
-	}, []);
+	}, [onScreen]);
 
 	return (
 		<div
+			ref={ref}
 			style={{
 				background: c.bg,
 				border: `1px solid ${c.line}`,

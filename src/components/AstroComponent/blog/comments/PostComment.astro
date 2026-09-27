@@ -19,9 +19,8 @@ const { theme = "dark" } = Astro.props;
   >
     <div class="flex h-full items-center justify-center">
       <div
-        class="text-(--text-light)/60 flex animate-pulse flex-col items-center"
+        class="text-(--text-light)/60 flex flex-col items-center"
       >
-        <div class="loading-spinner mb-4"></div>
         <span>Loading comments...</span>
       </div>
     </div>
@@ -59,8 +58,7 @@ const { theme = "dark" } = Astro.props;
       setLoadingState() {
         this.container.innerHTML = `
           <div class="flex items-center justify-center h-full">
-            <div class="animate-pulse text-(--text-light)/60 flex flex-col items-center">
-              <div class="loading-spinner mb-4"></div>
+            <div class="text-(--text-light)/60 flex flex-col items-center">
               <span>Loading comments...</span>
               <span class="text-sm mt-2">This might take a few seconds</span>
             </div>
@@ -239,35 +237,6 @@ const { theme = "dark" } = Astro.props;
 
     .giscus-loaded {
       opacity: 1;
-    }
-
-    .loading-spinner {
-      width: 40px;
-      height: 40px;
-      border: 3px solid var(--text-light);
-      border-radius: 50%;
-      border-top-color: transparent;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-    @keyframes pulse {
-      0%,
-      100% {
-        opacity: 1;
-      }
-      50% {
-        opacity: 0.5;
-      }
-    }
-
-    .animate-pulse {
-      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     }
   </style>
 </section>

@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useOnScreen } from "@hooks/useOnScreen";
+import { useEffect, useRef, useState } from "react";
 
 const c = {
 	bg: "#1a1b26",
@@ -34,15 +35,19 @@ const plans = [
 ];
 
 export default function TierMath() {
+	const ref = useRef<HTMLDivElement>(null);
+	const onScreen = useOnScreen(ref);
 	const [sel, setSel] = useState(0);
 
 	useEffect(() => {
+		if (!onScreen) return;
 		const id = setInterval(() => setSel((s) => (s + 1) % plans.length), 3500);
 		return () => clearInterval(id);
-	}, []);
+	}, [onScreen]);
 
 	return (
 		<div
+			ref={ref}
 			style={{
 				background: c.bg,
 				border: `1px solid ${c.line}`,

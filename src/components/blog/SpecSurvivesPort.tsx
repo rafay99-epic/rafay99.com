@@ -1,3 +1,4 @@
+import { useOnScreen } from "@hooks/useOnScreen";
 import { type RefObject, useEffect, useRef, useState } from "react";
 
 interface Port {
@@ -101,13 +102,14 @@ const PORTS: readonly Port[] = [
 export default function SpecSurvivesPort() {
 	useStyles();
 	const { ref, inView } = useInView<HTMLDivElement>();
+	const onScreen = useOnScreen(ref);
 	const [i, setI] = useState(0);
 
 	useEffect(() => {
-		if (!inView) return;
+		if (!inView || !onScreen) return;
 		const id = setInterval(() => setI((x) => (x + 1) % PORTS.length), 1600);
 		return () => clearInterval(id);
-	}, [inView]);
+	}, [inView, onScreen]);
 
 	return (
 		<div className={`ts ${inView ? "ts-in" : ""}`} ref={ref}>

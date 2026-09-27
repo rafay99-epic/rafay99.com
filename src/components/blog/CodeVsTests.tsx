@@ -1,3 +1,4 @@
+import { useOnScreen } from "@hooks/useOnScreen";
 import { type RefObject, useEffect, useRef, useState } from "react";
 
 const CSS = `
@@ -100,13 +101,14 @@ const CODE_BAR_IDS = [
 export default function CodeVsTests() {
 	useStyles();
 	const { ref, inView } = useInView<HTMLDivElement>();
+	const onScreen = useOnScreen(ref);
 	const [t, setT] = useState(0);
 
 	useEffect(() => {
-		if (!inView) return;
+		if (!inView || !onScreen) return;
 		const id = setInterval(() => setT((x) => (x + 1) % 60), 90);
 		return () => clearInterval(id);
-	}, [inView]);
+	}, [inView, onScreen]);
 
 	const codeBars = CODE_BAR_IDS.map((id, i) => ({
 		id,

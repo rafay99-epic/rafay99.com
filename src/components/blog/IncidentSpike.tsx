@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useOnScreen } from "@hooks/useOnScreen";
+import { useEffect, useRef, useState } from "react";
 
 const C = {
 	bg: "#1a1b26",
@@ -21,27 +22,31 @@ const STEPS = [
 
 const MAX_RATE = 50;
 
-function useCycle(length: number, ms: number): number {
+function useCycle(length: number, ms: number, running: boolean): number {
 	const [index, setIndex] = useState<number>(0);
 
 	useEffect(() => {
+		if (!running) return;
 		const query = window.matchMedia("(prefers-reduced-motion: reduce)");
 		if (query.matches) return;
 		const id = window.setInterval(() => {
 			setIndex((current) => (current + 1) % length);
 		}, ms);
 		return () => window.clearInterval(id);
-	}, [length, ms]);
+	}, [length, ms, running]);
 
 	return index;
 }
 
 export default function IncidentSpike() {
-	const active = useCycle(STEPS.length, 2200);
+	const ref = useRef<HTMLDivElement>(null);
+	const onScreen = useOnScreen(ref);
+	const active = useCycle(STEPS.length, 2200, onScreen);
 	const current = STEPS[active] ?? STEPS[0];
 
 	return (
 		<div
+			ref={ref}
 			style={{
 				background: C.bg,
 				border: `1px solid ${C.line}`,

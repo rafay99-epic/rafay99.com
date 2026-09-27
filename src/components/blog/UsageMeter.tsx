@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useOnScreen } from "@hooks/useOnScreen";
+import { useEffect, useRef, useState } from "react";
 
 const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
@@ -25,12 +26,15 @@ for (const val of dailyUsage) {
 }
 
 export default function UsageMeter() {
+	const ref = useRef<HTMLDivElement>(null);
+	const onScreen = useOnScreen(ref);
 	const [day, setDay] = useState(0);
 
 	useEffect(() => {
+		if (!onScreen) return;
 		const id = setInterval(() => setDay((d) => (d + 1) % days.length), 1400);
 		return () => clearInterval(id);
-	}, []);
+	}, [onScreen]);
 
 	const cum = cumulative[day] ?? 0;
 	const overLimit = cum > weeklyLimit;
@@ -38,6 +42,7 @@ export default function UsageMeter() {
 
 	return (
 		<div
+			ref={ref}
 			style={{
 				background: c.bg,
 				border: `1px solid ${c.line}`,

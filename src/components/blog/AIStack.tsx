@@ -1,3 +1,4 @@
+import { useOnScreen } from "@hooks/useOnScreen";
 import { useEffect, useRef, useState } from "react";
 
 const STYLE_ID = "hx-stack-styles";
@@ -61,6 +62,7 @@ const CSS = `
   letter-spacing: .1em; text-transform: uppercase; color: var(--hx-signal);
   border: 1px solid var(--hx-signal); border-radius: 5px; padding: 1px 6px; }
 .hx-in .hx-drop { animation: hx-stack-drop .6s cubic-bezier(.2,.85,.25,1.15) both; }
+.hx-off .hx-layer.hx-hero::after { animation-play-state: paused; }
 @keyframes hx-stack-breathe { 0%,100% { opacity: .5; } 50% { opacity: 1; } }
 @keyframes hx-stack-drop { from { opacity: 0; transform: translateY(-16px) scale(.985); }
   to { opacity: 1; transform: none; } }
@@ -137,8 +139,12 @@ const STACK = [
 export default function AIStack() {
 	useStyles();
 	const { ref, inView } = useInView<HTMLDivElement>();
+	const onScreen = useOnScreen(ref);
 	return (
-		<div ref={ref} className={`hx-stack-wrap ${inView ? "hx-in" : ""}`}>
+		<div
+			ref={ref}
+			className={`hx-stack-wrap ${inView ? "hx-in" : ""} ${onScreen ? "" : "hx-off"}`}
+		>
 			<p className="hx-cap">Where the harness sits in the stack</p>
 			<div className="hx-stack">
 				{STACK.map((l, i) => (
