@@ -39,7 +39,7 @@ const stackCount = ProjectTech?.length ?? 0;
 
 try {
 	if (!featureFlags.showProjects) {
-		return Astro.redirect("/access-denied");
+		return Astro.redirect("/access-denied?feature=projects");
 	}
 } catch (_error) {
 	return Astro.redirect("/404");

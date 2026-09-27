@@ -13,7 +13,7 @@ import { getPublishedPosts, getRankedProjects } from "@util/collections";
 export const prerender = true;
 
 if (!featureFlags.showIndex) {
-	return Astro.redirect("/access-denied");
+	return Astro.redirect("/access-denied?feature=home");
 }
 
 const { stats, workExperience } = authorConfig;

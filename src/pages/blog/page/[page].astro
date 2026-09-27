@@ -13,7 +13,7 @@ export async function getStaticPaths() {
 }
 
 if (!featureFlags.showBlog) {
-	return Astro.redirect("/access-denied");
+	return Astro.redirect("/access-denied?feature=blog");
 }
 
 const page = Number.parseInt(Astro.params.page ?? "", 10);

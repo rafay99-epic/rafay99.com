@@ -29,7 +29,7 @@ const isArchive = (Astro.props as Props).isArchive === true;
 
 try {
 	if (!featureFlags.showBlog) {
-		return Astro.redirect("/access-denied");
+		return Astro.redirect("/access-denied?feature=blog");
 	}
 } catch (_error) {
 	return Astro.redirect("/404");
@@ -54,7 +54,7 @@ const currentBlog = BlogPosts.find(
 );
 
 if (!currentBlog) {
-	return Astro.redirect("/access-denied");
+	return Astro.redirect("/404");
 }
 
 const currentIndex = BlogPosts.findIndex(

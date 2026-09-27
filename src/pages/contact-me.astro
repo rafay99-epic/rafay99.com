@@ -9,7 +9,7 @@ export const prerender = true;
 
 try {
 	if (!featureFlags.showContact) {
-		return Astro.redirect("/access-denied");
+		return Astro.redirect("/access-denied?feature=contact");
 	}
 } catch (_error) {
 	return Astro.redirect("/404");

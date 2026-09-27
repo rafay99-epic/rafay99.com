@@ -13,7 +13,7 @@ import { getRankedProjects } from "@util/collections";
 export const prerender = true;
 
 if (!featureFlags.showProjects) {
-	return Astro.redirect("/access-denied");
+	return Astro.redirect("/access-denied?feature=projects");
 }
 
 const projects = await getRankedProjects();
