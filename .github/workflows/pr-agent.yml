@@ -12,8 +12,10 @@ permissions:
   issues: write
   pull-requests: write
 
+# Pushes to a PR cancel its stale review. Each comment gets its own group: PR-Agent's own
+# replies are comments too, and a shared group would let them cancel the /review they answer.
 concurrency:
-  group: pr-agent-${{ github.event_name }}-${{ github.event.pull_request.number || github.event.issue.number }}
+  group: pr-agent-${{ github.event.pull_request.number || format('comment-{0}', github.event.comment.id) }}
   cancel-in-progress: true
 
 jobs:
