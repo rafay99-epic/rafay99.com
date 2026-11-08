@@ -1,0 +1,24 @@
+# Copy to <repo>/.github/workflows/reviewpilot.yml to turn on ReviewPilot for that repo.
+name: reviewpilot
+
+on:
+  pull_request:
+    types: [opened, reopened, ready_for_review, synchronize]
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+# Runs are never cancelled mid-review: a cancel between posting comments and saving state
+# would make the next run post them again. The job-level group queues runs per PR instead.
+
+jobs:
+  review:
+    uses: rafay99-epic/reviewpilot/.github/workflows/review.yml@main
+    secrets:
+      REVIEWPILOT_API_KEY: ${{ secrets.CMD_API_KEY }}
+      REVIEWPILOT_APP_ID: ${{ secrets.REVIEWPILOT_APP_ID }}
+      REVIEWPILOT_PRIVATE_KEY: ${{ secrets.REVIEWPILOT_PRIVATE_KEY }}
